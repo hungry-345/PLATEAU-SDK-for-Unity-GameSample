@@ -8,14 +8,16 @@ namespace PLATEAU.Samples
     public class Contact : MonoBehaviour
     {
         private GameManage GameManageScript;
-
-        private ThirdPersonController ThirdPersonControllerScript;
-        //★GameViewスクリプトを参照する
         private GameView GameViewScript;
+        private UIManage UIManageScript;
+        private ThirdPersonController ThirdPersonControllerScript;
+
+        //★GameViewスクリプトを参照する
         void Start()
         {
             ThirdPersonControllerScript = this.GetComponent<ThirdPersonController>();
             GameManageScript = GameObject.Find("GameManager").GetComponent<GameManage>();
+            UIManageScript = GameObject.Find("UIManager").GetComponent<UIManage>();
             GameViewScript = GameObject.Find("GameView").GetComponent<GameView>();
         }
         public void GameOverFunc()
@@ -30,6 +32,7 @@ namespace PLATEAU.Samples
             {
                 //UIManageスクリプトのヒント関数を発動
                 GameManageScript.DisplayHint(hit.gameObject.name);
+                
                 //アイテムを削除
                 Destroy(hit.gameObject);
             }
@@ -45,20 +48,21 @@ namespace PLATEAU.Samples
                 //    Application.Quit();//ゲームプレイ終了
                 //#endif
             }
-            if(hit.gameObject.name == "Helper")
+            if(hit.gameObject.tag == "TargetFlag")
             {
-
                 //★一番上の親（GameView）にゲームクリアを通知
-                GameViewScript.isGameClear = true;
+                // GameViewScript.isGameClear = true;
                 //★スコアを加算（例）TODO:直接値を変えるのは望ましくないため、ViewManager側でスコア加算用の関数を作成する
-                ViewManager.instance.score += 100;
+                GameManageScript.rescuedNum += int.Parse(GameManageScript.GoalAttributeDict[hit.gameObject.name].saboveground);
+                UIManageScript.rescuedNumLabel.text = GameManageScript.rescuedNum.ToString();
 
+                Destroy(hit.gameObject);
+                GameManageScript.AddGoals(hit.gameObject.name);
                 //#if UNITY_EDITOR
                 //    UnityEditor.EditorApplication.isPlaying = false;//ゲームプレイ終了
                 //#else
                 //    Application.Quit();//ゲームプレイ終了
                 //#endif
-
             }
 
         }
