@@ -2381,6 +2381,52 @@ MonoBehaviour:
   toTitleButton: {fileID: 3074243661790725291}
   gameEndText: {fileID: 1805183499}
   scoreText: {fileID: 1502615333}
+--- !u!1 &2498496833351519745
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6533859682033912489}
+  - component: {fileID: 2384877018557236406}
+  m_Layer: 0
+  m_Name: ItemManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6533859682033912489
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2498496833351519745}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 63.864594, y: -55.562267, z: 22.110125}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7600826448952342369}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2384877018557236406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2498496833351519745}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 646d569dc72d39f42bc83594759f58c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  measuredheightItem: {fileID: 7600826449144852250}
+  UsageItem: {fileID: 7600826447574357227}
 --- !u!1 &2528044205618342976
 GameObject:
   m_ObjectHideFlags: 0
@@ -3215,6 +3261,51 @@ Transform:
   m_Father: {fileID: 3440418375657259141}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4221906582468330337
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5296890538204113336}
+  - component: {fileID: 7448985612959676408}
+  m_Layer: 0
+  m_Name: EnemyManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5296890538204113336
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4221906582468330337}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 63.864594, y: -55.562267, z: 22.110125}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7600826448952342369}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7448985612959676408
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4221906582468330337}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49dafa99c79849c4e87da73885083d26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Zombie: {fileID: 7600826447473823434}
 --- !u!1 &4267063259346395183
 GameObject:
   m_ObjectHideFlags: 0
@@ -7284,10 +7375,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58a9e143b6e5edb4c80b2f22912f4246, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  measuredheightItem: {fileID: 3899591778895641240, guid: 0bf2ae0ed116e3443a6884b0d8c0cb9c, type: 3}
-  UsageItem: {fileID: 2639674871864769449, guid: 4cb823215c5c5014b81d9a4b56d4e116, type: 3}
   targetFlag: {fileID: 0}
-  Zombie: {fileID: 7600826447473823434}
   sonarCount: 0
   distance: 0
 --- !u!1 &7600826448184942160
@@ -9647,6 +9735,8 @@ Transform:
   - {fileID: 7600826448005534122}
   - {fileID: 7600826448028043675}
   - {fileID: 7600826448446974061}
+  - {fileID: 5296890538204113336}
+  - {fileID: 6533859682033912489}
   m_Father: {fileID: 234354615730148977}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

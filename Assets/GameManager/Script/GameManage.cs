@@ -1,4 +1,4 @@
-// 正解データがある大元
+﻿// 正解データがある大元
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,13 +10,17 @@ namespace PLATEAU.Samples
 {
     public class GameManage : MonoBehaviour, InputGameManage.IInputGameActions
     {
-        [SerializeField, Tooltip("高さアイテム")] private GameObject measuredheightItem;
-        [SerializeField, Tooltip("用途アイテム")] private GameObject UsageItem;
+        //[SerializeField, Tooltip("高さアイテム")] private GameObject measuredheightItem;
+        //[SerializeField, Tooltip("用途アイテム")] private GameObject UsageItem;
         [SerializeField, Tooltip("ターゲットフラッグ")] private GameObject targetFlag;
-        [SerializeField, Tooltip("ゾンビ")] private GameObject Zombie;
+        //[SerializeField, Tooltip("ゾンビ")] private GameObject Zombie;
         private InputGameManage inputActions;
         private UIManage UIManageScript;
         private TimeManage TimeManageScript;
+
+        private EnemyManager enemyManager;
+        private ItemManager itemManager;
+
         public SampleAttribute correctGMLdata;
         private GameObject goalBuilding;
         private Bounds goalBounds;
@@ -27,7 +31,7 @@ namespace PLATEAU.Samples
         public float sonarCount;
         public float distance;
 
-        private int zombieNum;
+        //private int zombieNum;
         private bool isSetGMLdata;
         private int goalNum;
         KeyValuePair<string, PLATEAU.Samples.SampleCityObject> rndBuilding;
@@ -72,6 +76,10 @@ namespace PLATEAU.Samples
             //SceneManagerからShow.csにアクセスする
             UIManageScript = GameObject.Find("UIManager").GetComponent<UIManage>();
             TimeManageScript = GameObject.Find("TimeManager").GetComponent<TimeManage>();
+
+            enemyManager = GameObject.Find("EnemyManager").GetComponent<EnemyManager>();
+            itemManager = GameObject.Find("ItemManager").GetComponent<ItemManager>();
+
             //Hintのリストを作る
             HintLst = GameObject.FindGameObjectsWithTag("HintText");
             buildingDirName = new List<string>();
@@ -79,12 +87,12 @@ namespace PLATEAU.Samples
 
             goalNum = 3;
             sonarCount = 5;
-            zombieNum = 50;
+            //zombieNum = 50;
 
-            for(int i=0; i < zombieNum;i++)
-            {
-                GenerateZombie();
-            }
+            //for(int i=0; i < zombieNum;i++)
+            //{
+            //    GenerateZombie();
+            //}
         }
 
         private string GetAttribute(string attributeName,SampleAttribute attribeteData)
@@ -288,30 +296,46 @@ namespace PLATEAU.Samples
         /// <summary>
         /// アイテムを生成する
         /// </summary>
-        public void GenerateHintItem()
-        {
-            //★GameViewの子として生成
-            GameObject hintItem = Instantiate(measuredheightItem, transform.root.gameObject.transform) as GameObject;
-            hintItem.name = "measuredheight";
-            float itemPosX = Random.Range(0f,550f);
-            float itemPosZ= Random.Range(0,700f);
-            hintItem.transform.position = new Vector3(itemPosX,300,itemPosZ);
+        //public void GenerateHintItem()
+        //{
+        //    //★GameViewの子として生成
+        //    GameObject hintItem = Instantiate(measuredheightItem, transform.root.gameObject.transform) as GameObject;
+        //    hintItem.name = "measuredheight";
+        //    float itemPosX = Random.Range(0f,550f);
+        //    float itemPosZ= Random.Range(0,700f);
+        //    hintItem.transform.position = new Vector3(itemPosX,300,itemPosZ);
 
-            hintItem = Instantiate(UsageItem, transform.root.gameObject.transform) as GameObject;
-            hintItem.name = "Usage";
-            itemPosX = Random.Range(0f,550f);
-            itemPosZ= Random.Range(0f,700f);
-            hintItem.transform.position = new Vector3(itemPosX,300,itemPosZ);
+        //    hintItem = Instantiate(UsageItem, transform.root.gameObject.transform) as GameObject;
+        //    hintItem.name = "Usage";
+        //    itemPosX = Random.Range(0f,550f);
+        //    itemPosZ= Random.Range(0f,700f);
+        //    hintItem.transform.position = new Vector3(itemPosX,300,itemPosZ);
+        //}
+        public void SpawnHintItem()
+        {
+            ////★GameViewの子として生成
+            //GameObject hintItem = Instantiate(measuredheightItem, transform.root.gameObject.transform) as GameObject;
+            //hintItem.name = "measuredheight";
+            //float itemPosX = Random.Range(-400f,450f);
+            //float itemPosZ= Random.Range(-200f,200f);
+            //hintItem.transform.position = new Vector3(itemPosX,100,itemPosZ);
+
+            //hintItem = Instantiate(UsageItem, transform.root.gameObject.transform) as GameObject;
+            //hintItem.name = "Usage";
+            //itemPosX = Random.Range(-400f,450f);
+            //itemPosZ= Random.Range(-200f,200f);
+            //hintItem.transform.position = new Vector3(itemPosX,100,itemPosZ);
+            itemManager.GenerateItem();
         }
 
-        public void GenerateZombie()
-        {
-            GameObject zombie = Instantiate(Zombie, transform.root.gameObject.transform) as GameObject;
-            zombie.name = "zombie";
-            float itemPosX = Random.Range(-400f,400f);
-            float itemPosZ= Random.Range(-200f,200f);
-            zombie.transform.position = new Vector3(itemPosX,300,itemPosZ);
-        }
+        //public void GenerateZombie()
+        //{
+        //    GameObject zombie = Instantiate(Zombie, transform.root.gameObject.transform) as GameObject;
+        //    zombie.name = "zombie";
+        //    float itemPosX = Random.Range(-400f,400f);
+        //    float itemPosZ= Random.Range(-200f,200f);
+        //    zombie.transform.position = new Vector3(itemPosX,300,itemPosZ);
+        //}
         private void GenerateTargetFlag(Vector3 flagPosition)
         {
             GameObject flag = Instantiate(targetFlag,transform.root.gameObject.transform) as GameObject;
@@ -335,6 +359,12 @@ namespace PLATEAU.Samples
                 }   
                 UIManageScript.DisplayDistance();
             }
+        }
+        //ゲームの初期化処理
+        public void OnEndGame()
+        {
+            enemyManager.DestroyEnemy();
+            itemManager.DestroyItem();
         }
     }
 }

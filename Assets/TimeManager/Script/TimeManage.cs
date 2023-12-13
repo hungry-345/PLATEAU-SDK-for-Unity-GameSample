@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -27,7 +27,7 @@ namespace PLATEAU.Samples
             if(elapsedTime > span)
             {
                 elapsedTime = 0f;
-                GameManageScript.GenerateHintItem();
+                GameManageScript.SpawnHintItem();
             }
 
         }
