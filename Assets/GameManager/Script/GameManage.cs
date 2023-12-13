@@ -5,15 +5,14 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 using System.Linq;
+using StarterAssets;
 
 namespace PLATEAU.Samples
 {
     public class GameManage : MonoBehaviour, InputGameManage.IInputGameActions
     {
-        //[SerializeField, Tooltip("高さアイテム")] private GameObject measuredheightItem;
-        //[SerializeField, Tooltip("用途アイテム")] private GameObject UsageItem;
         [SerializeField, Tooltip("ターゲットフラッグ")] private GameObject targetFlag;
-        //[SerializeField, Tooltip("ゾンビ")] private GameObject Zombie;
+
         private InputGameManage inputActions;
         private UIManage UIManageScript;
         private TimeManage TimeManageScript;
@@ -31,11 +30,14 @@ namespace PLATEAU.Samples
         public float sonarCount;
         public float distance;
 
-        //private int zombieNum;
         private bool isSetGMLdata;
         private int goalNum;
+
         KeyValuePair<string, PLATEAU.Samples.SampleCityObject> rndBuilding;
-        private List<string> buildingDirName; 
+        private List<string> buildingDirName;
+
+        //プレイヤーのコントローラー関数
+        private ThirdPersonController thirdpersonController;
 
         public struct GoalInfo
         {
@@ -71,28 +73,29 @@ namespace PLATEAU.Samples
 
         void Start()
         {
+
+        }
+
+        public void StartGame()
+        {
             rnd = new System.Random();
             inputActions.InputGame.AddCallbacks(this);
+            thirdpersonController = GameObject.Find("PlayerArmature").GetComponent<ThirdPersonController>();
+
             //SceneManagerからShow.csにアクセスする
             UIManageScript = GameObject.Find("UIManager").GetComponent<UIManage>();
             TimeManageScript = GameObject.Find("TimeManager").GetComponent<TimeManage>();
-
             enemyManager = GameObject.Find("EnemyManager").GetComponent<EnemyManager>();
             itemManager = GameObject.Find("ItemManager").GetComponent<ItemManager>();
-
             //Hintのリストを作る
             HintLst = GameObject.FindGameObjectsWithTag("HintText");
             buildingDirName = new List<string>();
-            GoalAttributeDict = new Dictionary<string,GoalInfo>();
+            GoalAttributeDict = new Dictionary<string, GoalInfo>();
 
             goalNum = 3;
             sonarCount = 5;
-            //zombieNum = 50;
-
-            //for(int i=0; i < zombieNum;i++)
-            //{
-            //    GenerateZombie();
-            //}
+            enemyManager.InitializeEnemy();
+            itemManager.InitializeItem();
         }
 
         private string GetAttribute(string attributeName,SampleAttribute attribeteData)
@@ -133,18 +136,6 @@ namespace PLATEAU.Samples
                     break;
                 }
             }
-                // foreach(var t in buildingData.GetKeyValues())
-                // {
-                //     if(t.Key.Path.Contains(hint.name))
-                //     {
-                //         isSetData = true;
-                //         if(hint.name == "measuredheight")
-                //         {
-                //             buildingHeight = t.Value;
-                //         }
-                //         break;
-                //     }
-                // }
 
             // 建物の高さは10m以上か
             buildingHeight = GetAttribute("measuredheight",buildingData);
@@ -360,11 +351,12 @@ namespace PLATEAU.Samples
                 UIManageScript.DisplayDistance();
             }
         }
-        //ゲームの初期化処理
+        //ゲームの終了処理
         public void OnEndGame()
         {
             enemyManager.DestroyEnemy();
             itemManager.DestroyItem();
+            thirdpersonController.enabled = false;
         }
     }
 }
