@@ -9,6 +9,7 @@ public class ViewBase : MonoBehaviour
         yield return null;
     }
 
+    //ƒeƒXƒg
     //‰æ–Ê‚ð”jŠü‚·‚é
     public void DestroyView()
     {
