@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,58 +10,68 @@ namespace PLATEAU.Samples
         private float elapsedTime;
         private UIManage UIManageScript;
         private GameManage GameManageScript;
+        private GameView GameViewScript;
         private bool isInitialiseFinish;
         private string itemName;
-        private float span = 0.5f;
+        private float generateSpan = 0.1f;
+        public int countdownMinutes = 3;
+        private float countdownSeconds;
+        private Coroutine coloringCoroutine;
+        private bool isCoroutine;
+        
+        public TimeSpan timeSpan;
+
 
         void Start()
         {
             UIManageScript = GameObject.Find("UIManager").GetComponent<UIManage>();
             GameManageScript = GameObject.Find("GameManager").GetComponent<GameManage>();
+            GameViewScript = GameObject.Find("GameView").GetComponent<GameView>();
 
-            StartCoroutine(WatiForInitialise());
+            countdownSeconds = countdownMinutes * 60f;
         }
 
         void Update()
         {
             elapsedTime += Time.deltaTime;
-            if(elapsedTime > span)
+            if(elapsedTime > generateSpan)
             {
                 elapsedTime = 0f;
                 GameManageScript.GenerateHintItem();
             }
-
-        }
-
-        private IEnumerator Coloring(string gmlName,string attributeValue)
-        {
-            UIManageScript.ChangeColoring(gmlName,attributeValue);
-            yield return new WaitForSeconds(20);
-            UIManageScript.ChangeColoring("None",attributeValue);
-        }
-        public void ColorBuilding(string gmlName,string attributeValue)
-        {
-            if(itemName == gmlName)
-            {
-                UIManageScript.ChangeColoring("None",attributeValue);
-            }
-            itemName = gmlName;
-            StartCoroutine(Coloring(gmlName,attributeValue));
-        }
-
-        IEnumerator WatiForInitialise()
-        {
-            // yield return ->　ある関数が終わるまで待つ
-            yield return new WaitUntil(() => IsInitialiseFinished());
-        }
-        private bool IsInitialiseFinished()
-        {
             if(UIManageScript.isInitialiseFinish)
             {
-                GameManageScript.SelectGoals();
-                isInitialiseFinish = true;
+                countdownSeconds -= Time.deltaTime;
+                timeSpan = new TimeSpan(0, 0, (int)countdownSeconds);
+                if(timeSpan != null && UIManageScript.timeLabel != null)
+                {
+                    UIManageScript.timeLabel.text = timeSpan.ToString(@"mm\:ss");
+                }
             }
-            return isInitialiseFinish;
+            if(countdownSeconds <= 0)
+            {
+                GameViewScript.isGameClear = true;
+            }
+
+        }
+
+        private IEnumerator Coloring(string gmlName,string nearestBuildingName,string hint)
+        {
+            isCoroutine = true;
+            UIManageScript.ChangeColoring(gmlName,nearestBuildingName,hint);
+            yield return new WaitForSeconds(20);
+            UIManageScript.ChangeColoring("None",nearestBuildingName,hint);
+            isCoroutine = false;
+        }
+        public void ColorBuilding(string gmlName,string nearestBuildingName,string hint)
+        {
+            if(isCoroutine)
+            {
+                StopCoroutine(coloringCoroutine);
+                UIManageScript.ColorCode("None",nearestBuildingName);
+                isCoroutine = false;
+            }
+            coloringCoroutine = StartCoroutine(Coloring(gmlName,nearestBuildingName,hint));
         }
     }
 }
