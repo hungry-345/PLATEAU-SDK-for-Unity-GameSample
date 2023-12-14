@@ -4247,7 +4247,7 @@ MonoBehaviour:
     m_Bits: 521
   CinemachineCameraTarget: {fileID: 1927970039916406960}
   TopClamp: 70
-  BottomClamp: -30
+  BottomClamp: -90
   CameraAngleOverride: 0
   LockCameraPosition: 0
   isDied: 0
@@ -4460,7 +4460,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: d5e3892242bbbe645995b69570d7f7c3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

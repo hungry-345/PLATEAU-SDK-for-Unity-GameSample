@@ -16,6 +16,9 @@ namespace StarterAssets
         private GameObject player;
         private CharacterController _controller;
         private ActionManager actionManager;
+        private ThirdPersonController _thirdPersonController;
+
+        private float gravity;
 
 
 
@@ -32,15 +35,21 @@ namespace StarterAssets
 
 
 
-        public void Awake()
+        private void Awake()
         {
             lr = GetComponent<LineRenderer>();
             lr.enabled = false;
             player = GameObject.Find("PlayerArmature");
             _controller = GetComponent<CharacterController>();
             actionManager = GetComponent<ActionManager>();
+            _thirdPersonController = GetComponent<ThirdPersonController>();
 
 
+        }
+
+        private void Start()
+        {
+            gravity = _thirdPersonController.Gravity;
         }
 
         private void Update()
@@ -93,6 +102,7 @@ namespace StarterAssets
 
             //normalizedはベクトルの正規化(ゼロベクトル）
             Vector3 hookshotDir = (hookshotPosition - transform.position).normalized;
+            hookshotDir.y += gravity * Time.deltaTime;
 
             if (hookshotDir.magnitude > 0.01)
             {
@@ -104,14 +114,15 @@ namespace StarterAssets
             float hookshotSpeed = Mathf.Clamp(Vector3.Distance(transform.position, hookshotPosition), hookshotSpeedMin, hookshotSpeedMax);
             float hookshotSpeedMultipulier = 2f;
             _controller.Move(hookshotDir * hookshotSpeed * hookshotSpeedMultipulier * Time.deltaTime);
+           
 
-            float reachedHookshotPositionDistance = 1f;
+            float reachedHookshotPositionDistance = 3f;
             isreached = Vector3.Distance(transform.position, hookshotPosition) < reachedHookshotPositionDistance;
             if (isreached)
             {
 
                 HookDelete();
-                //_controller.Move(new Vector3(-hookshotDir.x*10f, 0, -hookshotDir.z * 10f));
+                _controller.Move(new Vector3(0.4f, 3f, 0.4f));
                 hookshotAble = false;
 
                 return;
