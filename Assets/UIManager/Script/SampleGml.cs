@@ -211,6 +211,7 @@ namespace PLATEAU.Samples
         public readonly GameObject[] LodObjects;
 
         public readonly SampleAttribute Attribute;
+        private GameManage GameManageScript = GameObject.Find("GameManager").GetComponent<GameManage>();
 
         public SampleCityObject(string id, CityObject cityObject)
         {
@@ -267,7 +268,7 @@ namespace PLATEAU.Samples
         /// <param name="type"></param>
         /// <param name="colorTable"></param>
         /// <param name="areaName">浸水エリア名</param>
-        public void ColorCode(ColorCodeType type, Color[] colorTable,SampleAttribute attribute)
+        public void ColorCode(ColorCodeType type, Color[] colorTable, string nearestBuildingName)
         {
 
             switch (type)
@@ -277,23 +278,11 @@ namespace PLATEAU.Samples
                     SetMaterialColor(Color.white);
                     break;
                 case ColorCodeType.measuredheight:
-                    foreach(var t in attribute.GetKeyValues())
-                    {
-                        if(t.Key.Path.Contains("measuredheight"))
-                        {
-                            correctData = t.Value;
-                        }
-                    }
+                    correctData = GameManageScript.GoalAttributeDict[nearestBuildingName].measuredheight;
                     ColorCodeByHeight(colorTable,float.Parse(correctData));
                     break;
                 case ColorCodeType.Usage:
-                    foreach(var t in attribute.GetKeyValues())
-                    {
-                        if(t.Key.Path.Contains("Usage"))
-                        {
-                            correctData = t.Value;
-                        }
-                    }
+                    correctData = GameManageScript.GoalAttributeDict[nearestBuildingName].Usage;
                     ColorCodeByUsage(colorTable,correctData);
                     break;
             }
@@ -494,11 +483,11 @@ namespace PLATEAU.Samples
         /// <param name="type">色分けタイプ</param>
         /// <param name="colorTable">色テーブル</param>
         /// <param name="areaName">浸水エリア名</param>
-        public void ColorCode(ColorCodeType type, Color[] colorTable)
+        public void ColorCode(ColorCodeType type, Color[] colorTable,string nearestBuildingName)
         {
             foreach (var keyValue in CityObjects)
             {
-                keyValue.Value.ColorCode(type, colorTable,GameManageScript.correctGMLdata);
+                keyValue.Value.ColorCode(type, colorTable,nearestBuildingName);
             }
         }
     }
