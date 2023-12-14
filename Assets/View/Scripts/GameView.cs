@@ -14,10 +14,21 @@ public class GameView : ViewBase
     [SerializeField] private Text gameEndText;  //ゲーム終了テキスト
     [SerializeField] private Text scoreText;  //スコアテキスト
 
+    private GameObject cursor;
 
+    private CursorManager cursorManage;
+
+    void Awake()
+    {
+        cursor = GameObject.Find("Cursor");
+        cursorManage = cursor.GetComponent<CursorManager>();
+    }
 
     void Start()
     {
+        
+        cursorManage.OnInvisible();
+        Cursor.lockState = CursorLockMode.Confined;
         gameEndCanvas.enabled=false;
     }
     public override IEnumerator Wait()
@@ -34,6 +45,7 @@ public class GameView : ViewBase
 
                 //ゲーム終了UIを表示
                 gameEndCanvas.enabled=true;
+                cursorManage.OnVisible();
 
                 //ゲームオーバーテキスト
                 gameEndText.text = "Game Over";
