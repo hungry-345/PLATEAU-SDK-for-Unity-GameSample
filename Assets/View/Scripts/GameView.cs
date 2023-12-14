@@ -5,8 +5,12 @@ using UnityEngine;
 //using UnityEngine.UI;
 using UnityEngine.UIElements;
 using Cursor = UnityEngine.Cursor;
+
+
 public class GameView : ViewBase
 {
+
+
 
     [SerializeField] private GameManage gameManage;
     [SerializeField, Tooltip("ゲームオーバーUI")] private UIDocument gameOverUI;
@@ -32,6 +36,11 @@ public class GameView : ViewBase
         gameManage.StartGame();
         cursorManage.OnInvisible();
         Cursor.lockState = CursorLockMode.Confined;
+
+    
+
+
+
         IsClicked = false;
         //toTitleButton = gameOverUI.rootVisualElement.Query<Button>();
         //toTitleButton.clicked += OnButtonClicked;
