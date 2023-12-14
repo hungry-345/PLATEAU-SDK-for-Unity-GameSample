@@ -7,6 +7,13 @@ using UnityEngine.UIElements;
 
 public class GameView : ViewBase
 {
+
+
+    [SerializeField] private Canvas gameEndCanvas;
+    [SerializeField] private ExtendButton retryButton;  //���g���C�{�^��
+    [SerializeField] private ExtendButton toTitleButton;  //�^�C�g���ɖ߂�{�^��
+    [SerializeField] private Text gameEndText;  //�Q�[���I���e�L�X�g
+    [SerializeField] private Text scoreText;  //�X�R�A�e�L�X�g
     [SerializeField] private GameManage gameManage;
     [SerializeField, Tooltip("ゲームオーバーUI")] private UIDocument gameOverUI;
     private bool IsClicked; //ボタンが押されたか
@@ -14,15 +21,24 @@ public class GameView : ViewBase
     public bool isGameClear = false;  //ゲームクリアフラグ
     public bool isGameOver = false;   //ゲームオーバーフラグ
 
-    //s[SerializeField] private Canvas gameEndCanvas;
-    //[SerializeField] private ExtendButton toTitleButton;  //タイトルに戻るボタン
-    //[SerializeField] private Text gameEndText;  //ゲーム終了テキスト
-    //[SerializeField] private Text scoreText;  //スコアテキスト
+    private GameObject cursor;
+
+    private CursorManager cursorManage;
+
+    void Awake()
+    {
+        cursor = GameObject.Find("Cursor");
+        cursorManage = cursor.GetComponent<CursorManager>();
+    }
 
     void Start()
     {
-        //ゲーム開始
+                        //ゲーム開始
         gameManage.StartGame();
+        cursorManage.OnInvisible();
+        Cursor.lockState = CursorLockMode.Confined;
+        gameEndCanvas.enabled=false;
+
 
         IsClicked = false;
         //toTitleButton = gameOverUI.rootVisualElement.Query<Button>();
@@ -40,8 +56,10 @@ public class GameView : ViewBase
             //ゲーム終了
             if(isGameOver||isGameClear)
             {
+
                 //ゾンビやアイテムを消す・プレイヤーを操作できなくする
                 gameManage.OnEndGame();
+                cursorManage.OnVisible();
 
                 //ゲームオーバーテキスト
                 //gameEndText.text = "Game Over";
