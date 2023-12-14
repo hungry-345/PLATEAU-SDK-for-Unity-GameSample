@@ -4345,7 +4345,7 @@ MonoBehaviour:
   lr: {fileID: 5915899325788646510}
   Hookable:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 9
   hookshotTransform: {fileID: 3481672870656600438}
   AnimationCurve:
     serializedVersion: 2
