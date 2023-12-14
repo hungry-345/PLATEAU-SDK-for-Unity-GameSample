@@ -7,18 +7,17 @@ using UnityEngine.UIElements;
 
 public class GameView : ViewBase
 {
-
-    [SerializeField, Tooltip("ゲームオーバーUI")] private UIDocument GameOvergUi;
-    private bool IsClicked;
-    private Button startButton;
+    [SerializeField, Tooltip("ゲームオーバーUI")] private UIDocument gameOverUI;
+    private bool IsClicked; //ボタンが押されたか
+    private Button toTitleButton;
 
     public bool isGameClear = false;  //ゲームクリアフラグ
     public bool isGameOver = false;   //ゲームオーバーフラグ
 
 
     [SerializeField] private GameManage gameManage;
-    [SerializeField] private Canvas gameEndCanvas;
-    [SerializeField] private ExtendButton toTitleButton;  //タイトルに戻るボタン
+    //s[SerializeField] private Canvas gameEndCanvas;
+    //[SerializeField] private ExtendButton toTitleButton;  //タイトルに戻るボタン
     //[SerializeField] private Text gameEndText;  //ゲーム終了テキスト
     //[SerializeField] private Text scoreText;  //スコアテキスト
 
@@ -26,11 +25,21 @@ public class GameView : ViewBase
 
     void Start()
     {
-        //ゲーム終了UIを非表示にする
-        gameEndCanvas.enabled=false;
+        Debug.Log("Game View Start");
         //ゲーム開始
         gameManage.StartGame();
+
+        IsClicked = false;
+        toTitleButton = gameOverUI.rootVisualElement.Query<Button>();
+        toTitleButton.clicked += OnButtonClicked;
+
+        //スタート時はUIを非表示にする
+        gameOverUI.enabled = false;
+
+        //ゲーム終了UIを非表示にする
+        //gameEndCanvas.enabled=false;
     }
+
     public override IEnumerator Wait()
     {
         while (true)
@@ -38,13 +47,9 @@ public class GameView : ViewBase
             //ゲーム終了
             if(isGameOver||isGameClear)
             {
-                //★ゾンビやアイテムを消す
+                //ゾンビやアイテムを消す・プレイヤーを操作できなくする
                 gameManage.OnEndGame();
-                //★プレイヤーを操作できなくする
 
-
-                //ゲーム終了UIを表示
-                gameEndCanvas.enabled=true;
                 //ゲームオーバーテキスト
                 //gameEndText.text = "Game Over";
                 if (isGameClear)
@@ -55,11 +60,16 @@ public class GameView : ViewBase
                     //スコア表示★スコア取得用の関数を作成する
                     //scoreText.text = "SCORE　"+ViewManager.instance.score;
                 }
+                else
+                {
+                    //ゲームオーバーUIを表示
+                    gameOverUI.enabled = true;
+                }
 
                 //ボタン入力待ち状態にする
                 while (true)
                 {
-                    if (toTitleButton.IsClicked)  //タイトルボタン
+                    if (IsClicked)  //タイトルボタン
                     {
                         //ゲーム終了
                         yield break;
@@ -71,5 +81,9 @@ public class GameView : ViewBase
             }
             yield return null;
         }
+    }
+    private void OnButtonClicked()
+    {
+        IsClicked = true;
     }
 }
