@@ -224,8 +224,7 @@ namespace PLATEAU.Samples
             // goalPos = new Vector3(goalBounds.center.x+320f,goalBounds.center.y+goalBounds.size.y,goalBounds.center.z+380f);
             
             //Helperの位置を変更
-            //★デバッグ終了後元に戻す
-            // GameObject.Find("Helper").transform.position = goalPos;
+             GameObject.Find("Helper").transform.position = goalPos;
         }
 
 //  -------------------------------------------------------------------------------
@@ -282,51 +281,14 @@ namespace PLATEAU.Samples
             TimeManageScript.ColorBuilding(itemName,hint);
         }
 
-        // 生成する処理
         // -----------------------------------------------------------------------------------------------------------
         /// <summary>
         /// アイテムを生成する
         /// </summary>
-        //public void GenerateHintItem()
-        //{
-        //    //★GameViewの子として生成
-        //    GameObject hintItem = Instantiate(measuredheightItem, transform.root.gameObject.transform) as GameObject;
-        //    hintItem.name = "measuredheight";
-        //    float itemPosX = Random.Range(0f,550f);
-        //    float itemPosZ= Random.Range(0,700f);
-        //    hintItem.transform.position = new Vector3(itemPosX,300,itemPosZ);
-
-        //    hintItem = Instantiate(UsageItem, transform.root.gameObject.transform) as GameObject;
-        //    hintItem.name = "Usage";
-        //    itemPosX = Random.Range(0f,550f);
-        //    itemPosZ= Random.Range(0f,700f);
-        //    hintItem.transform.position = new Vector3(itemPosX,300,itemPosZ);
-        //}
         public void SpawnHintItem()
         {
-            ////★GameViewの子として生成
-            //GameObject hintItem = Instantiate(measuredheightItem, transform.root.gameObject.transform) as GameObject;
-            //hintItem.name = "measuredheight";
-            //float itemPosX = Random.Range(-400f,450f);
-            //float itemPosZ= Random.Range(-200f,200f);
-            //hintItem.transform.position = new Vector3(itemPosX,100,itemPosZ);
-
-            //hintItem = Instantiate(UsageItem, transform.root.gameObject.transform) as GameObject;
-            //hintItem.name = "Usage";
-            //itemPosX = Random.Range(-400f,450f);
-            //itemPosZ= Random.Range(-200f,200f);
-            //hintItem.transform.position = new Vector3(itemPosX,100,itemPosZ);
             itemManager.GenerateItem();
         }
-
-        //public void GenerateZombie()
-        //{
-        //    GameObject zombie = Instantiate(Zombie, transform.root.gameObject.transform) as GameObject;
-        //    zombie.name = "zombie";
-        //    float itemPosX = Random.Range(-400f,400f);
-        //    float itemPosZ= Random.Range(-200f,200f);
-        //    zombie.transform.position = new Vector3(itemPosX,300,itemPosZ);
-        //}
         private void GenerateTargetFlag(Vector3 flagPosition)
         {
             GameObject flag = Instantiate(targetFlag,transform.root.gameObject.transform) as GameObject;

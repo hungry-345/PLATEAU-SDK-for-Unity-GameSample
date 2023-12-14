@@ -24,7 +24,7 @@ public class TitleView : ViewBase
     {
         while (true)
         {
-            //�Q�[���X�^�[�g
+            //ボタン入力待ち状態にする
             if (IsClicked)
             {
                 yield break;

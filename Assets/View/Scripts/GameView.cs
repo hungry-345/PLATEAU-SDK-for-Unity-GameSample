@@ -7,37 +7,30 @@ using UnityEngine.UIElements;
 
 public class GameView : ViewBase
 {
+    [SerializeField] private GameManage gameManage;
     [SerializeField, Tooltip("ゲームオーバーUI")] private UIDocument gameOverUI;
     private bool IsClicked; //ボタンが押されたか
     private Button toTitleButton;
-
     public bool isGameClear = false;  //ゲームクリアフラグ
     public bool isGameOver = false;   //ゲームオーバーフラグ
 
-
-    [SerializeField] private GameManage gameManage;
     //s[SerializeField] private Canvas gameEndCanvas;
     //[SerializeField] private ExtendButton toTitleButton;  //タイトルに戻るボタン
     //[SerializeField] private Text gameEndText;  //ゲーム終了テキスト
     //[SerializeField] private Text scoreText;  //スコアテキスト
 
-
-
     void Start()
     {
-        Debug.Log("Game View Start");
         //ゲーム開始
         gameManage.StartGame();
 
         IsClicked = false;
-        toTitleButton = gameOverUI.rootVisualElement.Query<Button>();
-        toTitleButton.clicked += OnButtonClicked;
+        //toTitleButton = gameOverUI.rootVisualElement.Query<Button>();
+        //toTitleButton.clicked += OnButtonClicked;
 
         //スタート時はUIを非表示にする
         gameOverUI.enabled = false;
 
-        //ゲーム終了UIを非表示にする
-        //gameEndCanvas.enabled=false;
     }
 
     public override IEnumerator Wait()
@@ -64,6 +57,8 @@ public class GameView : ViewBase
                 {
                     //ゲームオーバーUIを表示
                     gameOverUI.enabled = true;
+                    toTitleButton = gameOverUI.rootVisualElement.Query<Button>();
+                    toTitleButton.clicked += OnButtonClicked;
                 }
 
                 //ボタン入力待ち状態にする

@@ -2204,10 +2204,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cd7dc17b0884ac49946e2a5e008b964, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameManage: {fileID: 7600826448113697727}
   gameOverUI: {fileID: 1131458464}
   isGameClear: 0
   isGameOver: 0
-  gameManage: {fileID: 7600826448113697727}
 --- !u!1 &2498496833351519745
 GameObject:
   m_ObjectHideFlags: 0
@@ -4059,7 +4059,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6068492455930876395}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -98.58518, y: -12.80653, z: 31.863161}
+  m_LocalPosition: {x: 267.3, y: -48.04, z: 416.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7901,7 +7901,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7600826448313368511}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -98.385185, y: -11.43153, z: 27.863161}
+  m_LocalPosition: {x: 267.5, y: -46.665, z: 412.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -11056,7 +11056,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8486726551857001085}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -98.385185, y: -11.43153, z: 27.863161}
+  m_LocalPosition: {x: 267.5, y: -46.665, z: 412.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
