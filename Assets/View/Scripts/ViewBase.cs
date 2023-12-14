@@ -13,7 +13,6 @@ public class ViewBase : MonoBehaviour
     //画面を破棄する
     public void DestroyView()
     {
-        Debug.Log("Destroy");
         Destroy(this.gameObject);
     }
 

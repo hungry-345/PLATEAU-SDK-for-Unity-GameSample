@@ -80,6 +80,7 @@ namespace PLATEAU.Samples
         {
             rnd = new System.Random();
             inputActions.InputGame.AddCallbacks(this);
+            //操作不能にするために取得
             thirdpersonController = GameObject.Find("PlayerArmature").GetComponent<ThirdPersonController>();
 
             //SceneManagerからShow.csにアクセスする
