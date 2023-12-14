@@ -4,16 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 //using UnityEngine.UI;
 using UnityEngine.UIElements;
+using Cursor = UnityEngine.Cursor;
 
 public class GameView : ViewBase
 {
 
 
-    [SerializeField] private Canvas gameEndCanvas;
-    [SerializeField] private ExtendButton retryButton;  //���g���C�{�^��
-    [SerializeField] private ExtendButton toTitleButton;  //�^�C�g���ɖ߂�{�^��
-    [SerializeField] private Text gameEndText;  //�Q�[���I���e�L�X�g
-    [SerializeField] private Text scoreText;  //�X�R�A�e�L�X�g
     [SerializeField] private GameManage gameManage;
     [SerializeField, Tooltip("ゲームオーバーUI")] private UIDocument gameOverUI;
     private bool IsClicked; //ボタンが押されたか
@@ -37,7 +33,7 @@ public class GameView : ViewBase
         gameManage.StartGame();
         cursorManage.OnInvisible();
         Cursor.lockState = CursorLockMode.Confined;
-        gameEndCanvas.enabled=false;
+    
 
 
         IsClicked = false;
