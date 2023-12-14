@@ -97,7 +97,6 @@ namespace PLATEAU.Samples
             goalNum = 5;
             sonarCount = 5;
             enemyManager.InitializeEnemy();
-            itemManager.InitializeItem();
         }
 
         private string GetAttribute(string attributeName,SampleAttribute attribeteData)
