@@ -1,22 +1,25 @@
-// 正解データがある大元
+﻿// 正解データがある大元
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 using System.Linq;
+using StarterAssets;
 
 namespace PLATEAU.Samples
 {
     public class GameManage : MonoBehaviour, InputGameManage.IInputGameActions
     {
-        [SerializeField, Tooltip("高さアイテム")] private GameObject measuredheightItem;
-        [SerializeField, Tooltip("用途アイテム")] private GameObject UsageItem;
         [SerializeField, Tooltip("ターゲットフラッグ")] private GameObject targetFlag;
-        [SerializeField, Tooltip("ゾンビ")] private GameObject Zombie;
+
         private InputGameManage inputActions;
         private UIManage UIManageScript;
         private TimeManage TimeManageScript;
+
+        private EnemyManager enemyManager;
+        private ItemManager itemManager;
+
         public SampleAttribute correctGMLdata;
         private GameObject goalBuilding;
         private Bounds goalBounds;
@@ -24,14 +27,17 @@ namespace PLATEAU.Samples
         private System.Random rnd;
         private GameObject[] HintLst;
 
-        public float sonarCount;
-        public float distance;
+        public int sonarCount;
+        public int rescuedNum;
 
-        private int zombieNum;
         private bool isSetGMLdata;
         private int goalNum;
+
         KeyValuePair<string, PLATEAU.Samples.SampleCityObject> rndBuilding;
-        private List<string> buildingDirName; 
+        private List<string> buildingDirName;
+
+        //プレイヤーのコントローラー関数
+        private ThirdPersonController thirdpersonController;
 
         public struct GoalInfo
         {
@@ -67,24 +73,31 @@ namespace PLATEAU.Samples
 
         void Start()
         {
+
+        }
+
+        public void StartGame()
+        {
             rnd = new System.Random();
             inputActions.InputGame.AddCallbacks(this);
+            //操作不能にするために取得
+            thirdpersonController = GameObject.Find("PlayerArmature").GetComponent<ThirdPersonController>();
+
             //SceneManagerからShow.csにアクセスする
             UIManageScript = GameObject.Find("UIManager").GetComponent<UIManage>();
             TimeManageScript = GameObject.Find("TimeManager").GetComponent<TimeManage>();
+            enemyManager = GameObject.Find("EnemyManager").GetComponent<EnemyManager>();
+            itemManager = GameObject.Find("ItemManager").GetComponent<ItemManager>();
             //Hintのリストを作る
             HintLst = GameObject.FindGameObjectsWithTag("HintText");
             buildingDirName = new List<string>();
-            GoalAttributeDict = new Dictionary<string,GoalInfo>();
+            GoalAttributeDict = new Dictionary<string, GoalInfo>();
 
-            goalNum = 3;
+            rescuedNum = 0;
+            goalNum = 5;
             sonarCount = 5;
-            zombieNum = 50;
-
-            for(int i=0; i < zombieNum;i++)
-            {
-                GenerateZombie();
-            }
+            enemyManager.InitializeEnemy();
+            itemManager.InitializeItem();
         }
 
         private string GetAttribute(string attributeName,SampleAttribute attribeteData)
@@ -125,18 +138,6 @@ namespace PLATEAU.Samples
                     break;
                 }
             }
-                // foreach(var t in buildingData.GetKeyValues())
-                // {
-                //     if(t.Key.Path.Contains(hint.name))
-                //     {
-                //         isSetData = true;
-                //         if(hint.name == "measuredheight")
-                //         {
-                //             buildingHeight = t.Value;
-                //         }
-                //         break;
-                //     }
-                // }
 
             // 建物の高さは10m以上か
             buildingHeight = GetAttribute("measuredheight",buildingData);
@@ -192,7 +193,7 @@ namespace PLATEAU.Samples
             GoalInfo gmlData = new GoalInfo { goalPosition = goalPos, measuredheight = GetAttribute("measuredheight",correctGMLdata), Usage = GetAttribute("Usage",correctGMLdata), saboveground = GetAttribute("saboveground",correctGMLdata)};
             GoalAttributeDict.Add(rndBuilding.Key,gmlData);
 
-            GenerateTargetFlag(goalPos);
+            GenerateTargetFlag(goalPos,rndBuilding.Key);
         }
 
         /// <summary>
@@ -225,11 +226,25 @@ namespace PLATEAU.Samples
             // goalPos = new Vector3(goalBounds.center.x+320f,goalBounds.center.y+goalBounds.size.y,goalBounds.center.z+380f);
             
             //Helperの位置を変更
-            //★デバッグ終了後元に戻す
-            // GameObject.Find("Helper").transform.position = goalPos;
+             GameObject.Find("Helper").transform.position = goalPos;
+        }
+        public void AddGoals(string goalName)
+        {
+            SelectGoal();
+            GoalAttributeDict.Remove(key: goalName);
         }
 
 //  -------------------------------------------------------------------------------
+
+        private float Cal2DDistance(Vector3 point1,Vector3 point2)
+        {
+            Vector2 point1_2D = new Vector2(point1.x,point1.z);
+            Vector2 point2_2D = new Vector2(point2.x,point2.z);
+            float distance = Vector2.Distance(point1_2D,point2_2D);
+
+            return distance;
+        }
+
 
         /// <summary>
         /// ゴールとプレイヤーの距離を計測する
@@ -239,19 +254,19 @@ namespace PLATEAU.Samples
         {
             string nearestBuildingName = "";
             float nearestDistance = float.MaxValue;
+            float distance = 0;
             Vector3 playerPos = GameObject.Find("PlayerArmature").transform.position;
 
             
             foreach(var goalAttribute in GoalAttributeDict)
             {
-                distance = Vector2.Distance(new Vector2(goalAttribute.Value.goalPosition.x,goalAttribute.Value.goalPosition.z),new Vector2(playerPos.x,playerPos.z));
+                distance = Cal2DDistance(goalAttribute.Value.goalPosition,playerPos);
                 if(distance < nearestDistance)
                 {
                     nearestDistance = distance;
                     nearestBuildingName = goalAttribute.Key;
                 }
             }
-
             return nearestBuildingName;
         }
 
@@ -265,6 +280,7 @@ namespace PLATEAU.Samples
 
             //表示させる建物の情報を決める
             nearestBuildingName = FindNearestGoal();
+
             if(itemName == "measuredheight")
             {
                 hint = GoalAttributeDict[nearestBuildingName].measuredheight;
@@ -280,42 +296,21 @@ namespace PLATEAU.Samples
             UIManageScript.DisplayAnswerGML(itemName,hint,nearestBuildingName);
 
             //フィルター関連の表示
-            TimeManageScript.ColorBuilding(itemName,hint);
+            TimeManageScript.ColorBuilding(itemName,nearestBuildingName,hint);
         }
 
-        // 生成する処理
         // -----------------------------------------------------------------------------------------------------------
         /// <summary>
         /// アイテムを生成する
         /// </summary>
-        public void GenerateHintItem()
+        public void SpawnHintItem()
         {
-            //★GameViewの子として生成
-            GameObject hintItem = Instantiate(measuredheightItem, transform.root.gameObject.transform) as GameObject;
-            hintItem.name = "measuredheight";
-            float itemPosX = Random.Range(0f,550f);
-            float itemPosZ= Random.Range(0,700f);
-            hintItem.transform.position = new Vector3(itemPosX,300,itemPosZ);
-
-            hintItem = Instantiate(UsageItem, transform.root.gameObject.transform) as GameObject;
-            hintItem.name = "Usage";
-            itemPosX = Random.Range(0f,550f);
-            itemPosZ= Random.Range(0f,700f);
-            hintItem.transform.position = new Vector3(itemPosX,300,itemPosZ);
+            itemManager.GenerateItem();
         }
-
-        public void GenerateZombie()
-        {
-            GameObject zombie = Instantiate(Zombie, transform.root.gameObject.transform) as GameObject;
-            zombie.name = "zombie";
-            float itemPosX = Random.Range(-400f,400f);
-            float itemPosZ= Random.Range(-200f,200f);
-            zombie.transform.position = new Vector3(itemPosX,300,itemPosZ);
-        }
-        private void GenerateTargetFlag(Vector3 flagPosition)
+        private void GenerateTargetFlag(Vector3 flagPosition,string flagName)
         {
             GameObject flag = Instantiate(targetFlag,transform.root.gameObject.transform) as GameObject;
-            flag.name = "targetflag";
+            flag.name = flagName;
             flag.transform.position = flagPosition;
         }
 
@@ -328,13 +323,28 @@ namespace PLATEAU.Samples
         {
             if (context.performed)
             {
+                string nearestBuildingName = "";
+                float distance = -1f;
                 if(sonarCount > 0)
                 {
-                    string nearestBuildingName = FindNearestGoal();
+                    nearestBuildingName = FindNearestGoal();
+                    
+                    Vector3 playerPos = GameObject.Find("PlayerArmature").transform.position;
+                    Vector3 buildingPos = GoalAttributeDict[nearestBuildingName].goalPosition;
+                    distance = Cal2DDistance(playerPos,buildingPos);
+                    
                     sonarCount -= 1;
-                }   
-                UIManageScript.DisplayDistance();
+
+                }
+                UIManageScript.DisplayDistance(distance,sonarCount);
             }
+        }
+        //ゲームの終了処理
+        public void OnEndGame()
+        {
+            enemyManager.DestroyEnemy();
+            itemManager.DestroyItem();
+            thirdpersonController.enabled = false;
         }
     }
 }
