@@ -18,6 +18,7 @@ namespace PLATEAU.Samples
         [SerializeField, Tooltip("初期化中UI")] private UIDocument initializingUi;
         [SerializeField, Tooltip("ヒントUI")] private UIDocument HintUi;
         [SerializeField, Tooltip("GMLデータUI")] private UIDocument GmlUi;
+        [SerializeField, Tooltip("ベースUI")] private UIDocument BaseUi;
         [SerializeField, Tooltip("色分け（高さ）の色テーブル")] private Color[] heightColorTable;
         [SerializeField, Tooltip("色分け（使用用途）の色テーブル")] private Color[] usageColorTable;
         [SerializeField, Tooltip("選択中のオブジェクトの色")] private Color selectedColor;
@@ -27,7 +28,6 @@ namespace PLATEAU.Samples
 
         private PLATEAUInstancedCityModel[] instancedCityModels;
         private SampleCityObject selectCityObject;
-        private SampleCityObject selectedCityObject;
         private InputScene inputActions;
         private ColorCodeType colorCodeType;
         private GameObject[] HintTexts;
@@ -42,15 +42,23 @@ namespace PLATEAU.Samples
 
 
         public bool isInitialiseFinish = false;
+
         private Label filteringLabel;
         private Label distanceLabel;
         private Label correctBuildingLabel;
         private Label selectBuildingLabel;
+        public Label timeLabel;
+        public Label rescuedNumLabel;
+
         private string filteringLabelText;
         private string distanceLabelText;
         private string correctBuildingLabelText;
         private string selectBuildingLabelText;
+
         private string displayBuildingName;
+
+        private string filterStatus;
+        private string nearestBuildingName;
 
 
 
@@ -87,7 +95,7 @@ namespace PLATEAU.Samples
             StartCoroutine(WatiForInitialise());
 
             //初期化
-            selectedCityObject = null;
+            filterStatus = "None";
             SceneName = "MainCamera";
             displayBuildingName = "";
             mainCamera.enabled = true;
@@ -98,11 +106,9 @@ namespace PLATEAU.Samples
                 // 共通タグのオブジェクトを一つの配列にまとめる
             HintTexts = GameObject.FindGameObjectsWithTag("HintText");
 
-
-                //UI
-            HintUi.gameObject.SetActive(false);
-            GmlUi.gameObject.SetActive(false);
-
+            
+              //UI
+            // GmlUi.gameObject.SetActive(false);
 
         }
 
@@ -261,16 +267,18 @@ namespace PLATEAU.Samples
         /// <summary>
         /// 機能しているフィルターを表示させる 
         /// </summary> 
-        public void ChangeColoring(string itemName,string attributeValue)
+        public void ChangeColoring(string itemName,string nearestName,string attributeValue)
         {
             // TextMeshProUGUI  displayMesh = GameObject.Find("FilterLabel").GetComponent<TextMeshProUGUI>();
+            nearestBuildingName = nearestName; // 個の変数はUIManage専用の変数でここで以外変更してはいけない　<- あとで直す
+            filterStatus = itemName;
 
             // 全ての建物の色を元に戻す
-            colorCodeType = (ColorCodeType)Enum.Parse(typeof(ColorCodeType), "None");
-            ColorCode(colorCodeType);
+            // colorCodeType = (ColorCodeType)Enum.Parse(typeof(ColorCodeType), "None");
+            ColorCode("None",nearestBuildingName);
             //フィルターに引っかかった建物の色を変える
-            colorCodeType = (ColorCodeType)Enum.Parse(typeof(ColorCodeType), itemName);
-            ColorCode(colorCodeType);
+            // colorCodeType = (ColorCodeType)Enum.Parse(typeof(ColorCodeType), itemName);
+            ColorCode(itemName,nearestBuildingName);
 
 
             string filterText = SetFilterText(itemName,attributeValue); 
@@ -291,13 +299,14 @@ namespace PLATEAU.Samples
         /// <summary>
         /// すべての建物の色を変える
         /// </summary>
-        private void ColorCode(ColorCodeType type)
+        public void ColorCode(string type,string nearestName)
         {
+            colorCodeType = (ColorCodeType)Enum.Parse(typeof(ColorCodeType), type);
             //GISSample.csのColorCode関数(上の方)を参考
             foreach (var keyValue in gmls)
             {
                 Color[] colorTable = null;
-                switch (type)
+                switch (colorCodeType)
                 {
                     case ColorCodeType.measuredheight:
                         colorTable = heightColorTable;
@@ -308,7 +317,7 @@ namespace PLATEAU.Samples
                     default:
                         break;
                 }
-                keyValue.Value.ColorCode(type, colorTable);
+                keyValue.Value.ColorCode(colorCodeType, colorTable,nearestName);
             }
         }
 
@@ -368,23 +377,21 @@ namespace PLATEAU.Samples
             var trans = Lookforward();
             if(trans == null || trans.parent.parent == null)
             {
-                selectedCityObject = null;
+                // selectedCityObject = null;
                 return;
             }
 
             // 建物の色を変える
-            selectCityObject = gmls[trans.parent.parent.name].CityObjects[trans.name];
-                //選択された状態の建物の色を元に戻す
-            if(selectedCityObject != null)
-            {
-                selectedCityObject.SetMaterialColor(Color.white);
-            }
+            //選択された状態の建物の色を元に戻す
+            colorCodeType = (ColorCodeType)Enum.Parse(typeof(ColorCodeType), filterStatus);
+            ColorCode(filterStatus,nearestBuildingName);
             // 選択した建物の色を変更する
-            if(selectCityObject != selectedCityObject)
-            {
-                selectCityObject.SetMaterialColor(selectedColor);
-                selectedCityObject =gmls[trans.parent.parent.name].CityObjects[trans.name];
-            }
+            selectCityObject = gmls[trans.parent.parent.name].CityObjects[trans.name];
+            selectCityObject.SetMaterialColor(selectedColor);
+            // selectedCityObject =gmls[trans.parent.parent.name].CityObjects[trans.name];
+            // if(selectCityObject != selectedCityObject)
+            // {
+            // }
 
             //対象の建物のGMLデータを表示させる
             GMLText = "";
@@ -410,9 +417,14 @@ namespace PLATEAU.Samples
         /// <summary>
         /// ゴールまでの距離を表示させる
         /// </summary> 
-        public void DisplayDistance()
+        public void DisplayDistance(float distance,int sonarCount)
         {
-            distanceLabelText = "ソナー残数 : " + GameManageScript.sonarCount + "\n" + "距離 : " + GameManageScript.distance.ToString();
+            string dist = "";
+            if(distance >-1f)
+            {
+                dist = distance.ToString();
+            }
+            distanceLabelText = "ソナー残数 : " + sonarCount + "\n" + "距離 : " + dist;
             distanceLabel.text = distanceLabelText;
         }
 
@@ -434,7 +446,14 @@ namespace PLATEAU.Samples
         {
             if(isInitialiseFinish)
             {
+                GameManageScript.SelectGoals();
+
                 initializingUi.gameObject.SetActive(false);
+
+                BaseUi.gameObject.SetActive(true);
+                timeLabel = BaseUi.rootVisualElement.Q<Label>("TimeLabel");
+                rescuedNumLabel = BaseUi.rootVisualElement.Q<Label>("RescuedNumLabel");
+
                 GmlUi.gameObject.SetActive(true);
                 correctBuildingLabel = GmlUi.rootVisualElement.Q<Label>("CorrectBuildingLabel");
                 selectBuildingLabel = GmlUi.rootVisualElement.Q<Label>("SelectBuildingLabel");

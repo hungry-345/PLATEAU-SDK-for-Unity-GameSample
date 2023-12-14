@@ -27,8 +27,8 @@ namespace PLATEAU.Samples
         private System.Random rnd;
         private GameObject[] HintLst;
 
-        public float sonarCount;
-        public float distance;
+        public int sonarCount;
+        public int rescuedNum;
 
         private bool isSetGMLdata;
         private int goalNum;
@@ -93,7 +93,8 @@ namespace PLATEAU.Samples
             buildingDirName = new List<string>();
             GoalAttributeDict = new Dictionary<string, GoalInfo>();
 
-            goalNum = 3;
+            rescuedNum = 0;
+            goalNum = 5;
             sonarCount = 5;
             enemyManager.InitializeEnemy();
             itemManager.InitializeItem();
@@ -192,7 +193,7 @@ namespace PLATEAU.Samples
             GoalInfo gmlData = new GoalInfo { goalPosition = goalPos, measuredheight = GetAttribute("measuredheight",correctGMLdata), Usage = GetAttribute("Usage",correctGMLdata), saboveground = GetAttribute("saboveground",correctGMLdata)};
             GoalAttributeDict.Add(rndBuilding.Key,gmlData);
 
-            GenerateTargetFlag(goalPos);
+            GenerateTargetFlag(goalPos,rndBuilding.Key);
         }
 
         /// <summary>
@@ -227,8 +228,23 @@ namespace PLATEAU.Samples
             //Helperの位置を変更
              GameObject.Find("Helper").transform.position = goalPos;
         }
+        public void AddGoals(string goalName)
+        {
+            SelectGoal();
+            GoalAttributeDict.Remove(key: goalName);
+        }
 
 //  -------------------------------------------------------------------------------
+
+        private float Cal2DDistance(Vector3 point1,Vector3 point2)
+        {
+            Vector2 point1_2D = new Vector2(point1.x,point1.z);
+            Vector2 point2_2D = new Vector2(point2.x,point2.z);
+            float distance = Vector2.Distance(point1_2D,point2_2D);
+
+            return distance;
+        }
+
 
         /// <summary>
         /// ゴールとプレイヤーの距離を計測する
@@ -238,19 +254,19 @@ namespace PLATEAU.Samples
         {
             string nearestBuildingName = "";
             float nearestDistance = float.MaxValue;
+            float distance = 0;
             Vector3 playerPos = GameObject.Find("PlayerArmature").transform.position;
 
             
             foreach(var goalAttribute in GoalAttributeDict)
             {
-                distance = Vector2.Distance(new Vector2(goalAttribute.Value.goalPosition.x,goalAttribute.Value.goalPosition.z),new Vector2(playerPos.x,playerPos.z));
+                distance = Cal2DDistance(goalAttribute.Value.goalPosition,playerPos);
                 if(distance < nearestDistance)
                 {
                     nearestDistance = distance;
                     nearestBuildingName = goalAttribute.Key;
                 }
             }
-
             return nearestBuildingName;
         }
 
@@ -264,6 +280,7 @@ namespace PLATEAU.Samples
 
             //表示させる建物の情報を決める
             nearestBuildingName = FindNearestGoal();
+
             if(itemName == "measuredheight")
             {
                 hint = GoalAttributeDict[nearestBuildingName].measuredheight;
@@ -279,7 +296,7 @@ namespace PLATEAU.Samples
             UIManageScript.DisplayAnswerGML(itemName,hint,nearestBuildingName);
 
             //フィルター関連の表示
-            TimeManageScript.ColorBuilding(itemName,hint);
+            TimeManageScript.ColorBuilding(itemName,nearestBuildingName,hint);
         }
 
         // -----------------------------------------------------------------------------------------------------------
@@ -290,10 +307,10 @@ namespace PLATEAU.Samples
         {
             itemManager.GenerateItem();
         }
-        private void GenerateTargetFlag(Vector3 flagPosition)
+        private void GenerateTargetFlag(Vector3 flagPosition,string flagName)
         {
             GameObject flag = Instantiate(targetFlag,transform.root.gameObject.transform) as GameObject;
-            flag.name = "targetflag";
+            flag.name = flagName;
             flag.transform.position = flagPosition;
         }
 
@@ -306,12 +323,20 @@ namespace PLATEAU.Samples
         {
             if (context.performed)
             {
+                string nearestBuildingName = "";
+                float distance = -1f;
                 if(sonarCount > 0)
                 {
-                    string nearestBuildingName = FindNearestGoal();
+                    nearestBuildingName = FindNearestGoal();
+                    
+                    Vector3 playerPos = GameObject.Find("PlayerArmature").transform.position;
+                    Vector3 buildingPos = GoalAttributeDict[nearestBuildingName].goalPosition;
+                    distance = Cal2DDistance(playerPos,buildingPos);
+                    
                     sonarCount -= 1;
-                }   
-                UIManageScript.DisplayDistance();
+
+                }
+                UIManageScript.DisplayDistance(distance,sonarCount);
             }
         }
         //ゲームの終了処理
