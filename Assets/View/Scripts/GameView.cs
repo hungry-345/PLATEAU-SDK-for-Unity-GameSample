@@ -6,8 +6,10 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using Cursor = UnityEngine.Cursor;
 
+
 public class GameView : ViewBase
 {
+
 
 
     [SerializeField] private GameManage gameManage;
@@ -30,10 +32,13 @@ public class GameView : ViewBase
     void Start()
     {
                         //ゲーム開始
+        gameOverUI.enabled = false;
         gameManage.StartGame();
         cursorManage.OnInvisible();
         Cursor.lockState = CursorLockMode.Confined;
+
     
+
 
 
         IsClicked = false;
@@ -41,7 +46,7 @@ public class GameView : ViewBase
         //toTitleButton.clicked += OnButtonClicked;
 
         //スタート時はUIを非表示にする
-        gameOverUI.enabled = false;
+        Debug.Log("D");
 
     }
 

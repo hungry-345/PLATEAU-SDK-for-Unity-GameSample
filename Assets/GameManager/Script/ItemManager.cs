@@ -2,21 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class ItemManager : MonoBehaviour
 {
     //生成する敵
     [SerializeField, Tooltip("高さアイテム")] private GameObject measuredheightItem;
     [SerializeField, Tooltip("用途アイテム")] private GameObject UsageItem;
-    private int itemNum = 50; 
 
-    //初期化処理
-    public void InitializeItem()
-    {
-        //for (int i = 0; i < itemNum; i++)
-        //{
-        //    GenerateItem();
-        //}
-    }
+    //初期化処
     public void GenerateItem()
     {
         //★GameViewの子として生成
