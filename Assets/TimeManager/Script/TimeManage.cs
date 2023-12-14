@@ -37,7 +37,7 @@ namespace PLATEAU.Samples
             if(elapsedTime > generateSpan)
             {
                 elapsedTime = 0f;
-                GameManageScript.GenerateHintItem();
+                GameManageScript.SpawnHintItem();
             }
             if(UIManageScript.isInitialiseFinish)
             {
