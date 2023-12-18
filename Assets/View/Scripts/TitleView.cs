@@ -5,27 +5,40 @@ using UnityEngine;
 using UnityEngine.UIElements;
 public class TitleView : ViewBase
 {
-    [SerializeField, Tooltip("スタートUI")] private UIDocument startUI;
-    private bool IsClicked;
+    [SerializeField, Tooltip("タイトルUI")] private UIDocument titleUI;
+    [SerializeField, Tooltip("タイトルUI")] private UIDocument explanationUI;
+    private bool isStart;
+    private bool isExplatation;
     private Button startButton;
+    private Button explanationButton;
 
     private void Start()
     {
-        IsClicked = false;
-        startButton = startUI.rootVisualElement.Query<Button>();
-        startButton.clicked += OnButtonClicked;
+        isStart = false;
+        isExplatation = false;
+        startButton = titleUI.rootVisualElement.Query<Button>("StartButton");
+        startButton.clicked += OnStart;
+        explanationButton = titleUI.rootVisualElement.Query<Button>("ExplanationButton");
+        explanationButton.clicked += OnExplanation;
+        explanationUI.enabled = false;
     }
 
-    private void OnButtonClicked()
+    private void OnStart()
     {
-        IsClicked = true;
+        isStart = true;
+    }
+    private void OnExplanation()
+    {
+        isExplatation = true;
+        explanationUI.enabled = true;
+        Debug.Log("Explanation");
     }
     public override IEnumerator Wait()
     {
         while (true)
         {
             //ボタン入力待ち状態にする
-            if (IsClicked)
+            if (isStart)
             {
                 yield break;
             }

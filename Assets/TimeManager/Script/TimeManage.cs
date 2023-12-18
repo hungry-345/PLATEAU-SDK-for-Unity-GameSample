@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,7 +13,7 @@ namespace PLATEAU.Samples
         private GameView GameViewScript;
         private bool isInitialiseFinish;
         private string itemName;
-        private float generateSpan = 0.1f;
+        private float generateSpan = 5f;
         public int countdownMinutes = 3;
         private float countdownSeconds;
         private Coroutine coloringCoroutine;
