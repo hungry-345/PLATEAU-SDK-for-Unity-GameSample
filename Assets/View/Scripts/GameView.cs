@@ -14,9 +14,10 @@ public class GameView : ViewBase
 
     [SerializeField] private GameManage gameManage;
     [SerializeField, Tooltip("ゲームオーバーUI")] private UIDocument gameOverUI;
+    [SerializeField, Tooltip("ゲームフィニッシュUI")] private UIDocument gameFinishUI;
     private bool IsClicked; //ボタンが押されたか
     private Button toTitleButton;
-    public bool isGameClear = false;  //ゲームクリアフラグ
+    public bool isGameFinish = false;  //ゲームクリアフラグ
     public bool isGameOver = false;   //ゲームオーバーフラグ
 
     private GameObject cursor;
@@ -34,6 +35,7 @@ public class GameView : ViewBase
         //ゲーム開始
         //スタート時はUIを非表示にする
         gameOverUI.enabled = false;
+        gameFinishUI.enabled = false;
         gameManage.StartGame();
         cursorManage.OnInvisible();
         Cursor.lockState = CursorLockMode.Confined;
@@ -46,7 +48,7 @@ public class GameView : ViewBase
         while (true)
         {
             //ゲーム終了
-            if(isGameOver||isGameClear)
+            if(isGameOver||isGameFinish)
             {
 
                 //ゾンビやアイテムを消す・プレイヤーを操作できなくする
@@ -55,8 +57,13 @@ public class GameView : ViewBase
 
                 //ゲームオーバーテキスト
                 //gameEndText.text = "Game Over";
-                if (isGameClear)
+                if (isGameFinish)
                 {
+
+                    gameFinishUI.enabled = true;
+                    Label ResultLabel = gameFinishUI.rootVisualElement.Q<Label>("Result");
+                    ResultLabel.text = "救出した人数 : " + gameManage.rescuedNum;
+                    toTitleButton = gameFinishUI.rootVisualElement.Query<Button>();
                     //クリアテキスト
                     //gameEndText.text = "Game Clear!";
 
@@ -68,8 +75,8 @@ public class GameView : ViewBase
                     //ゲームオーバーUIを表示
                     gameOverUI.enabled = true;
                     toTitleButton = gameOverUI.rootVisualElement.Query<Button>();
-                    toTitleButton.clicked += OnButtonClicked;
                 }
+                toTitleButton.clicked += OnButtonClicked;
 
                 //ボタン入力待ち状態にする
                 while (true)

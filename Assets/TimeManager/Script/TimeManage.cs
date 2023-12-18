@@ -50,7 +50,7 @@ namespace PLATEAU.Samples
             }
             if(countdownSeconds <= 0)
             {
-                GameViewScript.isGameClear = true;
+                GameViewScript.isGameFinish = true;
             }
 
         }
