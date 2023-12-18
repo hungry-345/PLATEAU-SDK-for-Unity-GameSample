@@ -20,8 +20,7 @@ namespace PLATEAU.Samples
         [SerializeField, Tooltip("色分け（高さ）の色テーブル")] private Color[] heightColorTable;
         [SerializeField, Tooltip("色分け（使用用途）の色テーブル")] private Color[] usageColorTable;
         [SerializeField, Tooltip("選択中のオブジェクトの色")] private Color selectedColor;
-        [SerializeField] private Camera mainCamera;
-        [SerializeField] private Camera goalCamera;
+        [SerializeField] private Camera PlayerPosCamera;
 
 
         private PLATEAUInstancedCityModel[] instancedCityModels;
@@ -97,8 +96,7 @@ namespace PLATEAU.Samples
             filterStatus = "None";
             SceneName = "MainCamera";
             displayBuildingName = "";
-            mainCamera.enabled = true;
-            goalCamera.enabled = false;
+            PlayerPosCamera.enabled = false; 
                 // GameManagerの関数や変数を参照できる
             GameManageScript = GameObject.Find("GameManager").GetComponent<GameManage>();
             TimeManageScript = GameObject.Find("TimeManager").GetComponent<TimeManage>();
@@ -297,6 +295,7 @@ namespace PLATEAU.Samples
                     nearestTransform = hit.transform;
                 }
             }
+
             return nearestTransform;
         }
 
@@ -315,6 +314,7 @@ namespace PLATEAU.Samples
                     return city.Attribute;
                 }
             }
+
             return null;
         }
 
@@ -357,14 +357,7 @@ namespace PLATEAU.Samples
                 }
                 if(AttributeKeyValue.Key.Path.Contains("Usage"))
                 {
-                    bar3HintLabel.text =  AttributeKeyValue.Value;
-                }
-                foreach(GameObject HintContent in HintTexts)
-                {
-                    if(AttributeKeyValue.Key.Path.Contains(HintContent.name))
-                    {
-                        GMLText += HintContent.name + "\n" + AttributeKeyValue.Value + "\n";
-                    }
+                    bar3ScanLabel.text =  AttributeKeyValue.Value;
                 }
             }
         }
@@ -382,7 +375,7 @@ namespace PLATEAU.Samples
                 dist = distance.ToString();
             }
 
-            sonarCountLabel.text = sonarCount.ToString();
+            sonarCountLabel.text = "距離 : " + sonarCount.ToString();
             sonarContextLabel.text  = dist;
         }
 
@@ -425,8 +418,7 @@ namespace PLATEAU.Samples
                 bar3ScanLabel = BaseUi.rootVisualElement.Q<Label>("Bar3_Scan");
                 bar3HintLabel = BaseUi.rootVisualElement.Q<Label>("Bar3_Hint");
 
-                GameObject PlayerPosCamera = GameObject.Find("PlayerPositionCamera");
-                PlayerPosCamera.SetActive(true); 
+                PlayerPosCamera.enabled = true; 
             }
             return isInitialiseFinish;
         }

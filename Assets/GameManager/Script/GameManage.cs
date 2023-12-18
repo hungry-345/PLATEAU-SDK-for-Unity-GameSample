@@ -344,7 +344,7 @@ namespace PLATEAU.Samples
         {
             enemyManager.DestroyEnemy();
             itemManager.DestroyItem();
-            thirdpersonController.enabled = false;
+            thirdpersonController.enabled = false;           
         }
     }
 }
