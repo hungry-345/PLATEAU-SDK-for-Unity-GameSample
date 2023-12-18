@@ -1,22 +1,25 @@
-// 正解データがある大元
+﻿// 正解データがある大元
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 using System.Linq;
+using StarterAssets;
 
 namespace PLATEAU.Samples
 {
     public class GameManage : MonoBehaviour, InputGameManage.IInputGameActions
     {
-        [SerializeField, Tooltip("高さアイテム")] private GameObject measuredheightItem;
-        [SerializeField, Tooltip("用途アイテム")] private GameObject UsageItem;
         [SerializeField, Tooltip("ターゲットフラッグ")] private GameObject targetFlag;
-        [SerializeField, Tooltip("ゾンビ")] private GameObject Zombie;
+
         private InputGameManage inputActions;
         private UIManage UIManageScript;
         private TimeManage TimeManageScript;
+
+        private EnemyManager enemyManager;
+        private ItemManager itemManager;
+
         public SampleAttribute correctGMLdata;
         private GameObject goalBuilding;
         private Bounds goalBounds;
@@ -27,11 +30,14 @@ namespace PLATEAU.Samples
         public int sonarCount;
         public int rescuedNum;
 
-        private int zombieNum;
         private bool isSetGMLdata;
         private int goalNum;
+
         KeyValuePair<string, PLATEAU.Samples.SampleCityObject> rndBuilding;
-        private List<string> buildingDirName; 
+        private List<string> buildingDirName;
+
+        //プレイヤーのコントローラー関数
+        private ThirdPersonController thirdpersonController;
 
         public struct GoalInfo
         {
@@ -67,25 +73,30 @@ namespace PLATEAU.Samples
 
         void Start()
         {
+
+        }
+
+        public void StartGame()
+        {
             rnd = new System.Random();
             inputActions.InputGame.AddCallbacks(this);
+            //操作不能にするために取得
+            thirdpersonController = GameObject.Find("PlayerArmature").GetComponent<ThirdPersonController>();
+
             //SceneManagerからShow.csにアクセスする
             UIManageScript = GameObject.Find("UIManager").GetComponent<UIManage>();
             TimeManageScript = GameObject.Find("TimeManager").GetComponent<TimeManage>();
+            enemyManager = GameObject.Find("EnemyManager").GetComponent<EnemyManager>();
+            itemManager = GameObject.Find("ItemManager").GetComponent<ItemManager>();
             //Hintのリストを作る
             HintLst = GameObject.FindGameObjectsWithTag("HintText");
             buildingDirName = new List<string>();
-            GoalAttributeDict = new Dictionary<string,GoalInfo>();
+            GoalAttributeDict = new Dictionary<string, GoalInfo>();
 
             rescuedNum = 0;
             goalNum = 5;
             sonarCount = 5;
-            zombieNum = 50;
-
-            for(int i=0; i < zombieNum;i++)
-            {
-                GenerateZombie();
-            }
+            enemyManager.InitializeEnemy();
         }
 
         private string GetAttribute(string attributeName,SampleAttribute attribeteData)
@@ -126,18 +137,6 @@ namespace PLATEAU.Samples
                     break;
                 }
             }
-                // foreach(var t in buildingData.GetKeyValues())
-                // {
-                //     if(t.Key.Path.Contains(hint.name))
-                //     {
-                //         isSetData = true;
-                //         if(hint.name == "measuredheight")
-                //         {
-                //             buildingHeight = t.Value;
-                //         }
-                //         break;
-                //     }
-                // }
 
             // 建物の高さは10m以上か
             buildingHeight = GetAttribute("measuredheight",buildingData);
@@ -226,8 +225,7 @@ namespace PLATEAU.Samples
             // goalPos = new Vector3(goalBounds.center.x+320f,goalBounds.center.y+goalBounds.size.y,goalBounds.center.z+380f);
             
             //Helperの位置を変更
-            //★デバッグ終了後元に戻す
-            // GameObject.Find("Helper").transform.position = goalPos;
+             GameObject.Find("Helper").transform.position = goalPos;
         }
         public void AddGoals(string goalName)
         {
@@ -300,34 +298,13 @@ namespace PLATEAU.Samples
             TimeManageScript.ColorBuilding(itemName,nearestBuildingName,hint);
         }
 
-        // 生成する処理
         // -----------------------------------------------------------------------------------------------------------
         /// <summary>
         /// アイテムを生成する
         /// </summary>
-        public void GenerateHintItem()
+        public void SpawnHintItem()
         {
-            //★GameViewの子として生成
-            GameObject hintItem = Instantiate(measuredheightItem, transform.root.gameObject.transform) as GameObject;
-            hintItem.name = "measuredheight";
-            float itemPosX = Random.Range(0f,550f);
-            float itemPosZ= Random.Range(0,700f);
-            hintItem.transform.position = new Vector3(itemPosX,300,itemPosZ);
-
-            hintItem = Instantiate(UsageItem, transform.root.gameObject.transform) as GameObject;
-            hintItem.name = "Usage";
-            itemPosX = Random.Range(0f,550f);
-            itemPosZ= Random.Range(0f,700f);
-            hintItem.transform.position = new Vector3(itemPosX,300,itemPosZ);
-        }
-
-        public void GenerateZombie()
-        {
-            GameObject zombie = Instantiate(Zombie, transform.root.gameObject.transform) as GameObject;
-            zombie.name = "zombie";
-            float itemPosX = Random.Range(-400f,400f);
-            float itemPosZ= Random.Range(-200f,200f);
-            zombie.transform.position = new Vector3(itemPosX,300,itemPosZ);
+            itemManager.GenerateItem();
         }
         private void GenerateTargetFlag(Vector3 flagPosition,string flagName)
         {
@@ -360,6 +337,13 @@ namespace PLATEAU.Samples
                 }
                 UIManageScript.DisplayDistance(distance,sonarCount);
             }
+        }
+        //ゲームの終了処理
+        public void OnEndGame()
+        {
+            enemyManager.DestroyEnemy();
+            itemManager.DestroyItem();
+            thirdpersonController.enabled = false;
         }
     }
 }

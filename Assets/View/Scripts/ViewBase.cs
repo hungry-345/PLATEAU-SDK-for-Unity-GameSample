@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,16 +9,16 @@ public class ViewBase : MonoBehaviour
         yield return null;
     }
 
-    //‰æ–Ê‚ğ”jŠü‚·‚é
+    //ãƒ†ã‚¹ãƒˆ
+    //ç”»é¢ã‚’ç ´æ£„ã™ã‚‹
     public void DestroyView()
     {
-        Debug.Log("Destroy");
         Destroy(this.gameObject);
     }
 
-    /// ‰æ–Ê‚ğ¶¬‚·‚é
-    /// <typeparam name="T">View‚ÌŒp³</typeparam>
-    /// <param name="viewName">View–¼</param>
+    /// ç”»é¢ã‚’ç”Ÿæˆã™ã‚‹
+    /// <typeparam name="T">Viewã®ç¶™æ‰¿</typeparam>
+    /// <param name="viewName">Viewå</param>
     public static T Instantiate<T>(string viewName) where T : ViewBase
     {
         var prefab = Resources.Load<T>("Prefabs/ViewPrefabs/"+viewName);

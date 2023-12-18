@@ -1,18 +1,18 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 // using UnityEngine.UI;
 using UnityEngine.UIElements;
 public class TitleView : ViewBase
 {
-    [SerializeField, Tooltip("スタートUI")] private UIDocument StartgUi;
+    [SerializeField, Tooltip("スタートUI")] private UIDocument startUI;
     private bool IsClicked;
     private Button startButton;
 
     private void Start()
     {
         IsClicked = false;
-        startButton = StartgUi.rootVisualElement.Query<Button>();
+        startButton = startUI.rootVisualElement.Query<Button>();
         startButton.clicked += OnButtonClicked;
     }
 
@@ -24,7 +24,7 @@ public class TitleView : ViewBase
     {
         while (true)
         {
-            //�Q�[���X�^�[�g
+            //ボタン入力待ち状態にする
             if (IsClicked)
             {
                 yield break;

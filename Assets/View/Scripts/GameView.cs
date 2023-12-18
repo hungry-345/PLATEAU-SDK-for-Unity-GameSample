@@ -1,63 +1,91 @@
+ï»¿using PLATEAU.Samples;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+//using UnityEngine.UI;
+using UnityEngine.UIElements;
+using Cursor = UnityEngine.Cursor;
+
 
 public class GameView : ViewBase
 {
-    public bool isGameClear = false;  //ƒQ[ƒ€ƒNƒŠƒAƒtƒ‰ƒO
-    public bool isGameOver = false;   //ƒQ[ƒ€ƒI[ƒo[ƒtƒ‰ƒO
-
-    [SerializeField] private Canvas gameEndCanvas;
-    [SerializeField] private ExtendButton retryButton;  //ƒŠƒgƒ‰ƒCƒ{ƒ^ƒ“
-    [SerializeField] private ExtendButton toTitleButton;  //ƒ^ƒCƒgƒ‹‚É–ß‚éƒ{ƒ^ƒ“
-    [SerializeField] private Text gameEndText;  //ƒQ[ƒ€I—¹ƒeƒLƒXƒg
-    [SerializeField] private Text scoreText;  //ƒXƒRƒAƒeƒLƒXƒg
 
 
+
+    [SerializeField] private GameManage gameManage;
+    [SerializeField, Tooltip("ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼UI")] private UIDocument gameOverUI;
+    private bool IsClicked; //ãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸã‹
+    private Button toTitleButton;
+    public bool isGameClear = false;  //ã‚²ãƒ¼ãƒ ã‚¯ãƒªã‚¢ãƒ•ãƒ©ã‚°
+    public bool isGameOver = false;   //ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼ãƒ•ãƒ©ã‚°
+
+    private GameObject cursor;
+
+    private CursorManager cursorManage;
+
+    void Awake()
+    {
+        cursor = GameObject.Find("Cursor");
+        cursorManage = cursor.GetComponent<CursorManager>();
+    }
 
     void Start()
     {
-        gameEndCanvas.enabled=false;
+                        //ã‚²ãƒ¼ãƒ é–‹å§‹
+        gameOverUI.enabled = false;
+        gameManage.StartGame();
+        cursorManage.OnInvisible();
+        Cursor.lockState = CursorLockMode.Confined;
+
+    
+
+
+
+        IsClicked = false;
+        //toTitleButton = gameOverUI.rootVisualElement.Query<Button>();
+        //toTitleButton.clicked += OnButtonClicked;
+
+        //ã‚¹ã‚¿ãƒ¼ãƒˆæ™‚ã¯UIã‚’éè¡¨ç¤ºã«ã™ã‚‹
+        Debug.Log("D");
+
     }
+
     public override IEnumerator Wait()
     {
         while (true)
         {
-            //ƒQ[ƒ€I—¹
+            //ã‚²ãƒ¼ãƒ çµ‚äº†
             if(isGameOver||isGameClear)
             {
-                //šUI‚ğ”ñ•\¦‚É‚·‚é
-                //šƒ]ƒ“ƒr‚âƒAƒCƒeƒ€‚ğÁ‚·
-                //šƒvƒŒƒCƒ„[‚ğ‘€ì‚Å‚«‚È‚­‚·‚é
 
+                //ã‚¾ãƒ³ãƒ“ã‚„ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ¶ˆã™ãƒ»ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’æ“ä½œã§ããªãã™ã‚‹
+                gameManage.OnEndGame();
+                cursorManage.OnVisible();
 
-                //ƒQ[ƒ€I—¹UI‚ğ•\¦
-                gameEndCanvas.enabled=true;
-
-                //ƒQ[ƒ€ƒI[ƒo[ƒeƒLƒXƒg
-                gameEndText.text = "Game Over";
-
+                //ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼ãƒ†ã‚­ã‚¹ãƒˆ
+                //gameEndText.text = "Game Over";
                 if (isGameClear)
                 {
-                    //ƒNƒŠƒAƒeƒLƒXƒg
-                    gameEndText.text = "Game Clear!";
+                    //ã‚¯ãƒªã‚¢ãƒ†ã‚­ã‚¹ãƒˆ
+                    //gameEndText.text = "Game Clear!";
 
-                    //ƒXƒRƒA•\¦¦ƒXƒRƒAæ“¾—p‚ÌŠÖ”‚ğì¬‚·‚é
-                    scoreText.text = "SCORE@"+ViewManager.instance.score;
+                    //ã‚¹ã‚³ã‚¢è¡¨ç¤ºâ˜…ã‚¹ã‚³ã‚¢å–å¾—ç”¨ã®é–¢æ•°ã‚’ä½œæˆã™ã‚‹
+                    //scoreText.text = "SCOREã€€"+ViewManager.instance.score;
+                }
+                else
+                {
+                    //ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼UIã‚’è¡¨ç¤º
+                    gameOverUI.enabled = true;
+                    toTitleButton = gameOverUI.rootVisualElement.Query<Button>();
+                    toTitleButton.clicked += OnButtonClicked;
                 }
 
-                //ƒ{ƒ^ƒ““ü—Í‘Ò‚¿ó‘Ô‚É‚·‚é
+                //ãƒœã‚¿ãƒ³å…¥åŠ›å¾…ã¡çŠ¶æ…‹ã«ã™ã‚‹
                 while (true)
                 {
-                    if (retryButton.IsClicked)  //Ä’§íƒ{ƒ^ƒ“
+                    if (IsClicked)  //ã‚¿ã‚¤ãƒˆãƒ«ãƒœã‚¿ãƒ³
                     {
-                        //ƒQ[ƒ€‚ğ‰Šú‰»‚·‚é
-
-                    }
-                    else if (toTitleButton.IsClicked)  //ƒ^ƒCƒgƒ‹ƒ{ƒ^ƒ“
-                    {
-                        //ƒQ[ƒ€I—¹
+                        //ã‚²ãƒ¼ãƒ çµ‚äº†
                         yield break;
                     }
 
@@ -67,5 +95,9 @@ public class GameView : ViewBase
             }
             yield return null;
         }
+    }
+    private void OnButtonClicked()
+    {
+        IsClicked = true;
     }
 }
