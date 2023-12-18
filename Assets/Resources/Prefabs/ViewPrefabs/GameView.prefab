@@ -6913,8 +6913,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initializingUi: {fileID: 7600826448228269312}
-  HintUi: {fileID: 7600826448033309018}
-  GmlUi: {fileID: 7600826447587962454}
   BaseUi: {fileID: 8615188611050498614}
   heightColorTable:
   - {r: 1, g: 0.5639591, b: 0, a: 0}
@@ -7460,7 +7458,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PanelSettings: {fileID: 11400000, guid: d8cbffa7f2392be458da5ceb13b6e356, type: 2}
   m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 9197481963319205126, guid: 468b0b437616ee94f84306bf89858f4f, type: 3}
+  sourceAsset: {fileID: 9197481963319205126, guid: 87556deef7dfa5140abf9c1d23204282, type: 3}
   m_SortingOrder: 0
 --- !u!1 &7600826448235179980
 GameObject:
@@ -11703,7 +11701,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PanelSettings: {fileID: 11400000, guid: d8cbffa7f2392be458da5ceb13b6e356, type: 2}
   m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 9197481963319205126, guid: 173b9b95c4749274b8f4d479254be4af, type: 3}
+  sourceAsset: {fileID: 9197481963319205126, guid: 841660e0fd0cc354b83c4c6e148a787a, type: 3}
   m_SortingOrder: 0
 --- !u!1 &8956751846637325759
 GameObject:
