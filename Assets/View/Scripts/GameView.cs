@@ -31,23 +31,14 @@ public class GameView : ViewBase
 
     void Start()
     {
-                        //ゲーム開始
+        //ゲーム開始
+        //スタート時はUIを非表示にする
         gameOverUI.enabled = false;
         gameManage.StartGame();
         cursorManage.OnInvisible();
         Cursor.lockState = CursorLockMode.Confined;
 
-    
-
-
-
         IsClicked = false;
-        //toTitleButton = gameOverUI.rootVisualElement.Query<Button>();
-        //toTitleButton.clicked += OnButtonClicked;
-
-        //スタート時はUIを非表示にする
-        Debug.Log("D");
-
     }
 
     public override IEnumerator Wait()
