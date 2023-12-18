@@ -16,11 +16,11 @@ namespace PLATEAU.Samples
     public class UIManage : MonoBehaviour, InputScene.ISelectSceneActions
     {
         [SerializeField, Tooltip("初期化中UI")] private UIDocument initializingUi;
-        [SerializeField, Tooltip("ベースUI")] private UIDocument BaseUi;
+        [SerializeField, Tooltip("ベースUI")] public UIDocument BaseUi;
         [SerializeField, Tooltip("色分け（高さ）の色テーブル")] private Color[] heightColorTable;
         [SerializeField, Tooltip("色分け（使用用途）の色テーブル")] private Color[] usageColorTable;
         [SerializeField, Tooltip("選択中のオブジェクトの色")] private Color selectedColor;
-        [SerializeField] private Camera PlayerPosCamera;
+        [SerializeField] public  Camera PlayerPosCamera;
 
 
         private PLATEAUInstancedCityModel[] instancedCityModels;

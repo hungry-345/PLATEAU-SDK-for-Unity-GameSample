@@ -344,6 +344,7 @@ namespace PLATEAU.Samples
         {
             enemyManager.DestroyEnemy();
             itemManager.DestroyItem();
+            UIManageScript.PlayerPosCamera.enabled = false;
             thirdpersonController.enabled = false;           
         }
     }
