@@ -16,8 +16,6 @@ namespace PLATEAU.Samples
     public class UIManage : MonoBehaviour, InputScene.ISelectSceneActions
     {
         [SerializeField, Tooltip("初期化中UI")] private UIDocument initializingUi;
-        [SerializeField, Tooltip("ヒントUI")] private UIDocument HintUi;
-        [SerializeField, Tooltip("GMLデータUI")] private UIDocument GmlUi;
         [SerializeField, Tooltip("ベースUI")] private UIDocument BaseUi;
         [SerializeField, Tooltip("色分け（高さ）の色テーブル")] private Color[] heightColorTable;
         [SerializeField, Tooltip("色分け（使用用途）の色テーブル")] private Color[] usageColorTable;
@@ -43,18 +41,19 @@ namespace PLATEAU.Samples
 
         public bool isInitialiseFinish = false;
 
-        private Label filteringLabel;
-        private Label distanceLabel;
-        private Label correctBuildingLabel;
-        private Label selectBuildingLabel;
         public Label timeLabel;
         public Label rescuedNumLabel;
-
-        private string filteringLabelText;
-        private string distanceLabelText;
-        private string correctBuildingLabelText;
-        private string selectBuildingLabelText;
-
+        public Label sonarCountLabel;
+        public Label sonarContextLabel;
+        public Label filterStatusLabel;
+        public Label filterContextLabel;
+        public Label bar1ScanLabel;
+        public Label bar1HintLabel;
+        public Label bar2ScanLabel;
+        public Label bar2HintLabel;
+        public Label bar3ScanLabel;
+        public Label bar3HintLabel;
+        
         private string displayBuildingName;
 
         private string filterStatus;
@@ -105,11 +104,6 @@ namespace PLATEAU.Samples
             TimeManageScript = GameObject.Find("TimeManager").GetComponent<TimeManage>();
                 // 共通タグのオブジェクトを一つの配列にまとめる
             HintTexts = GameObject.FindGameObjectsWithTag("HintText");
-
-            
-              //UI
-            // GmlUi.gameObject.SetActive(false);
-
         }
 
         // Plateauのデータに関する関数
@@ -146,56 +140,6 @@ namespace PLATEAU.Samples
             isInitialiseFinish = true;
         }
 
-        // カメラに関する関数
-        // -------------------------------------------------------------------------------------------------------------
-        /// <summary>
-        /// カメラのシーンを切り替える
-        /// </summary> 
-        private void ChangeCameraScene()
-        {
-            if(mainCamera.enabled)
-            {
-                SceneName = "GoalCamera";
-                mainCamera.enabled = false;
-                goalCamera.enabled = true;
-            }
-            else
-            {
-                SceneName = "MainCamera";
-                mainCamera.enabled = true;
-                goalCamera.enabled = false;
-            }
-        }
-
-        // UIに関する関数
-        // -------------------------------------------------------------------------------------------------------------
-        /// <summary>
-        /// UIを切り替える
-        /// </summary>
-        /// 
-        private void ChangeUIDisplay()
-        {
-            if(HintUi.gameObject.activeSelf)
-            {
-                HintUi.gameObject.SetActive(false);
-                GmlUi.gameObject.SetActive(true);
-                correctBuildingLabel = GmlUi.rootVisualElement.Q<Label>("CorrectBuildingLabel");
-                selectBuildingLabel = GmlUi.rootVisualElement.Q<Label>("SelectBuildingLabel");
-                correctBuildingLabel.text = correctBuildingLabelText;
-                selectBuildingLabel.text = selectBuildingLabelText;
-                // correctBuildingLabel.text = "wwww";
-            }
-            else
-            {
-                GmlUi.gameObject.SetActive(false);
-                HintUi.gameObject.SetActive(true);
-                filteringLabel = HintUi.rootVisualElement.Q<Label>("FilterLabel");
-                distanceLabel = HintUi.rootVisualElement.Q<Label>("DistanceLabel");
-                filteringLabel.text = filteringLabelText;
-                distanceLabel.text = distanceLabelText;
-            }
-        }
-
         // ヒントに関する関数
         // -------------------------------------------------------------------------------------------------------------
         /// <summary>
@@ -205,17 +149,21 @@ namespace PLATEAU.Samples
         {
             if(displayBuildingName != buildingName)
             {
-                correctBuildingLabelText = "避難者数 : " + GameManageScript.GoalAttributeDict[buildingName].saboveground + "\n";
+                bar1HintLabel.text = GameManageScript.GoalAttributeDict[buildingName].saboveground;
             }
             //正解の建物のGMLデータを表示させる
-            foreach(GameObject text in HintTexts)
+
+
+            if(itemName == "measuredheight")
             {
-                if(!correctBuildingLabelText.Contains(itemName))
-                {
-                    correctBuildingLabelText += itemName + " : " + hint + "\n";
-                }
-                correctBuildingLabel.text = correctBuildingLabelText; 
+                bar2HintLabel.text = hint;
             }
+            if(itemName == "Usage")
+            {
+                bar3HintLabel.text = hint;
+            }
+
+
             displayBuildingName = buildingName;
         }
 
@@ -227,27 +175,27 @@ namespace PLATEAU.Samples
                 float height = float.Parse(attributeValue);  
                 if (height <= 12f)
                 {
-                    filterText = "~ 12m";
+                    filterText = "高さ : ~ 12m";
                 }
                 else if (height > 12f && height <= 31f)
                 {
-                    filterText = "13m ~ 31m";
+                    filterText = "高さ : 13m ~ 31m";
                 }
                 else if (height > 31f && height <= 60f)
                 {
-                    filterText = "32m ~ 60m";
+                    filterText = "高さ : 32m ~ 60m";
                 }
                 else if (height > 60f && height <= 120f)
                 {
-                    filterText = "61m ~ 120m";
+                    filterText = "高さ : 61m ~ 120m";
                 }
                 else if (height > 120f && height <= 180f)
                 {
-                    filterText = "121m ~ 180m";
+                    filterText = "高さ : 121m ~ 180m";
                 }
                 else if (height > 180f)
                 {
-                    filterText = "181m ~";
+                    filterText = "高さ : 181m ~";
                 }
             }
             if(itemName == "Usage")
@@ -256,7 +204,7 @@ namespace PLATEAU.Samples
                 {
                     if(t.Key.Path.Contains(itemName))
                     {
-                        filterText = t.Value;
+                        filterText = "使用用途 : " + t.Value;
                     }
                 }
             }
@@ -285,11 +233,13 @@ namespace PLATEAU.Samples
             // ownHintLstの中のIndexで指定された候補を返す
             if(itemName == "None")
             {
-                filteringLabelText = $"フィルターなし";
+                filterContextLabel.text = "";
+                filterStatusLabel.text = "OFF";
             }
             else
             {
-                filteringLabelText = itemName + "\n" + filterText;
+                filterStatusLabel.text = "ON";
+                filterContextLabel.text = filterText;
             }
         }
 
@@ -398,8 +348,17 @@ namespace PLATEAU.Samples
             var selectbuildingAttribute = GetAttribute(trans.parent.parent.name, trans.name);
             var AttributeKeyValues = selectbuildingAttribute.GetKeyValues();
 
+            bar1ScanLabel.text = "Unknown";
             foreach(var AttributeKeyValue in AttributeKeyValues)
             {
+                if(AttributeKeyValue.Key.Path.Contains("measuredheight"))
+                {
+                    bar2ScanLabel.text = AttributeKeyValue.Value;
+                }
+                if(AttributeKeyValue.Key.Path.Contains("Usage"))
+                {
+                    bar3HintLabel.text =  AttributeKeyValue.Value;
+                }
                 foreach(GameObject HintContent in HintTexts)
                 {
                     if(AttributeKeyValue.Key.Path.Contains(HintContent.name))
@@ -408,8 +367,6 @@ namespace PLATEAU.Samples
                     }
                 }
             }
-            selectBuildingLabelText = GMLText;
-            selectBuildingLabel.text = selectBuildingLabelText;
         }
 
         // 実行時間に依存する処理
@@ -424,8 +381,9 @@ namespace PLATEAU.Samples
             {
                 dist = distance.ToString();
             }
-            distanceLabelText = "ソナー残数 : " + sonarCount + "\n" + "距離 : " + dist;
-            distanceLabel.text = distanceLabelText;
+
+            sonarCountLabel.text = sonarCount.ToString();
+            sonarContextLabel.text  = dist;
         }
 
         
@@ -451,14 +409,24 @@ namespace PLATEAU.Samples
                 initializingUi.gameObject.SetActive(false);
 
                 BaseUi.gameObject.SetActive(true);
-                timeLabel = BaseUi.rootVisualElement.Q<Label>("TimeLabel");
-                rescuedNumLabel = BaseUi.rootVisualElement.Q<Label>("RescuedNumLabel");
+                timeLabel = BaseUi.rootVisualElement.Q<Label>("Time");
+                rescuedNumLabel = BaseUi.rootVisualElement.Q<Label>("Rescued_Count");
 
-                GmlUi.gameObject.SetActive(true);
-                correctBuildingLabel = GmlUi.rootVisualElement.Q<Label>("CorrectBuildingLabel");
-                selectBuildingLabel = GmlUi.rootVisualElement.Q<Label>("SelectBuildingLabel");
-                correctBuildingLabelText = "";
-                distanceLabelText = "ソナー残数 : 5";
+                sonarCountLabel = BaseUi.rootVisualElement.Q<Label>("Sonar_Count");
+                sonarContextLabel = BaseUi.rootVisualElement.Q<Label>("Sonar_Context");
+
+                filterStatusLabel = BaseUi.rootVisualElement.Q<Label>("Filter_Status");
+                filterContextLabel = BaseUi.rootVisualElement.Q<Label>("Filter_Context");
+
+                bar1ScanLabel = BaseUi.rootVisualElement.Q<Label>("Bar1_Scan");
+                bar1HintLabel = BaseUi.rootVisualElement.Q<Label>("Bar1_Hint");
+                bar2ScanLabel = BaseUi.rootVisualElement.Q<Label>("Bar2_Scan");
+                bar2HintLabel = BaseUi.rootVisualElement.Q<Label>("Bar2_Hint");
+                bar3ScanLabel = BaseUi.rootVisualElement.Q<Label>("Bar3_Scan");
+                bar3HintLabel = BaseUi.rootVisualElement.Q<Label>("Bar3_Hint");
+
+                GameObject PlayerPosCamera = GameObject.Find("PlayerPositionCamera");
+                PlayerPosCamera.SetActive(true); 
             }
             return isInitialiseFinish;
         }
@@ -484,17 +452,6 @@ namespace PLATEAU.Samples
         {
             if(context.performed)
             {
-                // if(ownHintLst.Count == filterIndex + 1)
-                // {
-                //     filterIndex = 0;
-                // }
-                // else
-                // {
-                //     filterIndex += 1;
-                // }
-
-                // ChangeFilter_Hints();
-                ChangeUIDisplay();
             }
         }
         /// <summary>
