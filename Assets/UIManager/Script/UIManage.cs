@@ -1,4 +1,4 @@
-using PLATEAU.CityInfo;
+﻿using PLATEAU.CityInfo;
 using PLATEAU.Util.Async;
 using System.Collections;
 using System.Collections.Generic;
@@ -279,7 +279,7 @@ namespace PLATEAU.Samples
             // 初期化
             float nearestDistance = float.MaxValue;
             Transform nearestTransform = null;
-                //カメラの方向を取得
+            //カメラの方向を取得
             var camera = Camera.main;
             var ray = camera.ScreenPointToRay(Mouse.current.position.ReadValue());
 
@@ -466,6 +466,11 @@ namespace PLATEAU.Samples
                     SelectCityObject();
                 }
             }
+        }
+
+        public void HideGameUI()
+        {
+            BaseUi.gameObject.SetActive(false);
         }
     }
 }
