@@ -11,34 +11,6 @@ namespace PLATEAU.Samples
 {
     public class GameManage : MonoBehaviour, InputGameManage.IInputGameActions
     {
-        [SerializeField, Tooltip("ターゲットフラッグ")] private GameObject targetFlag;
-
-        private InputGameManage inputActions;
-        private UIManage UIManageScript;
-        private TimeManage TimeManageScript;
-
-        private EnemyManager enemyManager;
-        private ItemManager itemManager;
-
-        public SampleAttribute correctGMLdata;
-        private GameObject goalBuilding;
-        private Bounds goalBounds;
-        private Vector3 goalPos;
-        private System.Random rnd;
-        private GameObject[] HintLst;
-
-        public int sonarCount;
-        public int rescuedNum;
-
-        private bool isSetGMLdata;
-        private int goalNum;
-
-        KeyValuePair<string, PLATEAU.Samples.SampleCityObject> rndBuilding;
-        private List<string> buildingDirName;
-
-        //プレイヤーのコントローラー関数
-        private ThirdPersonController thirdpersonController;
-
         public struct GoalInfo
         {
             public Vector3 goalPosition;
@@ -46,31 +18,49 @@ namespace PLATEAU.Samples
             public string Usage;
             public string saboveground;
         }
+        
+        [SerializeField, Tooltip("ターゲットフラッグ")] private GameObject targetFlag;
 
-
+        public SampleAttribute correctGMLdata;
         public Dictionary<string,GoalInfo> GoalAttributeDict;
+        public int sonarCount;
+        public int rescuedNum;
+
+        private InputGameManage inputActions;
+        private ThirdPersonController thirdpersonController;
+        private System.Random rnd;
+        private UIManage UIManageScript;
+        private TimeManage TimeManageScript;
+        private EnemyManage EnemyManageScript;
+        private ItemManage ItemManageScript;
+        private GameObject[] HintLst;
+        private GameObject goalBuilding;
+        private List<string> buildingDirName;
+        private KeyValuePair<string, PLATEAU.Samples.SampleCityObject> rndBuilding;
+        private Bounds goalBounds;
+        private Vector3 goalPos;
+        private int goalNum;
+        private bool isSetGMLdata;
+        // -------------------------------------------------------------------------------------------------------------
         private void Awake()
         {
             inputActions = new InputGameManage();
         }
-
-        // InputSystemに関する関数
+        // InputSystemを有効化させる
         // -------------------------------------------------------------------------------------------------------------
         private void OnEnable()
         {
             inputActions.Enable();
         }
-
         private void OnDisable()
         {
             inputActions.Disable();
         }
-
         private void OnDestroy()
         {
             inputActions.Dispose();
         }
-
+        // -------------------------------------------------------------------------------------------------------------
         void Start()
         {
 
@@ -82,12 +72,11 @@ namespace PLATEAU.Samples
             inputActions.InputGame.AddCallbacks(this);
             //操作不能にするために取得
             thirdpersonController = GameObject.Find("PlayerArmature").GetComponent<ThirdPersonController>();
-
             //SceneManagerからShow.csにアクセスする
             UIManageScript = GameObject.Find("UIManager").GetComponent<UIManage>();
             TimeManageScript = GameObject.Find("TimeManager").GetComponent<TimeManage>();
-            enemyManager = GameObject.Find("EnemyManager").GetComponent<EnemyManager>();
-            itemManager = GameObject.Find("ItemManager").GetComponent<ItemManager>();
+            EnemyManageScript = GameObject.Find("EnemyManager").GetComponent<EnemyManage>();
+            ItemManageScript = GameObject.Find("ItemManager").GetComponent<ItemManage>();
             //Hintのリストを作る
             HintLst = GameObject.FindGameObjectsWithTag("HintText");
             buildingDirName = new List<string>();
@@ -96,8 +85,8 @@ namespace PLATEAU.Samples
             rescuedNum = 0;
             goalNum = 5;
             sonarCount = 5;
-            enemyManager.InitializeEnemy();
-            itemManager.InitializeItem();
+            EnemyManageScript.InitializeEnemy();
+            ItemManageScript.InitializeItem();
         }
 
         private string GetAttribute(string attributeName,SampleAttribute attribeteData)
@@ -273,7 +262,7 @@ namespace PLATEAU.Samples
         /// <summary>
         /// アイテムを拾った時の処理
         /// </summary>
-        public void DisplayHint(string itemName)
+        public void GetHintItem(string itemName)
         {
             string nearestBuildingName;
             string hint;
@@ -305,7 +294,7 @@ namespace PLATEAU.Samples
         /// </summary>
         public void SpawnHintItem()
         {
-            itemManager.GenerateItem();
+            ItemManageScript.GenerateItem();
         }
         private void GenerateTargetFlag(Vector3 flagPosition,string flagName)
         {
@@ -342,8 +331,8 @@ namespace PLATEAU.Samples
         //ゲームの終了処理
         public void OnEndGame()
         {
-            enemyManager.DestroyEnemy();
-            itemManager.DestroyItem();
+            EnemyManageScript.DestroyEnemy();
+            ItemManageScript.DestroyItem();
             UIManageScript.PlayerPosCamera.enabled = false;          
             UIManageScript.HideGameUI();
             thirdpersonController.enabled = false;

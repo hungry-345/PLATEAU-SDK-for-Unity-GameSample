@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 //敵を管理するクラス
-public class EnemyManager : MonoBehaviour
+public class EnemyManage : MonoBehaviour
 {
     //生成する敵
     [SerializeField, Tooltip("ゾンビ")] private GameObject Zombie;

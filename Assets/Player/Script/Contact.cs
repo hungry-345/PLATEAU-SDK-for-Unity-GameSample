@@ -31,7 +31,7 @@ namespace PLATEAU.Samples
             if(hit.gameObject.tag == "Hint")
             {
                 //UIManageスクリプトのヒント関数を発動
-                GameManageScript.DisplayHint(hit.gameObject.name);
+                GameManageScript.GetHintItem(hit.gameObject.name);
                 
                 //アイテムを削除
                 Destroy(hit.gameObject);

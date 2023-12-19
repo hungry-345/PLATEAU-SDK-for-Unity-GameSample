@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class ItemManager : MonoBehaviour
+public class ItemManage : MonoBehaviour
 {
     //生成するアイテム
     [SerializeField, Tooltip("高さアイテム")] private GameObject measuredheightItem;

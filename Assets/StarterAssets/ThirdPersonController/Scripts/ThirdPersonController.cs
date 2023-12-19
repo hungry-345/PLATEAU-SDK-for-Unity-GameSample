@@ -170,10 +170,7 @@ namespace StarterAssets
 
             if(!isDied)
             {
-                if(UIManageScript.SceneName == "MainCamera")
-                {
-                    Move();
-                }
+                Move();
                 JumpAndGravity();
                 GroundedCheck();
             }
@@ -323,7 +320,7 @@ namespace StarterAssets
                 
                 // Jump
                 //_jumpTimeoutDeltaを0.5以下にしないとジャンプしなくなる Time.DeltaがSceneManager関連で0.3ぐらいになる
-                if (_input.jump && _jumpTimeoutDelta <= 0.5f && UIManageScript.SceneName == "MainCamera")
+                if (_input.jump && _jumpTimeoutDelta <= 0.5f)
                 {
                     // the square root of H * -2 * G = how much velocity needed to reach desired height
                     _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);

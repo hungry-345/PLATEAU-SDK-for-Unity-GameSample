@@ -31,7 +31,6 @@ public class TitleView : ViewBase
     {
         isExplatation = true;
         explanationUI.enabled = true;
-        Debug.Log("Explanation");
     }
     public override IEnumerator Wait()
     {

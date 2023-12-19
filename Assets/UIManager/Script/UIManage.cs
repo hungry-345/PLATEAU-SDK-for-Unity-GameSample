@@ -20,66 +20,53 @@ namespace PLATEAU.Samples
         [SerializeField, Tooltip("色分け（高さ）の色テーブル")] private Color[] heightColorTable;
         [SerializeField, Tooltip("色分け（使用用途）の色テーブル")] private Color[] usageColorTable;
         [SerializeField, Tooltip("選択中のオブジェクトの色")] private Color selectedColor;
-        [SerializeField] public  Camera PlayerPosCamera;
+        [SerializeField] public Camera PlayerPosCamera;
 
-
+        public readonly Dictionary<string, SampleGml> gmls = new Dictionary<string, SampleGml>();
+        public bool isInitialiseFinish = false;
+        public Label timeLabel;
+        public Label rescuedNumLabel;
+        
         private PLATEAUInstancedCityModel[] instancedCityModels;
         private SampleCityObject selectCityObject;
         private InputScene inputActions;
         private ColorCodeType colorCodeType;
-        private GameObject[] HintTexts;
-        private GameObject[] FilterContents;
         private GameManage GameManageScript;
         private TimeManage TimeManageScript;
-        private GameObject displaySelectGML;
-        public readonly Dictionary<string, SampleGml> gmls = new Dictionary<string, SampleGml>();
-        private string GMLText;
-        public string SceneName; 
-        private bool isSetColorCodeType;
-
-
-        public bool isInitialiseFinish = false;
-
-        public Label timeLabel;
-        public Label rescuedNumLabel;
-        public Label sonarCountLabel;
-        public Label sonarContextLabel;
-        public Label filterStatusLabel;
-        public Label filterContextLabel;
-        public Label bar1ScanLabel;
-        public Label bar1HintLabel;
-        public Label bar2ScanLabel;
-        public Label bar2HintLabel;
-        public Label bar3ScanLabel;
-        public Label bar3HintLabel;
-        
-        private string displayBuildingName;
-
+        private GameObject[] HintTexts;
+        // UI Document のラベル
+        private Label sonarCountLabel;
+        private Label sonarContextLabel;
+        private Label filterStatusLabel;
+        private Label filterContextLabel;
+        private Label EvacueeScanLabel;
+        private Label EvacueeHintLabel;
+        private Label HeightScanLabel;
+        private Label HeightHintLabel;
+        private Label UsageScanLabel;
+        private Label UsageHintLabel;
+        private string correctBuildingName;
         private string filterStatus;
         private string nearestBuildingName;
-
-
-
+        // -------------------------------------------------------------------------------------------------------------
         private void Awake()
         {
+            // InputSystemのインスタンス(初期値)
             inputActions = new InputScene();
-
             //Plateauのデータを取得
-            InitializeAsync().ContinueWithErrorCatch();  
+            InitializeAsync().ContinueWithErrorCatch();
         }
 
-        // InputSystemに関する関数
+        // InputSystemを有効化させる
         // -------------------------------------------------------------------------------------------------------------
         private void OnEnable()
         {
             inputActions.Enable();
         }
-
         private void OnDisable()
         {
             inputActions.Disable();
         }
-
         private void OnDestroy()
         {
             inputActions.Dispose();
@@ -87,27 +74,25 @@ namespace PLATEAU.Samples
         // -------------------------------------------------------------------------------------------------------------
         void Start()
         {
+            // InputSystemの入力を登録
             inputActions.SelectScene.AddCallbacks(this);
-
             //コルーチン開始(Plateauのデータの取得が終わった後の処理を実行)
             StartCoroutine(WatiForInitialise());
-
-            //初期化
+            //変数の初期化
             filterStatus = "None";
-            SceneName = "MainCamera";
-            displayBuildingName = "";
+            correctBuildingName = "";
             PlayerPosCamera.enabled = false; 
-                // GameManagerの関数や変数を参照できる
+            // 他オブジェクトのスクリプトのインスタンス(GameManagerの関数や変数を参照できる)
             GameManageScript = GameObject.Find("GameManager").GetComponent<GameManage>();
             TimeManageScript = GameObject.Find("TimeManager").GetComponent<TimeManage>();
-                // 共通タグのオブジェクトを一つの配列にまとめる
+            // 共通タグのオブジェクトを一つの配列にまとめる
             HintTexts = GameObject.FindGameObjectsWithTag("HintText");
         }
 
-        // Plateauのデータに関する関数
+        // Plateauのデータのロードに関する処理
         // -------------------------------------------------------------------------------------------------------------
         /// <summary>
-        /// Plateauのデータを取得する
+        /// Plateauのデータを取得する関数
         /// </summary> 
         private async Task InitializeAsync()
         {
@@ -134,8 +119,45 @@ namespace PLATEAU.Samples
                     gmls.Add(go.name, gml);
                 }
             }
-            // 初期化UIを消去
             isInitialiseFinish = true;
+        }
+        /// <summary>
+        /// Plateauのデータの取得が終わるまで待機する関数
+        /// </summary>
+        IEnumerator WatiForInitialise()
+        {
+            // yield return ->　ある関数が終わるまで待つ
+            yield return new WaitUntil(() => IsInitialiseFinished());
+        }
+        /// <summary>
+        /// Plateauのデータの取得が終わった後の処理を行う関数
+        /// </summary> 
+        private bool IsInitialiseFinished()
+        {
+            if(isInitialiseFinish)
+            {
+                // ゴールの位置を設定する
+                GameManageScript.SelectGoals();
+                // UIの切り替え
+                initializingUi.gameObject.SetActive(false);
+                BaseUi.gameObject.SetActive(true);
+                // BaseUIのラベルを取得
+                timeLabel = BaseUi.rootVisualElement.Q<Label>("Time");
+                rescuedNumLabel = BaseUi.rootVisualElement.Q<Label>("Rescued_Count");
+                sonarCountLabel = BaseUi.rootVisualElement.Q<Label>("Sonar_Count");
+                sonarContextLabel = BaseUi.rootVisualElement.Q<Label>("Sonar_Context");
+                filterStatusLabel = BaseUi.rootVisualElement.Q<Label>("Filter_Status");
+                filterContextLabel = BaseUi.rootVisualElement.Q<Label>("Filter_Context");
+                EvacueeScanLabel = BaseUi.rootVisualElement.Q<Label>("Bar1_Scan");
+                EvacueeHintLabel = BaseUi.rootVisualElement.Q<Label>("Bar1_Hint");
+                HeightScanLabel = BaseUi.rootVisualElement.Q<Label>("Bar2_Scan");
+                HeightHintLabel = BaseUi.rootVisualElement.Q<Label>("Bar2_Hint");
+                UsageScanLabel = BaseUi.rootVisualElement.Q<Label>("Bar3_Scan");
+                UsageHintLabel = BaseUi.rootVisualElement.Q<Label>("Bar3_Hint");
+                // Map用のカメラを起動する
+                PlayerPosCamera.enabled = true; 
+            }
+            return isInitialiseFinish;
         }
 
         // ヒントに関する関数
@@ -145,24 +167,20 @@ namespace PLATEAU.Samples
         /// </summary>
         public void DisplayAnswerGML(string itemName,string hint,string buildingName)
         {
-            if(displayBuildingName != buildingName)
+            if(correctBuildingName != buildingName)
             {
-                bar1HintLabel.text = GameManageScript.GoalAttributeDict[buildingName].saboveground;
+                EvacueeHintLabel.text = GameManageScript.GoalAttributeDict[buildingName].saboveground;
             }
-            //正解の建物のGMLデータを表示させる
-
-
+            //正解の建物の属性情報を表示させる
             if(itemName == "measuredheight")
             {
-                bar2HintLabel.text = hint;
+                HeightHintLabel.text = hint;
             }
             if(itemName == "Usage")
             {
-                bar3HintLabel.text = hint;
+                UsageHintLabel.text = hint;
             }
-
-
-            displayBuildingName = buildingName;
+            correctBuildingName = buildingName;
         }
 
         private string SetFilterText(string itemName,string attributeValue)
@@ -338,26 +356,22 @@ namespace PLATEAU.Samples
             // 選択した建物の色を変更する
             selectCityObject = gmls[trans.parent.parent.name].CityObjects[trans.name];
             selectCityObject.SetMaterialColor(selectedColor);
-            // selectedCityObject =gmls[trans.parent.parent.name].CityObjects[trans.name];
-            // if(selectCityObject != selectedCityObject)
-            // {
-            // }
 
             //対象の建物のGMLデータを表示させる
-            GMLText = "";
             var selectbuildingAttribute = GetAttribute(trans.parent.parent.name, trans.name);
             var AttributeKeyValues = selectbuildingAttribute.GetKeyValues();
 
-            bar1ScanLabel.text = "Unknown";
+            EvacueeScanLabel.text = "Unknown";
             foreach(var AttributeKeyValue in AttributeKeyValues)
             {
+                Debug.Log(AttributeKeyValue.Key.Path + " : " + AttributeKeyValue.Value);
                 if(AttributeKeyValue.Key.Path.Contains("measuredheight"))
                 {
-                    bar2ScanLabel.text = AttributeKeyValue.Value;
+                    HeightScanLabel.text = AttributeKeyValue.Value;
                 }
                 if(AttributeKeyValue.Key.Path.Contains("Usage"))
                 {
-                    bar3ScanLabel.text =  AttributeKeyValue.Value;
+                    UsageScanLabel.text =  AttributeKeyValue.Value;
                 }
             }
         }
@@ -375,8 +389,8 @@ namespace PLATEAU.Samples
                 dist = distance.ToString();
             }
 
-            sonarCountLabel.text = "距離 : " + sonarCount.ToString();
-            sonarContextLabel.text  = dist;
+            sonarCountLabel.text = sonarCount.ToString();
+            sonarContextLabel.text  = "距離 : " +  dist;
         }
 
         
@@ -385,43 +399,6 @@ namespace PLATEAU.Samples
         /// <summary>
         /// ある関数が終わるまで待つ
         /// </summary> 
-        IEnumerator WatiForInitialise()
-        {
-            // yield return ->　ある関数が終わるまで待つ
-            yield return new WaitUntil(() => IsInitialiseFinished());
-        }
-        /// <summary>
-        /// Plateauのデータの取得が終わった後の処理
-        /// </summary> 
-        private bool IsInitialiseFinished()
-        {
-            if(isInitialiseFinish)
-            {
-                GameManageScript.SelectGoals();
-
-                initializingUi.gameObject.SetActive(false);
-
-                BaseUi.gameObject.SetActive(true);
-                timeLabel = BaseUi.rootVisualElement.Q<Label>("Time");
-                rescuedNumLabel = BaseUi.rootVisualElement.Q<Label>("Rescued_Count");
-
-                sonarCountLabel = BaseUi.rootVisualElement.Q<Label>("Sonar_Count");
-                sonarContextLabel = BaseUi.rootVisualElement.Q<Label>("Sonar_Context");
-
-                filterStatusLabel = BaseUi.rootVisualElement.Q<Label>("Filter_Status");
-                filterContextLabel = BaseUi.rootVisualElement.Q<Label>("Filter_Context");
-
-                bar1ScanLabel = BaseUi.rootVisualElement.Q<Label>("Bar1_Scan");
-                bar1HintLabel = BaseUi.rootVisualElement.Q<Label>("Bar1_Hint");
-                bar2ScanLabel = BaseUi.rootVisualElement.Q<Label>("Bar2_Scan");
-                bar2HintLabel = BaseUi.rootVisualElement.Q<Label>("Bar2_Hint");
-                bar3ScanLabel = BaseUi.rootVisualElement.Q<Label>("Bar3_Scan");
-                bar3HintLabel = BaseUi.rootVisualElement.Q<Label>("Bar3_Hint");
-
-                PlayerPosCamera.enabled = true; 
-            }
-            return isInitialiseFinish;
-        }
 
 
         // InputSystemの入力に対する処理(OnChangeCameraScene : Keyboard Q, OnChangeFilterScene : Keyboard C, OnSelectObject : Mouse Left)
