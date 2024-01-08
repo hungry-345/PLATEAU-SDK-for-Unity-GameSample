@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class ItemManager : MonoBehaviour
 {
     //生成するアイテム
@@ -34,7 +33,6 @@ public class ItemManager : MonoBehaviour
         GameObject hintItem = Instantiate(UsageItem, this.gameObject.transform) as GameObject;
         hintItem.name = "Usage";
         hintItem.transform.position = spawnPos;
-
         circlePos = radius * Random.insideUnitCircle;
         //スポーン位置にセット
         spawnPos = new Vector3(circlePos.x, 100f, circlePos.y) + center;

@@ -211,7 +211,7 @@ namespace PLATEAU.Samples
         public readonly GameObject[] LodObjects;
 
         public readonly SampleAttribute Attribute;
-        private GameManage GameManageScript = GameObject.Find("GameManager").GetComponent<GameManage>();
+        private UIManage UIManageScript = GameObject.Find("UIManager").GetComponent<UIManage>();
 
         public SampleCityObject(string id, CityObject cityObject)
         {
@@ -278,11 +278,11 @@ namespace PLATEAU.Samples
                     SetMaterialColor(Color.white);
                     break;
                 case ColorCodeType.measuredheight:
-                    correctData = GameManageScript.GoalAttributeDict[nearestBuildingName].measuredheight;
+                    correctData = UIManageScript.GoalAttributeDict[nearestBuildingName].measuredheight;
                     ColorCodeByHeight(colorTable,float.Parse(correctData));
                     break;
                 case ColorCodeType.Usage:
-                    correctData = GameManageScript.GoalAttributeDict[nearestBuildingName].Usage;
+                    correctData = UIManageScript.GoalAttributeDict[nearestBuildingName].Usage;
                     ColorCodeByUsage(colorTable,correctData);
                     break;
             }

@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using StarterAssets;
@@ -31,7 +31,7 @@ namespace PLATEAU.Samples
             if(hit.gameObject.tag == "Hint")
             {
                 //UIManageスクリプトのヒント関数を発動
-                GameManageScript.DisplayHint(hit.gameObject.name);
+                UIManageScript.DisplayHint(hit.gameObject.name);
                 
                 //アイテムを削除
                 Destroy(hit.gameObject);
@@ -53,11 +53,11 @@ namespace PLATEAU.Samples
                 //★一番上の親（GameView）にゲームクリアを通知
                 // GameViewScript.isGameClear = true;
                 //★スコアを加算（例）TODO:直接値を変えるのは望ましくないため、ViewManager側でスコア加算用の関数を作成する
-                GameManageScript.rescuedNum += int.Parse(GameManageScript.GoalAttributeDict[hit.gameObject.name].saboveground);
+                GameManageScript.rescuedNum += int.Parse(UIManageScript.GoalAttributeDict[hit.gameObject.name].saboveground);
                 UIManageScript.rescuedNumLabel.text = GameManageScript.rescuedNum.ToString();
 
                 Destroy(hit.gameObject);
-                GameManageScript.AddGoals(hit.gameObject.name);
+                UIManageScript.AddGoals(hit.gameObject.name);
                 //#if UNITY_EDITOR
                 //    UnityEditor.EditorApplication.isPlaying = false;//ゲームプレイ終了
                 //#else
