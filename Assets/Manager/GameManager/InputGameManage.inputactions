@@ -1,0 +1,34 @@
+{
+    "name": "InputGameManage",
+    "maps": [
+        {
+            "name": "InputGame",
+            "id": "ae63787b-949a-4b5f-a1e4-30d6facf9025",
+            "actions": [
+                {
+                    "name": "Sonar",
+                    "type": "Button",
+                    "id": "4c9e2380-41fe-485c-a3d4-fa2c9b924718",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "0995ca74-38a2-4324-8dfa-709d0b181e3b",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Sonar",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
