@@ -1,24 +1,23 @@
-ï»¿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 
 public class CursorManager : MonoBehaviour
 {
     public Image cursorImage;              // UI Image
-    //public Sprite defaultCursorSprite;     // é€šå¸¸ã®ã‚«ãƒ¼ã‚½ãƒ«ã®ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆ
-    //public Sprite highlightCursorSprite;   // å…‰ã‚‰ã›ãŸã„ã‚«ãƒ¼ã‚½ãƒ«ã®ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆ
+    //public Sprite defaultCursorSprite;     // ’Êí‚ÌƒJ[ƒ\ƒ‹‚ÌƒXƒvƒ‰ƒCƒg
+    //public Sprite highlightCursorSprite;   // Œõ‚ç‚¹‚½‚¢ƒJ[ƒ\ƒ‹‚ÌƒXƒvƒ‰ƒCƒg
 
     public void OnEnable()
     {
-        // Mouseãƒ‡ãƒã‚¤ã‚¹ã®ãƒˆãƒ©ãƒƒã‚­ãƒ³ã‚°ã‚’æœ‰åŠ¹ã«ã™ã‚‹
+        // MouseƒfƒoƒCƒX‚Ìƒgƒ‰ƒbƒLƒ“ƒO‚ğ—LŒø‚É‚·‚é
         InputSystem.EnableDevice(Mouse.current);
         Cursor.visible = false;
-        OnVisible();
     }
 
     public void OnDisable()
     {
-        // Mouseãƒ‡ãƒã‚¤ã‚¹ã®ãƒˆãƒ©ãƒƒã‚­ãƒ³ã‚°ã‚’ç„¡åŠ¹ã«ã™ã‚‹
+        // MouseƒfƒoƒCƒX‚Ìƒgƒ‰ƒbƒLƒ“ƒO‚ğ–³Œø‚É‚·‚é
         InputSystem.DisableDevice(Mouse.current);
     }
 
@@ -33,7 +32,7 @@ public class CursorManager : MonoBehaviour
 
     public void Update()
     {
-        // Mouseã®ä½ç½®ã‚’å–å¾—ã—ã¦ã‚«ãƒ¼ã‚½ãƒ«ã®ä½ç½®ã‚’æ›´æ–°
+        // Mouse‚ÌˆÊ’u‚ğæ“¾‚µ‚ÄƒJ[ƒ\ƒ‹‚ÌˆÊ’u‚ğXV
         Vector2 mousePosition = Mouse.current.position.ReadValue();
         cursorImage.rectTransform.position = mousePosition;
         //cursorImage.sprite = highlightCursorSprite;
@@ -43,8 +42,8 @@ public class CursorManager : MonoBehaviour
 
     bool ShouldHighlightCursor()
     {
-        // å…‰ã‚‰ã›ãŸã„æ¡ä»¶ã‚’ã“ã“ã«è¿½åŠ 
-        // ä¾‹: ç‰¹å®šã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«ãƒã‚¦ã‚¹ãŒé‡ãªã£ã¦ã„ã‚‹å ´åˆãªã©
+        // Œõ‚ç‚¹‚½‚¢ğŒ‚ğ‚±‚±‚É’Ç‰Á
+        // —á: “Á’è‚ÌƒIƒuƒWƒFƒNƒg‚Éƒ}ƒEƒX‚ªd‚È‚Á‚Ä‚¢‚éê‡‚È‚Ç
         return false;
     }
 }

@@ -2,11 +2,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+//using UnityEngine.UI;
 using UnityEngine.UIElements;
 using Cursor = UnityEngine.Cursor;
 
+
 public class GameView : ViewBase
 {
+
+
 
     [SerializeField] private GameManage gameManage;
     [SerializeField, Tooltip("ゲームオーバーUI")] private UIDocument gameOverUI;
@@ -17,6 +21,7 @@ public class GameView : ViewBase
     public bool isGameOver = false;   //ゲームオーバーフラグ
 
     private GameObject cursor;
+
     private CursorManager cursorManage;
 
     void Awake()
@@ -45,14 +50,16 @@ public class GameView : ViewBase
             //ゲーム終了
             if(isGameOver||isGameFinish)
             {
+
                 //ゾンビやアイテムを消す・プレイヤーを操作できなくする
-                gameManage.EndGame();
+                gameManage.OnEndGame();
                 cursorManage.OnVisible();
 
                 //ゲームオーバーテキスト
                 //gameEndText.text = "Game Over";
                 if (isGameFinish)
                 {
+
                     gameFinishUI.enabled = true;
                     Label ResultLabel = gameFinishUI.rootVisualElement.Q<Label>("Result");
                     ResultLabel.text = "救出した人数 : " + gameManage.rescuedNum;

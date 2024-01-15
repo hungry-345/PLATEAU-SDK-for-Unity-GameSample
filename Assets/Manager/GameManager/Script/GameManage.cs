@@ -1,14 +1,15 @@
-﻿using System.Collections;
+﻿// 正解データがある大元
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 using System.Linq;
 using StarterAssets;
 
-//ゲームマネージャー
 namespace PLATEAU.Samples
 {
-    public class GameManage : MonoBehaviour
+    public class GameManage : MonoBehaviour, InputGameManage.IInputGameActions
     {
         public struct GoalInfo
         {
@@ -43,11 +44,11 @@ namespace PLATEAU.Samples
         private Vector3 goalPos;
         private int goalNum;
         private int getHintNum;
+        private bool isSetGMLdata;
         // -------------------------------------------------------------------------------------------------------------
         private void Awake()
         {
             inputActions = new InputGameManage();
-            UIManageScript.InitializeGML();
         }
         // InputSystemを有効化させる
         // -------------------------------------------------------------------------------------------------------------
@@ -77,7 +78,7 @@ namespace PLATEAU.Samples
             // GameObject.Find("PlayerArmature").transform.position = new Vector3(170,30,1400);
             thirdpersonController = GameObject.Find("PlayerArmature").GetComponent<ThirdPersonController>();
 
-            //SceneManagerから各マネージャースクリプトにアクセスする
+            //SceneManagerからShow.csにアクセスする
             UIManageScript = GameObject.Find("UIManager").GetComponent<UIManage>();
             TimeManageScript = GameObject.Find("TimeManager").GetComponent<TimeManage>();
             EnemyManageScript = GameObject.Find("EnemyManager").GetComponent<EnemyManage>();
@@ -115,9 +116,11 @@ namespace PLATEAU.Samples
         {
             bool isSetData = false;
             bool isOverbaseHeight = false;
+            // bool isOversaboveground = false;
             bool isSameBuilding = false;
             string hintValue;
             string buildingHeight;
+            string buildingsaboveground;
             // 必要なGMLデータがそろっているか判定  Usageは沼津にはない
             foreach(GameObject hint in HintLst)
             {
@@ -132,6 +135,7 @@ namespace PLATEAU.Samples
                     break;
                 }
             }
+
             // 建物の高さは10m以上か
             buildingHeight = GetAttribute("measuredheight",buildingData);
             if(buildingHeight == "")
@@ -142,6 +146,18 @@ namespace PLATEAU.Samples
             {
                 isOverbaseHeight = true;
             }
+
+            // 建物の階層は1以上か ぬまずにはない
+            // buildingsaboveground = GetAttribute("saboveground",buildingData);
+            // if(buildingsaboveground == "")
+            // {
+            //     buildingsaboveground = "-1";
+            // }
+            // if(float.Parse(buildingsaboveground) > 0)
+            // {
+            //     isOversaboveground = true;
+            // }
+
             // 同じ名前の建物でないか
             if(GoalAttributeDict.ContainsKey(buildingName))
             {
@@ -158,29 +174,26 @@ namespace PLATEAU.Samples
         private void SelectGoal()
         {
             int capacityNum = 0;
-            bool isSetGMLdata = false;
-
+            isSetGMLdata = false;
             while(!isSetGMLdata)
             {
                 var tmpdirName = buildingDirName[Random.Range(0,buildingDirName.Count)];
-                // bldgファイルからランダムに一つ建物を取ってくる
+                //ランダムに建物を指定
                 rndBuilding = UIManageScript.gmls[tmpdirName].CityObjects.ElementAt(rnd.Next(0, UIManageScript.gmls[tmpdirName].CityObjects.Count));
-                //取ってきた建物のgmlDataを保持
+                //ゴールの属性情報
                 correctGMLdata = rndBuilding.Value.Attribute;
                 isSetGMLdata = CheckGMLdata(correctGMLdata,rndBuilding.Key);
+                Debug.Log(isSetGMLdata);
             }
-
-            // 建物のメッシュから位置情報を取得
+            // goalPos
             goalBuilding = GameObject.Find(rndBuilding.Key);
             goalBounds = goalBuilding.GetComponent<MeshCollider>().sharedMesh.bounds;
             goalPos = new Vector3(goalBounds.center.x+320f,goalBounds.center.y+goalBounds.size.y,goalBounds.center.z+380f);
-            //建物のCapacityを計算する
+            //Capacity
             capacityNum =  (int)float.Parse(GetAttribute("measuredheight",correctGMLdata))/5;
-            // 正解の建物の情報を構造体に格納
+
             GoalInfo gmlData = new GoalInfo { goalPosition = goalPos, measuredheight = GetAttribute("measuredheight",correctGMLdata), isHintActive=false, capacity=capacityNum,evacueeNum=0};
-            // 構造体を辞書に追加
             GoalAttributeDict.Add(rndBuilding.Key,gmlData);
-            // ゴールのポールを作成
             goalPos += new Vector3(-467.28f,0f,-1869.266f);
             GenerateTargetFlag(goalPos,rndBuilding.Key);
         }
@@ -198,9 +211,14 @@ namespace PLATEAU.Samples
                     buildingDirName.Add(dir.Key);
                 }
             }
+            
             for(int i=0;i<goalNum;i++)
             {
                 SelectGoal();
+            }
+            foreach(var i in GoalAttributeDict)
+            {
+                Debug.Log(i.Key);
             }
 
             //正解の建物の情報を取得
@@ -327,7 +345,7 @@ namespace PLATEAU.Samples
         }
 
         // --------------------------------------------------------------------------------------------------------------
-        public void ClickedBuildingAction(string clickedBuildingName)
+        public void selectBuildingAction(string clickedBuildingName)
         {
             GoalInfo tmpGoalAttribute = GoalAttributeDict[clickedBuildingName];
             int vacant;
@@ -374,8 +392,33 @@ namespace PLATEAU.Samples
             
         }
 
+        // InputSystemの入力に対する処理(OnSonar : F)
+        // -------------------------------------------------------------------------------------------------------------
+        /// <summary>
+        /// Sonarを使う時の処理
+        /// </summary> 
+        public void OnSonar(InputAction.CallbackContext context)
+        {
+            if (context.performed)
+            {
+                string nearestBuildingName = "";
+                float distance = -1f;
+                if(sonarCount > 0)
+                {
+                    nearestBuildingName = FindNearestGoal();
+                    
+                    Vector3 playerPos = GameObject.Find("PlayerArmature").transform.position;
+                    Vector3 buildingPos = GoalAttributeDict[nearestBuildingName].goalPosition;
+                    distance = Cal2DDistance(playerPos,buildingPos);
+                    
+                    sonarCount -= 1;
+
+                }
+                UIManageScript.DisplayDistance(distance,sonarCount);
+            }
+        }
         //ゲームの終了処理
-        public void EndGame()
+        public void OnEndGame()
         {
             EnemyManageScript.DestroyEnemy();
             ItemManageScript.DestroyItem();

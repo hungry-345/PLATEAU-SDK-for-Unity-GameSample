@@ -8,7 +8,7 @@
       "url": "https://packages.unity.com"
     },
     "com.cesium.unity": {
-      "version": "file:./com.cesium.unity-1.6.3.tgz",
+      "version": "file:C:/Users/nsiom/Downloads/com.cesium.unity-1.6.3.tgz",
       "depth": 0,
       "source": "local-tarball",
       "dependencies": {
@@ -19,7 +19,7 @@
       }
     },
     "com.synesthesias.plateau-unity-sdk": {
-      "version": "file:./PLATEAU SDK Assets2.tgz",
+      "version": "file:C:/Users/nsiom/Downloads/PLATEAU SDK Assets2.tgz",
       "depth": 0,
       "source": "local-tarball",
       "dependencies": {
@@ -172,7 +172,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.plateautoolkit": {
-      "version": "file:./com.unity.plateautoolkit-0.2.1-alpha1.tgz",
+      "version": "file:C:/Users/nsiom/Downloads/com.unity.plateautoolkit-0.2.1-alpha1.tgz",
       "depth": 0,
       "source": "local-tarball",
       "dependencies": {

@@ -55,27 +55,20 @@ namespace PLATEAU.Samples
         private string filterStatus;
         private string nearestBuildingName;
         // -------------------------------------------------------------------------------------------------------------
-        public void InitializeGML()
+        private void Awake()
         {
             // InputSystemのインスタンス(初期値)
             inputActions = new InputScene();
             //Plateauのデータを取得
             InitializeAsync().ContinueWithErrorCatch();
-            inputActions.Enable();
-            inputActions.SelectScene.AddCallbacks(this);
-            StartCoroutine(WatiForInitialise());
-            //初期化
-            filterStatus = "None";
-            PlayerPosCamera.enabled = false;
-            // GameManagerの関数や変数を参照できる
-            TimeManageScript = GameObject.Find("TimeManager").GetComponent<TimeManage>();
-            GameManageScript = GameObject.Find("GameManager").GetComponent<GameManage>();
-            //コルーチン開始(Plateauのデータの取得が終わった後の処理を実行)
-            HintTexts = GameObject.FindGameObjectsWithTag("HintText");
         }
 
         // InputSystemを有効化させる
         // -------------------------------------------------------------------------------------------------------------
+        private void OnEnable()
+        {
+            inputActions.Enable();
+        }
         private void OnDisable()
         {
             inputActions.Disable();
@@ -85,6 +78,22 @@ namespace PLATEAU.Samples
             inputActions.Dispose();
         }
         // -------------------------------------------------------------------------------------------------------------
+        void Start()
+        {
+            // InputSystemの入力を登録
+            inputActions.SelectScene.AddCallbacks(this);
+            //コルーチン開始(Plateauのデータの取得が終わった後の処理を実行)
+            StartCoroutine(WatiForInitialise());
+            //変数の初期化
+            filterStatus = "None";
+            correctBuildingName = "";
+            PlayerPosCamera.enabled = false; 
+            // 他オブジェクトのスクリプトのインスタンス(GameManagerの関数や変数を参照できる)
+            GameManageScript = GameObject.Find("GameManager").GetComponent<GameManage>();
+            TimeManageScript = GameObject.Find("TimeManager").GetComponent<TimeManage>();
+            // 共通タグのオブジェクトを一つの配列にまとめる
+            HintTexts = GameObject.FindGameObjectsWithTag("HintText");
+        }
 
         // Plateauのデータのロードに関する処理
         // -------------------------------------------------------------------------------------------------------------
@@ -124,12 +133,12 @@ namespace PLATEAU.Samples
         IEnumerator WatiForInitialise()
         {
             // yield return ->　ある関数が終わるまで待つ
-            yield return new WaitUntil(() => CheckInitialiseFinished());
+            yield return new WaitUntil(() => IsInitialiseFinished());
         }
         /// <summary>
         /// Plateauのデータの取得が終わった後の処理を行う関数
         /// </summary> 
-        private bool CheckInitialiseFinished()
+        private bool IsInitialiseFinished()
         {
             if(isInitialiseFinish)
             {
@@ -260,7 +269,7 @@ namespace PLATEAU.Samples
             }
             if(itemName == "Usage")
             {
-                foreach(var t in correctGMLdata.GetKeyValues())
+                foreach(var t in GameManageScript.correctGMLdata.GetKeyValues())
                 {
                     if(t.Key.Path.Contains(itemName))
                     {
@@ -282,9 +291,12 @@ namespace PLATEAU.Samples
             filterStatus = itemName;
 
             // 全ての建物の色を元に戻す
+            // colorCodeType = (ColorCodeType)Enum.Parse(typeof(ColorCodeType), "None");
             ColorCode("None",nearestBuildingName);
             //フィルターに引っかかった建物の色を変える
+            // colorCodeType = (ColorCodeType)Enum.Parse(typeof(ColorCodeType), itemName);
             ColorCode(itemName,nearestBuildingName);
+
 
             string filterText = SetFilterText(itemName,attributeValue); 
             // ownHintLstの中のIndexで指定された候補を返す
@@ -299,6 +311,7 @@ namespace PLATEAU.Samples
             //     filterContextLabel.text = filterText;
             // }
         }
+
 
         // 建物の選択に関する関数
         // -------------------------------------------------------------------------------------------------------------
@@ -342,6 +355,11 @@ namespace PLATEAU.Samples
             // 方向(ray)と交わったオブジェクトの中から一番PlayerArmatureと距離の近いオブジェクトを返す
             foreach (var hit in Physics.RaycastAll(ray))
             {
+                // if(hit.distance <= nearestDistance)
+                // {
+                //     Debug.Log(hit.transform.name);
+                // }
+                // if (hit.distance <= nearestDistance && hit.transform.name != "PlayerArmature" && !hit.transform.name.Contains("dem") && !hit.transform.name.Contains("zombie"))
                 if (hit.distance <= nearestDistance && hit.transform.name.Contains("bldg"))
                 {
                     nearestDistance = hit.distance;
@@ -355,74 +373,22 @@ namespace PLATEAU.Samples
         /// <summary>
         /// gmlsから目的の建物の属性情報を選ぶ(属性情報 == Attribute)
         /// </summary>
-        private string GetAttribute(string attributeName, SampleAttribute attribeteData)
+        public SampleAttribute GetAttribute(string gmlFileName, string cityObjectID)
         {
-            string value = "";
-            foreach (var attribute in attribeteData.GetKeyValues())
+            // gmls(gmlFileName, gml)  + gmlFileName  ->  gml
+            if (gmls.TryGetValue(gmlFileName, out SampleGml gml))
             {
-                if (attribute.Key.Path.Contains(attributeName))
+                // gml(ID,cityObject) + ID  -> cityObject
+                if (gml.CityObjects.TryGetValue(cityObjectID, out SampleCityObject city))
                 {
-                    value = attribute.Value;
+                    // cityobject -> attribute
+                    return city.Attribute;
                 }
             }
-            return value;
+
+            return null;
         }
 
-        private string FindNearestGoal()
-        {
-            string nearestBuildingName = "";
-            float nearestDistance = float.MaxValue;
-            float distance = 0;
-            Vector3 playerPos = GameObject.Find("PlayerArmature").transform.position;
-
-
-            foreach (var goalAttribute in GoalAttributeDict)
-            {
-                distance = Cal2DDistance(goalAttribute.Value.goalPosition, playerPos);
-                if (distance < nearestDistance)
-                {
-                    nearestDistance = distance;
-                    nearestBuildingName = goalAttribute.Key;
-                }
-            }
-            return nearestBuildingName;
-        }
-        private float Cal2DDistance(Vector3 point1, Vector3 point2)
-        {
-            Vector2 point1_2D = new Vector2(point1.x, point1.z);
-            Vector2 point2_2D = new Vector2(point2.x, point2.z);
-            float distance = Vector2.Distance(point1_2D, point2_2D);
-
-            return distance;
-        }
-
-        /// <summary>
-        /// アイテムを拾った時の処理
-        /// </summary>
-        public void DisplayHint(string itemName)
-        {
-            string nearestBuildingName;
-            string hint;
-
-            //表示させる建物の情報を決める
-            nearestBuildingName = FindNearestGoal();
-
-            if (itemName == "measuredheight")
-            {
-                hint = GoalAttributeDict[nearestBuildingName].measuredheight;
-            }
-            else if (itemName == "Usage")
-            {
-                hint = GoalAttributeDict[nearestBuildingName].Usage;
-            }
-            else
-            {
-                hint = GoalAttributeDict[nearestBuildingName].saboveground;
-            }
-            DisplayAnswerGML(itemName, hint, nearestBuildingName);
-            //フィルターの表示
-            TimeManageScript.ColorBuilding(itemName, nearestBuildingName, hint);
-        }
         /// <summary>
         /// 建物を選択した時の処理
         /// </summary>
@@ -446,7 +412,7 @@ namespace PLATEAU.Samples
 
             if(BuildingInfoDict.ContainsKey(trans.name))
             {
-                GameManageScript.ClickedBuildingAction(trans.name);
+                GameManageScript.selectBuildingAction(trans.name);
             }
 
 
@@ -534,42 +500,6 @@ namespace PLATEAU.Samples
         public void HideGameUI()
         {
             BaseUi.gameObject.SetActive(false);
-        }
-        /// <summary>
-        /// ランダムな位置に1個ゴールを設置する
-        /// </summary>
-
-        /// <summary>
-        /// ランダムな位置に複数個ゴールを設置する
-        /// </summary>
-
-        /// <summary>
-        /// 正解の建物として必要な要件は満たしているか
-        /// </summary>
-        // InputSystemの入力に対する処理(OnSonar : F)
-        // -------------------------------------------------------------------------------------------------------------
-        /// <summary>
-        /// Sonarを使う時の処理
-        /// </summary> 
-        public void OnSonar(InputAction.CallbackContext context)
-        {
-            if (context.performed)
-            {
-                string nearestBuildingName = "";
-                float distance = -1f;
-                if (sonarCount > 0)
-                {
-                    nearestBuildingName = FindNearestGoal();
-
-                    Vector3 playerPos = GameObject.Find("PlayerArmature").transform.position;
-                    Vector3 buildingPos = GoalAttributeDict[nearestBuildingName].goalPosition;
-                    distance = Cal2DDistance(playerPos, buildingPos);
-
-                    sonarCount -= 1;
-
-                }
-                DisplayDistance(distance, sonarCount);
-            }
         }
     }
 }

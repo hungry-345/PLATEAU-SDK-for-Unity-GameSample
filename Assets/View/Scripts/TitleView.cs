@@ -8,43 +8,35 @@ public class TitleView : ViewBase
     [SerializeField, Tooltip("タイトルUI")] private UIDocument titleUI;
     [SerializeField, Tooltip("タイトルUI")] private UIDocument explanationUI;
     private bool isStart;
-    //private bool isExplatation;
+    private bool isExplatation;
     private Button startButton;
     private Button explanationButton;
-    private Button cancelButton;
 
     private void Start()
     {
         isStart = false;
+        isExplatation = false;
         startButton = titleUI.rootVisualElement.Query<Button>("StartButton");
         startButton.clicked += OnStart;
         explanationButton = titleUI.rootVisualElement.Query<Button>("ExplanationButton");
         explanationButton.clicked += OnExplanation;
         explanationUI.enabled = false;
     }
-    //ゲームスタートボタン押下
+
     private void OnStart()
     {
         isStart = true;
     }
-    //説明パネルの表示/非表示
     private void OnExplanation()
     {
-        explanationUI.enabled = !(explanationUI.enabled);
-        //説明ウィンドウ表示時の処理
-        if(explanationUI.enabled)
-        {
-            cancelButton = explanationUI.rootVisualElement.Query<Button>("CancelButton");
-            cancelButton.clicked += OnExplanation;
-        }
+        isExplatation = true;
+        explanationUI.enabled = true;
     }
     public override IEnumerator Wait()
     {
         while (true)
         {
-
-
-            //スタートボタン入力待ち状態にする
+            //ボタン入力待ち状態にする
             if (isStart)
             {
                 yield break;
