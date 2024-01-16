@@ -162,7 +162,7 @@ namespace PLATEAU.Samples
                 // ゴールの位置を設定する
                 GameManageScript.SelectGoals();
                 // // Map用のカメラを起動する
-                // PlayerPosCamera.enabled = true; 
+                PlayerPosCamera.enabled = true; 
             }
             return isInitialiseFinish;
         }
@@ -172,20 +172,20 @@ namespace PLATEAU.Samples
         /// <summary>
         /// アイテムを取得した時の処理(Contact.csに参照されている)
         /// </summary>
-        public void DisplayAnswer(string hintBuildingName,string hintBuildingHeight,string hintBuildingCapacity)
+        public void DisplayAnswer(string hintBuildingName,string hintBuildingHeight,string hintBuildingCapacity,string hintBuildingEvacuee)
         {
             Debug.Log(hintBuildingCapacity);
             if(Shelter1HeightLabel.text == "")
             {
                 Shelter1HeightLabel.text = hintBuildingHeight;
-                Shelter1CapacityLabel.text = hintBuildingCapacity;
+                Shelter1CapacityLabel.text = hintBuildingEvacuee + "/" + hintBuildingCapacity;
                 BuildingInfo buildingInfo = new BuildingInfo {heightLabel=Shelter1HeightLabel,capacityLabel=Shelter1CapacityLabel};
                 BuildingInfoDict.Add(hintBuildingName,buildingInfo);
             }
             else if(Shelter2HeightLabel.text == "")
             {
                 Shelter2HeightLabel.text = hintBuildingHeight;
-                Shelter2CapacityLabel.text = hintBuildingCapacity;
+                Shelter2CapacityLabel.text = hintBuildingEvacuee + "/" + hintBuildingCapacity;
                 BuildingInfo buildingInfo = new BuildingInfo {heightLabel=Shelter2HeightLabel,capacityLabel=Shelter2CapacityLabel};
                 BuildingInfoDict.Add(hintBuildingName,buildingInfo);
                 return;
@@ -193,7 +193,7 @@ namespace PLATEAU.Samples
             else if(Shelter3HeightLabel.text == "")
             {
                 Shelter3HeightLabel.text = hintBuildingHeight;
-                Shelter3CapacityLabel.text = hintBuildingCapacity;
+                Shelter3CapacityLabel.text = hintBuildingEvacuee + "/" + hintBuildingCapacity;
                 BuildingInfo buildingInfo = new BuildingInfo {heightLabel=Shelter3HeightLabel,capacityLabel=Shelter3CapacityLabel};
                 BuildingInfoDict.Add(hintBuildingName,buildingInfo);
                 return;
@@ -414,7 +414,10 @@ namespace PLATEAU.Samples
             {
                 GameManageScript.selectBuildingAction(trans.name);
             }
-
+            if(BuildingInfoDict.ContainsKey(trans.name))
+            {
+                BuildingInfoDict[trans.name].capacityLabel.text = GameManageScript.GoalAttributeDict[trans.name].evacueeNum + "/" + GameManageScript.GoalAttributeDict[trans.name].capacity;
+            }
 
 
             //対象の建物のGMLデータを表示させる

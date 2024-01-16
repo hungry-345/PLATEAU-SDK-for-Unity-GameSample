@@ -3876,7 +3876,6 @@ MonoBehaviour:
   quality: 0
   waveCount: 0
   waveHeight: 0
-  isreached: 0
 --- !u!120 &5915899325788646510
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -5948,7 +5947,7 @@ Transform:
   m_GameObject: {fileID: 7600826447839942801}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 580, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 30, y: 1, z: 30}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7600826447380460217}
@@ -6191,7 +6190,7 @@ Camera:
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0.725
-    y: 0.04
+    y: 0.135
     width: 0.25
     height: 0.25
   near clip plane: 0.3

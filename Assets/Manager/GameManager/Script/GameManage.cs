@@ -22,7 +22,6 @@ namespace PLATEAU.Samples
         
         [SerializeField, Tooltip("ターゲットフラッグ")] private GameObject targetFlag;
 
-
         public SampleAttribute correctGMLdata;
         public Dictionary<string,GoalInfo> GoalAttributeDict;
         public int sonarCount;
@@ -276,6 +275,7 @@ namespace PLATEAU.Samples
             GoalInfo hintBuildingValue;
             string hintBuildingName = "";
             GameObject flag;
+            GameObject Marker;
             //表示させる建物の情報を決める
             foreach(var goalAttribute in GoalAttributeDict)
             {
@@ -284,7 +284,7 @@ namespace PLATEAU.Samples
                 {
                     hintBuildingName = goalAttribute.Key;
                     hintBuildingValue = goalAttribute.Value;
-                    UIManageScript.DisplayAnswer(hintBuildingName,hintBuildingValue.measuredheight,hintBuildingValue.capacity.ToString());
+                    UIManageScript.DisplayAnswer(hintBuildingName,hintBuildingValue.measuredheight,hintBuildingValue.capacity.ToString(),hintBuildingValue.evacueeNum.ToString());
                     break;
                 }
             }
@@ -305,6 +305,8 @@ namespace PLATEAU.Samples
             }
             flag = GameObject.Find(hintBuildingName+"flag");
             flag.GetComponent<MeshRenderer>().enabled = true;
+            Marker = GameObject.Find(hintBuildingName+"Marker");
+            Marker.GetComponent<MeshRenderer>().enabled = true;
 
             
 
@@ -342,6 +344,12 @@ namespace PLATEAU.Samples
             flag.name = flagName+"flag";
             flag.transform.position = flagPosition;
             flag.GetComponent<MeshRenderer>().enabled = false;
+
+            GameObject Marker = Instantiate(targetFlag,transform.root.gameObject.transform) as GameObject;
+            Marker.name = flagName + "Marker";
+            Marker.transform.localScale = new Vector3(30f, 1f, 30f);
+            Marker.transform.position = new Vector3(flagPosition.x,-500,flagPosition.z);
+            Marker.GetComponent<MeshRenderer>().enabled = false;
         }
 
         // --------------------------------------------------------------------------------------------------------------
@@ -362,12 +370,15 @@ namespace PLATEAU.Samples
                 UIManageScript.DeleteAnswer(clickedBuildingName);
                 GoalAttributeDict.Remove(clickedBuildingName);
                 GameObject flag = GameObject.Find(clickedBuildingName+"flag");
+                GameObject Marker = GameObject.Find(clickedBuildingName+"Marker");
                 Destroy(flag);
+                Destroy(Marker);
                 // 新しいゴールの生成
                 SelectGoal();
             }
             else
             {
+                Debug.Log(tmpGoalAttribute.evacueeNum);
                 GoalAttributeDict[clickedBuildingName] = tmpGoalAttribute;
             }
 
