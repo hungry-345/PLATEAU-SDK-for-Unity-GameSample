@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class ItemManage : MonoBehaviour
 {
     //生成するアイテム
@@ -11,6 +10,7 @@ public class ItemManage : MonoBehaviour
 
     //生成範囲
     private GameObject spawnTransformObjects;
+    private System.Random rnd;
     private Vector3 center; //スポーン範囲の中心
 
     public void InitializeItem()
@@ -19,6 +19,8 @@ public class ItemManage : MonoBehaviour
         spawnTransformObjects = GameObject.Find("StageRange");
         //オブジェクトの中心を設定
         center = spawnTransformObjects.GetComponent<Renderer>().bounds.center;
+
+        rnd = new System.Random();
     }
 
     //初期化
@@ -37,8 +39,8 @@ public class ItemManage : MonoBehaviour
 
         circlePos = radius * Random.insideUnitCircle;
         //スポーン位置にセット
-        spawnPos = new Vector3(circlePos.x, 100f, circlePos.y) + center;
-
+        // spawnPos = new Vector3(circlePos.x, 100f, circlePos.y) + center;
+        spawnPos = new Vector3(Random.Range(-140f,470f), 100f, Random.Range(1300f,1700f));
         hintItem = Instantiate(measuredheightItem, this.gameObject.transform) as GameObject;
         hintItem.name = "measuredheight";
         hintItem.transform.position = spawnPos;

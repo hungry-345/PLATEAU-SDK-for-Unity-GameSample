@@ -35,6 +35,12 @@ namespace PLATEAU.Samples
                 //アイテムを削除
                 Destroy(hit.gameObject);
             }
+            if(hit.gameObject.name == "HumanBody")
+            {
+                Debug.Log("Contact");
+                GameManageScript.ContactHumanAction();
+                UIManageScript.DisplayRescuingNum();
+            }
             if(hit.gameObject.name == "zombie")
             {
                 ThirdPersonControllerScript.DyingMotion();
