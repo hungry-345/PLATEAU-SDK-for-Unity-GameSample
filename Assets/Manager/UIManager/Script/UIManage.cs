@@ -299,17 +299,6 @@ namespace PLATEAU.Samples
 
 
             string filterText = SetFilterText(itemName,attributeValue); 
-            // ownHintLstの中のIndexで指定された候補を返す
-            // if(itemName == "None")
-            // {
-            //     filterContextLabel.text = "";
-            //     filterStatusLabel.text = "OFF";
-            // }
-            // else
-            // {
-            //     filterStatusLabel.text = "ON";
-            //     filterContextLabel.text = filterText;
-            // }
         }
 
 
@@ -355,11 +344,6 @@ namespace PLATEAU.Samples
             // 方向(ray)と交わったオブジェクトの中から一番PlayerArmatureと距離の近いオブジェクトを返す
             foreach (var hit in Physics.RaycastAll(ray))
             {
-                // if(hit.distance <= nearestDistance)
-                // {
-                //     Debug.Log(hit.transform.name);
-                // }
-                // if (hit.distance <= nearestDistance && hit.transform.name != "PlayerArmature" && !hit.transform.name.Contains("dem") && !hit.transform.name.Contains("zombie"))
                 if (hit.distance <= nearestDistance && hit.transform.name.Contains("bldg"))
                 {
                     nearestDistance = hit.distance;
@@ -413,30 +397,13 @@ namespace PLATEAU.Samples
             if(BuildingInfoDict.ContainsKey(trans.name))
             {
                 GameManageScript.selectBuildingAction(trans.name);
+                rescuedNumLabel.text = GameManageScript.rescuedNum.ToString();
+                rescuingNumLabel.text = GameManageScript.rescuingNum.ToString();
             }
             if(BuildingInfoDict.ContainsKey(trans.name))
             {
                 BuildingInfoDict[trans.name].capacityLabel.text = GameManageScript.GoalAttributeDict[trans.name].evacueeNum + "/" + GameManageScript.GoalAttributeDict[trans.name].capacity;
             }
-
-
-            //対象の建物のGMLデータを表示させる
-            // var selectbuildingAttribute = GetAttribute(trans.parent.parent.name, trans.name);
-            // var AttributeKeyValues = selectbuildingAttribute.GetKeyValues();
-
-            // EvacueeScanLabel.text = "Unknown";
-            // foreach(var AttributeKeyValue in AttributeKeyValues)
-            // {
-            //     Debug.Log(AttributeKeyValue.Key.Path + " : " + AttributeKeyValue.Value);
-            //     if(AttributeKeyValue.Key.Path.Contains("measuredheight"))
-            //     {
-            //         HeightScanLabel.text = AttributeKeyValue.Value;
-            //     }
-            //     if(AttributeKeyValue.Key.Path.Contains("Usage"))
-            //     {
-            //         UsageScanLabel.text =  AttributeKeyValue.Value;
-            //     }
-            // }
         }
 
         // 実行時間に依存する処理
@@ -454,6 +421,12 @@ namespace PLATEAU.Samples
 
             // sonarCountLabel.text = sonarCount.ToString();
             // sonarContextLabel.text  = "距離 : " +  dist;
+        }
+        // ---------------------------------------------------------------
+
+        public void DisplayRescuingNum()
+        {
+            rescuingNumLabel.text = GameManageScript.rescuingNum.ToString();
         }
 
         

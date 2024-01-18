@@ -20,9 +20,12 @@ public class MapPosition : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Player.rotation.ToAngleAxis(out float angle, out Vector3 axis);
         // プレイヤーの座標に合わせてカメラの位置を変更する
+        PlayerPositionMarker.localEulerAngles = new Vector3(-90,angle+180,0);
         PlayerPositionMarker.position = new Vector3(Player.position.x,-490,Player.position.z);
         PlayerPositionCamera.position = new Vector3(Player.position.x,-100,Player.position.z);
+
 
     }
 }

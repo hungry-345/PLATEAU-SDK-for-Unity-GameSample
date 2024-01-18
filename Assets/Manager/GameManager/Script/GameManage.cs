@@ -26,7 +26,7 @@ namespace PLATEAU.Samples
         public Dictionary<string,GoalInfo> GoalAttributeDict;
         public int sonarCount;
         public int rescuedNum;
-        private int rescuingNum;
+        public int rescuingNum;
 
         private InputGameManage inputActions;
         private ThirdPersonController thirdpersonController;
@@ -93,7 +93,7 @@ namespace PLATEAU.Samples
             sonarCount = 5;
             EnemyManageScript.InitializeEnemy();
             ItemManageScript.InitializeItem();
-            rescuingNum = 20;
+            rescuingNum = 0;
         }
 
         private string GetAttribute(string attributeName,SampleAttribute attribeteData)
@@ -359,50 +359,49 @@ namespace PLATEAU.Samples
             int vacant;
             vacant = tmpGoalAttribute.capacity - tmpGoalAttribute.evacueeNum;
 
-            UIManageScript.rescuedNumLabel.text = rescuedNum.ToString();
-            UIManageScript.rescuingNumLabel.text = rescuingNum.ToString();
-            
-            rescuingNum -= 1;
-            tmpGoalAttribute.evacueeNum += 1;
-            rescuedNum += 1;
-            if(tmpGoalAttribute.capacity == tmpGoalAttribute.evacueeNum)
+            if(rescuingNum > 0)
             {
-                UIManageScript.DeleteAnswer(clickedBuildingName);
-                GoalAttributeDict.Remove(clickedBuildingName);
-                GameObject flag = GameObject.Find(clickedBuildingName+"flag");
-                GameObject Marker = GameObject.Find(clickedBuildingName+"Marker");
-                Destroy(flag);
-                Destroy(Marker);
-                // 新しいゴールの生成
-                SelectGoal();
+                rescuingNum -= 1;
+                tmpGoalAttribute.evacueeNum += 1;
+                rescuedNum += 1;
+                if(tmpGoalAttribute.capacity == tmpGoalAttribute.evacueeNum)
+                {
+                    UIManageScript.DeleteAnswer(clickedBuildingName);
+                    GoalAttributeDict.Remove(clickedBuildingName);
+                    GameObject flag = GameObject.Find(clickedBuildingName+"flag");
+                    GameObject Marker = GameObject.Find(clickedBuildingName+"Marker");
+                    Destroy(flag);
+                    Destroy(Marker);
+                    // 新しいゴールの生成
+                    SelectGoal();
+                }
+                else
+                {
+                    GoalAttributeDict[clickedBuildingName] = tmpGoalAttribute;
+                }
+                // if(vacant > rescuingNum)
+                // {
+                //     // そのまま足す
+                //     tmpGoalAttribute.evacueeNum += rescuingNum;
+                //     rescuingNum = 0;
+                // }
+                // else if(vacant == rescuingNum)
+                // {
+                //     rescuingNum = 0;
+                //     // deleteGoal;
+                // }
+                // else
+                // {
+                //     rescuingNum -= vacant;
+                //     // deleteGoal;
+                // }
             }
-            else
-            {
-                Debug.Log(tmpGoalAttribute.evacueeNum);
-                GoalAttributeDict[clickedBuildingName] = tmpGoalAttribute;
-            }
-
-
-
-            // if(vacant > rescuingNum)
-            // {
-            //     // そのまま足す
-            //     tmpGoalAttribute.evacueeNum += rescuingNum;
-            //     rescuingNum = 0;
-            // }
-            // else if(vacant == rescuingNum)
-            // {
-            //     rescuingNum = 0;
-            //     // deleteGoal;
-            // }
-            // else
-            // {
-            //     rescuingNum -= vacant;
-            //     // deleteGoal;
-            // }
-            
         }
-
+        // -------------------------------------------------------------------------------------------------------------
+        public void ContactHumanAction()
+        {
+            rescuingNum += 1;
+        }
         // InputSystemの入力に対する処理(OnSonar : F)
         // -------------------------------------------------------------------------------------------------------------
         /// <summary>

@@ -79,10 +79,9 @@ namespace StarterAssets
                 if(Vector3.Distance(transform.position, hookshotPosition) < reachedHookshotPositionDistance)
                 {
                     HookDelete();
-                    Debug.Log(hookshotDir.y);
-                    if(hookshotDir.y > 0.1f)
+                    if(hookshotDir.y > 0.1f || hookshotPosition.y > 10f);
                     {
-                        _controller.Move(new Vector3(0.4f, 3f, 0.4f));
+                        _controller.Move(new Vector3(0f, 6f, 0f));
                     }
                     isHookshot = false;
                 }
