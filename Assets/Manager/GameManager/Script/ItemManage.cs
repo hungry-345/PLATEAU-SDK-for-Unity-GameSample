@@ -18,7 +18,7 @@ public class ItemManage : MonoBehaviour
         //ステージの範囲を取得
         spawnTransformObjects = GameObject.Find("StageRange");
         //オブジェクトの中心を設定
-        center = spawnTransformObjects.GetComponent<Renderer>().bounds.center;
+        // center = spawnTransformObjects.GetComponent<Renderer>().bounds.center;
 
         rnd = new System.Random();
     }
