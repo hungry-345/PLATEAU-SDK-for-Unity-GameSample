@@ -59,7 +59,7 @@ public class ViewManager : MonoBehaviour
 
             //�Q�[����ʂ����[�h
             var gameView = ViewBase.Instantiate<GameView>("GameView");
-            gameView.transform.position = new Vector3(160,65,1500);
+            //gameView.transform.position = new Vector3(160, 65, 1500);
             //�Q�[����ʕ\����
             yield return gameView.Wait();
             //�Q�[����ʂ�j��
