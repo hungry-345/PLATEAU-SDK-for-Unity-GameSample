@@ -26,6 +26,14 @@ public class GameView : ViewBase
 
     void Awake()
     {
+        if (transform.hasChanged)
+        {
+            // 変更ログを出力
+            print("Transformが変更された！");
+
+            // 変更フラグをクリア
+            transform.hasChanged = false;
+        }
         Cursor.lockState = CursorLockMode.Confined;
         cursor = GameObject.Find("Cursor");
         cursorManage = cursor.GetComponent<CursorManager>();
@@ -34,7 +42,7 @@ public class GameView : ViewBase
     void Start()
     {
         //ゲーム開始
-        transform.position = new Vector3 (0, 0, 0);
+        //transform.position = new Vector3(0, 0, 0);
         //スタート時はUIを非表示にする
         gameOverUI.enabled = false;
         gameFinishUI.enabled = false;

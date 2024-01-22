@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using StarterAssets;
@@ -12,7 +12,6 @@ namespace PLATEAU.Samples
         private UIManage UIManageScript;
         private ThirdPersonController ThirdPersonControllerScript;
 
-        //★GameViewスクリプトを参照する
         void Start()
         {
             ThirdPersonControllerScript = this.GetComponent<ThirdPersonController>();
@@ -22,9 +21,9 @@ namespace PLATEAU.Samples
         }
         public void GameOverFunc()
         {
-                ThirdPersonControllerScript.DyingMotion();
-                //★一番上の親（GameView）にゲームオーバーを通知
-                GameViewScript.isGameOver = true ; 
+            ThirdPersonControllerScript.DyingMotion();
+            //一番上の親（GameView）にゲームオーバーを通知
+            GameViewScript.isGameOver = true ; 
         }
         private void OnControllerColliderHit(ControllerColliderHit hit)
         {
@@ -35,16 +34,15 @@ namespace PLATEAU.Samples
                 //アイテムを削除
                 Destroy(hit.gameObject);
             }
-            if(hit.gameObject.name == "HumanBody")
+            if (hit.gameObject.name == "HumanBody")
             {
-                Debug.Log("Contact");
                 GameManageScript.ContactHumanAction();
-                UIManageScript.DisplayRescuingNum();
+                //UIManageScript.DisplayRescuingNum();
             }
-            if(hit.gameObject.name == "zombie")
+            if (hit.gameObject.name == "zombie")
             {
                 ThirdPersonControllerScript.DyingMotion();
-                //★一番上の親（GameView）にゲームオーバーを通知
+                //一番上の親（GameView）にゲームオーバーを通知
                 GameViewScript.isGameOver = true ; 
 
                 //#if UNITY_EDITOR
