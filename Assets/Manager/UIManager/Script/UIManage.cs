@@ -1,4 +1,4 @@
-using PLATEAU.CityInfo;
+﻿using PLATEAU.CityInfo;
 using PLATEAU.Util.Async;
 using System.Collections;
 using System.Collections.Generic;
@@ -80,17 +80,21 @@ namespace PLATEAU.Samples
         // -------------------------------------------------------------------------------------------------------------
         void Start()
         {
-            // InputSystemの入力を登録
+            // 他オブジェクトのスクリプトのインスタンス(GameManagerの関数や変数を参照できる)
+            GameManageScript = GameObject.Find("GameManager").GetComponent<GameManage>();
+            TimeManageScript = GameObject.Find("TimeManager").GetComponent<TimeManage>();
+        }
+        public void InitializeUI()
+        {
+            //InputSystemの入力を登録
             inputActions.SelectScene.AddCallbacks(this);
             //コルーチン開始(Plateauのデータの取得が終わった後の処理を実行)
             StartCoroutine(WatiForInitialise());
             //変数の初期化
             filterStatus = "None";
             correctBuildingName = "";
-            PlayerPosCamera.enabled = false; 
-            // 他オブジェクトのスクリプトのインスタンス(GameManagerの関数や変数を参照できる)
-            GameManageScript = GameObject.Find("GameManager").GetComponent<GameManage>();
-            TimeManageScript = GameObject.Find("TimeManager").GetComponent<TimeManage>();
+            PlayerPosCamera.enabled = false;
+
             // 共通タグのオブジェクトを一つの配列にまとめる
             HintTexts = GameObject.FindGameObjectsWithTag("HintText");
         }
@@ -379,7 +383,7 @@ namespace PLATEAU.Samples
         private void SelectCityObject()
         {
             // 目の前の建物のTransform情報を得る(GameObject -> Transform)
-            var trans = Lookforward();
+            Transform trans = Lookforward();
             if(trans == null || trans.parent.parent == null)
             {
                 // selectedCityObject = null;
@@ -394,9 +398,10 @@ namespace PLATEAU.Samples
             selectCityObject = gmls[trans.parent.parent.name].CityObjects[trans.name];
             selectCityObject.SetMaterialColor(selectedColor);
 
+            //ゴールの建物だった場合
             if(BuildingInfoDict.ContainsKey(trans.name))
             {
-                GameManageScript.selectBuildingAction(trans.name);
+                GameManageScript.selectBuildingAction(trans);
                 rescuedNumLabel.text = GameManageScript.rescuedNum.ToString();
                 rescuingNumLabel.text = GameManageScript.rescuingNum.ToString();
             }
@@ -446,7 +451,7 @@ namespace PLATEAU.Samples
         {
             if(context.performed)
             {
-                // ChangeCameraScene();
+                //ChangeCameraScene();
             }
 
         }

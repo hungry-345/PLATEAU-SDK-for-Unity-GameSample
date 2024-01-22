@@ -23,7 +23,7 @@ public class ViewBase : MonoBehaviour
     {
         var prefab = Resources.Load<T>("Prefabs/ViewPrefabs/"+viewName);
         prefab.name = viewName;
-        var view = Instantiate(prefab);
+        var view = Instantiate(prefab,new Vector3(0,0,0),Quaternion.identity);
         view.name = viewName;
         return view;
     }
