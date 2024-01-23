@@ -6,8 +6,6 @@ public class EnemyManage : MonoBehaviour
 {
     //生成する敵
     [SerializeField, Tooltip("ゾンビ")] private GameObject Zombie;
-    [SerializeField, Tooltip("ゾンビマーカー")] private GameObject marker;
-    public Dictionary<string,GameObject> enemyDict = new Dictionary<string, GameObject>();
     //生成範囲
     private GameObject spawnTransformObjects;  //敵のスポーン位置の候補が入ったオブジェクト
     //生成数
@@ -48,13 +46,6 @@ public class EnemyManage : MonoBehaviour
         zombie.transform.position = spawnPos;
         zombie.name = enemyCount + "Zombie";
 
-
-        GameObject enemyMarker = Instantiate(marker,transform.root.gameObject.transform) as GameObject;
-        enemyMarker.name = enemyCount + "ZombieMarker";
-        enemyMarker.transform.localScale = new Vector3(20f, 1f, 20f);
-        enemyMarker.transform.localPosition = new Vector3(spawnPos.x,-500,spawnPos.z);
-
-        enemyDict.Add(zombie.name,enemyMarker);
 
     }
     //敵の削除
