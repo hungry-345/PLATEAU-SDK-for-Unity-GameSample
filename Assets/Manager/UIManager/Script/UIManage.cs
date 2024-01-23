@@ -428,7 +428,10 @@ namespace PLATEAU.Samples
             // sonarContextLabel.text  = "距離 : " +  dist;
         }
         // ---------------------------------------------------------------
-
+        public void DisplayRescuedNum()
+        {
+            rescuedNumLabel.text = GameManageScript.rescuedNum.ToString();
+        }
         public void DisplayRescuingNum()
         {
             rescuingNumLabel.text = GameManageScript.rescuingNum.ToString();
