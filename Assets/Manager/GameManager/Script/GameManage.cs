@@ -359,11 +359,15 @@ namespace PLATEAU.Samples
 
             if(rescuingNum > 0)
             {
+                //救助中の人数-1
                 rescuingNum -= 1;
+                //建物にはいった救助者+1
                 tmpGoalAttribute.evacueeNum += 1;
+                //NPCが向かうTransformの値をセット
+                Transform goalTransform = GameObject.Find(clickedBuilding.name + "flag").transform;
 
                 //NPCを建物に向かわせる
-                NPCManageScript.SendBuilding(clickedBuilding);
+                NPCManageScript.SendBuilding(goalTransform);
 
                 //rescuedNum += 1;
 
@@ -408,6 +412,7 @@ namespace PLATEAU.Samples
         public void AddRescueNum()
         {
             rescuedNum++;
+            UIManageScript.DisplayRescuedNum();
         }
         //現在助けている人数を追加する関数
         public void ContactHumanAction()

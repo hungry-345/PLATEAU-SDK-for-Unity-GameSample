@@ -7,6 +7,7 @@ using UnityEngine.Events;
 public class CollisionDetector : MonoBehaviour
 {
     [SerializeField] private TriggerEvent triggerEnter = new TriggerEvent();
+    [SerializeField] private TriggerEvent triggerStay = new TriggerEvent();
     [SerializeField] private TriggerEvent triggerExit = new TriggerEvent();
 
     /// <summary>
@@ -17,6 +18,11 @@ public class CollisionDetector : MonoBehaviour
     {
         // InspectorタブのtriggerEnterで指定された処理を実行する
         triggerEnter.Invoke(other);
+    }
+    private void OnTriggerStay(Collider other)
+    {
+        // InspectorタブのtriggerEnterで指定された処理を実行する
+        triggerStay.Invoke(other);
     }
     private void OnTriggerExit(Collider other)
     {
