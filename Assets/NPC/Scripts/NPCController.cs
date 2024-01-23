@@ -181,14 +181,14 @@ public class NPCController : MonoBehaviour
     // 衝突があった場合
     void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        //ゴールの建物
-        if (hit.gameObject.CompareTag("Goal"))
-        {
-            //自身を助けた人数としてカウントさせる
-            gameManage.AddRescueNum();
-            //自身を消す
-            Destroy(this.gameObject);
-        }
+        ////ゴールの建物
+        //if (hit.gameObject.CompareTag("Goal"))
+        //{
+        //    //自身を助けた人数としてカウントさせる
+        //    gameManage.AddRescueNum();
+        //    //自身を消す
+        //    Destroy(this.gameObject);
+        //}
     }
 
     //NPCの目的地を設定
