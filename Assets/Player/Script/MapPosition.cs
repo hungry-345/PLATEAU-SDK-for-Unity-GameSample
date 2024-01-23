@@ -25,7 +25,5 @@ public class MapPosition : MonoBehaviour
         PlayerPositionMarker.localEulerAngles = new Vector3(-90,angle+180,0);
         PlayerPositionMarker.position = new Vector3(Player.position.x,-490,Player.position.z);
         PlayerPositionCamera.position = new Vector3(Player.position.x,-100,Player.position.z);
-
-
     }
 }

@@ -9,12 +9,16 @@ public class Zombie : MonoBehaviour
 {
     private Animator animator;
     private GameObject player;
-    public float distance;
-    public bool search;
-    [SerializeField] private SphereCollider searchArea;
     // [SerializeField] float searchAngle = 180f;
     private Contact ContactScript;
     private ThirdPersonController ThirdPersonControllerScript;
+    public float playerDistance;
+    public bool search;
+    
+    private float moveDistance;
+    private Vector3 direction;
+    private Vector3 previousPos;
+    private float elapsedTime;
 
     // Start is called before the first frame update
     void Start()
@@ -23,58 +27,48 @@ public class Zombie : MonoBehaviour
         animator = GetComponent<Animator>();
         ContactScript = GameObject.Find("PlayerArmature").GetComponent<Contact>();
         ThirdPersonControllerScript = GameObject.Find("PlayerArmature").GetComponent<ThirdPersonController>();
+        previousPos = this.transform.position;
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        distance = Vector3.Distance(this.transform.position, player.transform.position);
-        if(distance < 30 && !ThirdPersonControllerScript.isDied)
-        {
-            search = true;
-        }
-        else
-        {
-            search = false;
-        }
-        if(distance < 2f)
+        playerDistance = Vector3.Distance(this.transform.position, player.transform.position);
+        moveDistance = Vector3.Distance(this.transform.position,previousPos);
+        elapsedTime += Time.deltaTime;
+
+        if(playerDistance < 2f)
         {
             ContactScript.GameOverFunc();
         }
-        // if(distance < 5f)
-        // {
-        //     animator.SetTrigger("Attack");
-        // }
-        // else
-        // {
-        //     animator.ResetTrigger("Attack");
-        // }
-
-        if(search)
+        else if(playerDistance < 30 && !ThirdPersonControllerScript.isDied)
         {
-            animator.SetBool("Run",true);
-            this.transform.LookAt(new Vector3(player.transform.position.x,this.transform.position.y,player.transform.position.z));
-            transform.position -= transform.forward * 0.1f;
+            Chase();
         }
         else
         {
-            animator.SetBool("Run",false);
-            animator.SetBool("Walk",true);
-            // this.transform.position += transform.forward * 0.03f;
+            Lost();
         }
-        // Debug.Log(search);
+        
+        if(elapsedTime > 2f && moveDistance < 1f)
+        {
+            direction += new Vector3(Random.Range(0f,360f),0f,Random.Range(0f,360f));
+            elapsedTime = 0;
+        }
+
     }
-    // プレイヤーが範囲内にいるか
-    // private void OnTriggerExit(Collider other)
-    // {
-    //     if(other.tag == "Player")
-    //     {
-    //         search = false;
-    //     }
-    // }
-    // private void OnDrawGizmos()
-    // {
-    //     Handles.color = Color.red;
-    //     Handles.DrawSolidArc(transform.position, Vector3.up,Quaternion.Euler(0f,-searchAngle,0f)*transform.forward,searchAngle*2f,searchArea.radius);
-    // }
+
+    private void Lost()
+    {
+        animator.SetBool("Walk",true);
+        this.transform.LookAt(direction);
+    }
+
+    private void Chase()
+    {
+        animator.SetBool("Run",true);
+        direction = new Vector3(player.transform.position.x,this.transform.position.y,player.transform.position.z);
+        this.transform.LookAt(direction);
+        transform.position -= transform.forward * 0.01f;
+    }
 }
