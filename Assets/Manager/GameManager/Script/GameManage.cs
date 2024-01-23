@@ -190,7 +190,6 @@ namespace PLATEAU.Samples
                 //ゴールの属性情報
                 correctGMLdata = rndBuilding.Value.Attribute;
                 isSetGMLdata = CheckGMLdata(correctGMLdata,rndBuilding.Key);
-
             }
             // goalPos
             goalBuilding = GameObject.Find(rndBuilding.Key);
@@ -226,10 +225,6 @@ namespace PLATEAU.Samples
             for(int i=0;i<goalNum;i++)
             {
                 SelectGoal();
-            }
-            foreach(var i in GoalAttributeDict)
-            {
-                Debug.Log(i.Key);
             }
 
             //正解の建物の情報を取得
@@ -287,7 +282,6 @@ namespace PLATEAU.Samples
             //表示させる建物の情報を決める
             foreach(var goalAttribute in GoalAttributeDict)
             {
-                Debug.Log(goalAttribute.Value.isHintActive);
                 if(!goalAttribute.Value.isHintActive)
                 {
                     hintBuildingName = goalAttribute.Key;
@@ -296,11 +290,6 @@ namespace PLATEAU.Samples
                     break;
                 }
             }
-            foreach(var goalAttribute in GoalAttributeDict)
-            {
-                Debug.Log("isHintActive : " + goalAttribute.Value.isHintActive);
-            }
-            
             if(hintBuildingName == "")
             {
                 return;

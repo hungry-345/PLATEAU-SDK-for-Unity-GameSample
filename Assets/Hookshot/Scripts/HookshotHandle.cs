@@ -81,7 +81,7 @@ namespace StarterAssets
                     HookDelete();
                     if(hookshotDir.y > 0.1f || hookshotPosition.y > 10f);
                     {
-                        _controller.Move(new Vector3(0f, 6f, 0f));
+                        _controller.Move(new Vector3(0f, 5f, 0f));
                     }
                     isHookshot = false;
                 }
@@ -142,7 +142,7 @@ namespace StarterAssets
         }
         private void HangHook()
         {
-            if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit, 100f, Hookable))
+            if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit, 50f, Hookable))
             {
                 isHookshot = true;
                 lr.enabled = true;
