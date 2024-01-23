@@ -29,6 +29,8 @@ public class NPCController : MonoBehaviour
     private float currentDistance;
     //プレイヤーがこの距離まで近づいたらついてくるようになる
     private float followDistance=1.5f;
+    //他のNPCとこの距離まで接近したら待機状態になる
+    private float NPCfollowDistance=0.1f;
     //目的地に到着したかフラグ
     private bool isArrived;
     //速度
@@ -56,6 +58,7 @@ public class NPCController : MonoBehaviour
         if (state == NPCState.Follow)//追いかける
         {
             this.transform.LookAt(new Vector3(player.transform.position.x, this.transform.position.y, player.transform.position.z));
+
             SetNPCDestination(player.transform.position);
 
             velocity = Vector3.zero;
@@ -76,7 +79,8 @@ public class NPCController : MonoBehaviour
         }
         else if (state == NPCState.Goal) //ゴールに向かう
         {
-
+            direction = (NPCdestination - transform.position).normalized;
+            velocity = direction * RunSpeed;
         }
 
         velocity.y += Physics.gravity.y * Time.deltaTime;
@@ -119,16 +123,8 @@ public class NPCController : MonoBehaviour
     //検知範囲にオブジェクトが入った場合
     public void OnObjectEnter(Collider collider)
     {
-        //ゴールの建物
-        if(collider.CompareTag("Goal"))
-        {
-            //自身を助けた人数としてカウントさせる
-            gameManage.AddRescueNum();
-            //自身を消す
-            Destroy(this);
-        }
         //プレイヤーを発見
-        else if (collider.CompareTag("Player"))
+        if (collider.CompareTag("Player"))
         {
             //救助中の人としてカウント
             if(isArrived==false)
@@ -146,6 +142,26 @@ public class NPCController : MonoBehaviour
             }
         }
     }
+    //検知範囲にオブジェクトが入っている時
+    public void OnObjectStay(Collider collider)
+    {
+        //他のNPCが範囲内にいる
+        if (collider.CompareTag("Player")||(collider.CompareTag("NPC")&& collider.gameObject!=this.gameObject))
+        {
+            ////ついていく状態の時のNPCの目的地の更新
+            //if (state == NPCState.Follow)
+            //{
+            //    float distance = Vector3.Distance(this.transform.position, collider.transform.position);
+            //    //プレイヤーに十分近づいたら待機状態にする
+            //    if (distance < followDistance)
+            //    {
+            //        SetNPCDestination(collider.transform.position);
+            //    }
+
+            //}
+        }
+    }
+    //検知範囲からオブジェクトが出た場合
     public void OnObjectExit(Collider collider)
     {
         //プレイヤー
@@ -162,7 +178,18 @@ public class NPCController : MonoBehaviour
 
         }
     }
-    //検知範囲からオブジェクトが出た場合
+    // 衝突があった場合
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        //ゴールの建物
+        if (hit.gameObject.CompareTag("Goal"))
+        {
+            //自身を助けた人数としてカウントさせる
+            gameManage.AddRescueNum();
+            //自身を消す
+            Destroy(this.gameObject);
+        }
+    }
 
     //NPCの目的地を設定
     public void SetNPCDestination(Vector3 destination)

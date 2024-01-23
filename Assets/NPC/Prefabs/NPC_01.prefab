@@ -136,6 +136,21 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  triggerStay:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6899238057722065970}
+        m_TargetAssemblyTypeName: NPCController, Assembly-CSharp
+        m_MethodName: OnObjectStay
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   triggerExit:
     m_PersistentCalls:
       m_Calls:
@@ -195,7 +210,7 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1670074554276870723}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.35546452
   m_Height: 1.55
@@ -966,8 +981,8 @@ GameObject:
   - component: {fileID: 6899238057722065970}
   - component: {fileID: 1676669707770711004}
   m_Layer: 0
-  m_Name: Human_Female_01
-  m_TagString: Untagged
+  m_Name: NPC_01
+  m_TagString: NPC
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1079,9 +1094,9 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 2
   m_Height: 1.55
-  m_Radius: 0.3554645
+  m_Radius: 0.3
   m_SlopeLimit: 45
-  m_StepOffset: 0.3
+  m_StepOffset: 0
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.8, z: 0}
