@@ -369,13 +369,13 @@ namespace PLATEAU.Samples
                 //NPCを建物に向かわせる
                 NPCManageScript.SendBuilding(goalTransform);
 
-                //rescuedNum += 1;
+                rescuedNum += 1;
 
                 //収容人数の最後の1人が入る時
                 if(tmpGoalAttribute.capacity == tmpGoalAttribute.evacueeNum)
                 {
                     //ゴールの建物のタグを元に戻す
-                    clickedBuilding.gameObject.tag = "";
+                    clickedBuilding.gameObject.tag = "Untagged";
 
                     UIManageScript.DeleteAnswer(clickedBuilding.name);
                     GoalAttributeDict.Remove(clickedBuilding.name);
