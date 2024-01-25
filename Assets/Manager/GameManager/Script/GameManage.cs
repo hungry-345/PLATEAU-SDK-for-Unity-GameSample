@@ -376,11 +376,10 @@ namespace PLATEAU.Samples
                 {
                     //ゴールの建物のタグを元に戻す
                     clickedBuilding.gameObject.tag = "Untagged";
-
                     UIManageScript.DeleteAnswer(clickedBuilding.name);
                     GoalAttributeDict.Remove(clickedBuilding.name);
-                    GameObject flag = GameObject.Find(clickedBuilding+"flag");
-                    GameObject Marker = GameObject.Find(clickedBuilding+"Marker");
+                    GameObject flag = GameObject.Find(clickedBuilding.name + "flag");
+                    GameObject Marker = GameObject.Find(clickedBuilding.name + "Marker");
                     Destroy(flag);
                     Destroy(Marker);
                     // 新しいゴールの生成
@@ -390,6 +389,8 @@ namespace PLATEAU.Samples
                 {
                     GoalAttributeDict[clickedBuilding.name] = tmpGoalAttribute;
                 }
+
+                UIManageScript.EditMissionText();
                 // if(vacant > rescuingNum)
                 // {
                 //     // そのまま足す
