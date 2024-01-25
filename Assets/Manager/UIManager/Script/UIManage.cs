@@ -51,6 +51,7 @@ namespace PLATEAU.Samples
         private Label Shelter2CapacityLabel;
         private Label Shelter3HeightLabel;
         private Label Shelter3CapacityLabel;
+        private Label MissionLabel;
         private string correctBuildingName;
         private string filterStatus;
         private string nearestBuildingName;
@@ -153,16 +154,16 @@ namespace PLATEAU.Samples
                 timeLabel = BaseUi.rootVisualElement.Q<Label>("Time");
                 rescuedNumLabel = BaseUi.rootVisualElement.Q<Label>("Rescued_Count");
                 rescuingNumLabel = BaseUi.rootVisualElement.Q<Label>("Rescuing_Count");
-                // sonarCountLabel = BaseUi.rootVisualElement.Q<Label>("Sonar_Count");
-                // sonarContextLabel = BaseUi.rootVisualElement.Q<Label>("Sonar_Context");
-                // filterStatusLabel = BaseUi.rootVisualElement.Q<Label>("Filter_Status");
-                // filterContextLabel = BaseUi.rootVisualElement.Q<Label>("Filter_Context");
                 Shelter1HeightLabel = BaseUi.rootVisualElement.Q<Label>("Shelter1_Height");
                 Shelter1CapacityLabel = BaseUi.rootVisualElement.Q<Label>("Shelter1_Capacity");
                 Shelter2HeightLabel = BaseUi.rootVisualElement.Q<Label>("Shelter2_Height");
                 Shelter2CapacityLabel = BaseUi.rootVisualElement.Q<Label>("Shelter2_Capacity");
                 Shelter3HeightLabel = BaseUi.rootVisualElement.Q<Label>("Shelter3_Height");
                 Shelter3CapacityLabel = BaseUi.rootVisualElement.Q<Label>("Shelter3_Capacity");
+                MissionLabel = BaseUi.rootVisualElement.Q<Label>("Mission_Text");
+                
+
+                EditMissionText();
                 // ゴールの位置を設定する
                 GameManageScript.SelectGoals();
                 // // Map用のカメラを起動する
@@ -192,7 +193,6 @@ namespace PLATEAU.Samples
                 Shelter2CapacityLabel.text = hintBuildingEvacuee + "/" + hintBuildingCapacity;
                 BuildingInfo buildingInfo = new BuildingInfo {heightLabel=Shelter2HeightLabel,capacityLabel=Shelter2CapacityLabel};
                 BuildingInfoDict.Add(hintBuildingName,buildingInfo);
-                return;
             }
             else if(Shelter3HeightLabel.text == "")
             {
@@ -200,25 +200,30 @@ namespace PLATEAU.Samples
                 Shelter3CapacityLabel.text = hintBuildingEvacuee + "/" + hintBuildingCapacity;
                 BuildingInfo buildingInfo = new BuildingInfo {heightLabel=Shelter3HeightLabel,capacityLabel=Shelter3CapacityLabel};
                 BuildingInfoDict.Add(hintBuildingName,buildingInfo);
-                return;
             }
-            // if(correctBuildingName != buildingName)
-            // {
-            //     EvacueeHintLabel.text = GameManageScript.GoalAttributeDict[buildingName].saboveground;
-            // }
-            // //正解の建物の属性情報を表示させる
-            // if(itemName == "measuredheight")
-            // {
-            //     HeightHintLabel.text = hint;
-            // }
-            // if(itemName == "Usage")
-            // {
-            //     UsageHintLabel.text = hint;
-            // }
-            // correctBuildingName = buildingName;
+
+            // 建物の色を変更
+            GameObject building = GameObject.Find(hintBuildingName);
+            Renderer renderer = building.GetComponent<Renderer>();
+            for (int i = 0; i < renderer.materials.Length; ++i)
+            {
+                renderer.materials[i].color = selectedColor;
+            }
+            // GoalCityObject.GetComponent<Renderer>().material.color = selectedColor;
+            // selectCityObject = gmls[GoalCityObject.transform.parent.parent.name].CityObjects[GoalCityObject.transform.name];
+            // selectCityObject.SetMaterialColor(selectedColor);
+            // ミッションのメッセージの変更
+            EditMissionText();
         }
         public void DeleteAnswer(string deleteBuildingName)
         {
+            GameObject building = GameObject.Find(deleteBuildingName);
+            Renderer renderer = building.GetComponent<Renderer>();
+            for (int i = 0; i < renderer.materials.Length; ++i)
+            {
+                renderer.materials[i].color = Color.white;
+            }
+
             if(Shelter1HeightLabel.text == BuildingInfoDict[deleteBuildingName].heightLabel.text)
             {
                 Shelter1HeightLabel.text = "";
@@ -238,6 +243,7 @@ namespace PLATEAU.Samples
             {
                 BuildingInfoDict.Remove(deleteBuildingName);
             }
+
         }
 
         private string SetFilterText(string itemName,string attributeValue)
@@ -392,12 +398,11 @@ namespace PLATEAU.Samples
 
             // 建物の色を変える
             //選択された状態の建物の色を元に戻す
-            colorCodeType = (ColorCodeType)Enum.Parse(typeof(ColorCodeType), filterStatus);
-            ColorCode(filterStatus,nearestBuildingName);
-            // 選択した建物の色を変更する
-            selectCityObject = gmls[trans.parent.parent.name].CityObjects[trans.name];
-            selectCityObject.SetMaterialColor(selectedColor);
-
+            // colorCodeType = (ColorCodeType)Enum.Parse(typeof(ColorCodeType), filterStatus);
+            // ColorCode(filterStatus,nearestBuildingName);
+            // // 選択した建物の色を変更する
+            // selectCityObject = gmls[trans.parent.parent.name].CityObjects[trans.name];
+            // selectCityObject.SetMaterialColor(selectedColor);
             //ゴールの建物だった場合
             if(BuildingInfoDict.ContainsKey(trans.name))
             {
@@ -435,9 +440,24 @@ namespace PLATEAU.Samples
         public void DisplayRescuingNum()
         {
             rescuingNumLabel.text = GameManageScript.rescuingNum.ToString();
+            EditMissionText();
         }
 
-        
+        public void EditMissionText()
+        {
+            if(GameManageScript.rescuingNum == 0)
+            {
+                MissionLabel.text = "生存者を見つけよう!";
+            }
+            else if(BuildingInfoDict.Count == 0)
+            {
+                MissionLabel.text = "紙飛行機を拾って避難場所の位置を調べよう!";
+            }
+            else
+            {
+                MissionLabel.text = "避難場所に連れて行こう!";
+            }
+        }
         // Plateauのデータ取得の終了待ちの関数
         // -------------------------------------------------------------------------------------------------------------
         /// <summary>

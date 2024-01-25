@@ -12,6 +12,7 @@ public class TitleView : ViewBase
     private Button startButton;
     private Button explanationButton;
     private Button cancelButton;
+    
 
     private void Start()
     {
