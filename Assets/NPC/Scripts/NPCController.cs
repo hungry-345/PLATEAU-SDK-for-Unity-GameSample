@@ -9,10 +9,11 @@ public class NPCController : MonoBehaviour
 {
     public enum NPCState
     {
-        //Stroll,//巡回する
+        Stroll,//巡回する
         Wait,//待機する
         Follow,//ついていく
         Goal,//ゴールへ向かう
+        Escape //敵から逃げる
     };
 
     [SerializeField]private float runSpeed=15f;
@@ -38,7 +39,7 @@ public class NPCController : MonoBehaviour
     //移動方向
     private Vector3 direction;
     //目的地
-    private Vector3 NPCdDestination;
+    private Vector3 NPCDestination;
 
     void Start()
     {
@@ -63,7 +64,7 @@ public class NPCController : MonoBehaviour
 
             velocity = Vector3.zero;
             animator.SetFloat("MoveSpeed", runSpeed);
-            direction = (NPCdDestination - transform.position).normalized;
+            direction = (NPCDestination - transform.position).normalized;
             velocity = direction * runSpeed;
 
             //プレイヤーに十分近づいたら待機状態にする
@@ -79,7 +80,7 @@ public class NPCController : MonoBehaviour
         }
         else if (state == NPCState.Goal) //ゴールに向かう
         {
-            direction = (NPCdDestination - transform.position).normalized;
+            direction = (NPCDestination - transform.position).normalized;
             velocity = direction * runSpeed;
         }
 
@@ -114,6 +115,12 @@ public class NPCController : MonoBehaviour
             animator.SetBool("IsWalking", true);
 
         }
+        else if (tempState == NPCState.Escape)
+        {
+            animator.SetFloat("MoveSpeed", runSpeed);
+            animator.SetBool("IsWalking", true);
+
+        }
     }
     //NPCの状態取得メソッド
     public NPCState GetState()
@@ -133,12 +140,23 @@ public class NPCController : MonoBehaviour
             }
             isArrived = true;
             //NPCの状態を取得
-            NPCController.NPCState state = GetState();
+            state = GetState();
             //NPCが待機状態であればついていく設定に変更
             if (state == NPCState.Wait)
             {
                 //Debug.Log("プレイヤー発見");
                 SetState(NPCState.Follow);
+            }
+        }
+        //敵を発見
+        else if(collider.CompareTag("Enemy"))
+        {
+            if (state != NPCState.Follow)
+            {
+                //逃げる対象をセット
+
+                //逃げる
+                SetState(NPCState.Escape);
             }
         }
     }
@@ -155,7 +173,7 @@ public class NPCController : MonoBehaviour
             //    //プレイヤーに十分近づいたら待機状態にする
             //    if (distance < followDistance)
             //    {
-            //        SetNPCdDestination(collider.transform.position);
+            //        SetNPCDestination(collider.transform.position);
             //    }
 
             //}
@@ -164,18 +182,16 @@ public class NPCController : MonoBehaviour
     //検知範囲からオブジェクトが出た場合
     public void OnObjectExit(Collider collider)
     {
-        //プレイヤー
-        if (collider.CompareTag("Player"))
+        //敵
+        if (collider.CompareTag("Enemy"))
         {
             //NPCの状態を取得
-            NPCController.NPCState state = GetState();
-            //NPCが待機状態であればついていく設定に変更
+            state = GetState();
+            //NPCが逃げる状態であれば巡回状態に変更
             if (state == NPCState.Wait)
             {
-                //Debug.Log("プレイヤー発見");
-                SetState(NPCState.Follow);
+                SetState(NPCState.Stroll);
             }
-
         }
     }
     // 衝突があった場合
@@ -191,9 +207,9 @@ public class NPCController : MonoBehaviour
         //}
     }
 
-    //NPCの目的地を設定
+    //NPCの対象を設定
     public void SetNPCDestination(Vector3 destination)
     {
-        NPCdDestination=destination;
+        NPCDestination=destination;
     }
 }

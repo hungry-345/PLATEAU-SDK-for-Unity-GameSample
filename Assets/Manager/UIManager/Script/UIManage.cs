@@ -117,7 +117,7 @@ namespace PLATEAU.Samples
             foreach(var instancedCityModel in instancedCityModels)
             {
                 var rootDirName = instancedCityModel.name;
-                Debug.Log(instancedCityModel.transform.childCount);
+                //Debug.Log(instancedCityModel.transform.childCount);
                 for (int i = 0; i < instancedCityModel.transform.childCount; ++i)
                 {
                     var go = instancedCityModel.transform.GetChild(i).gameObject;
