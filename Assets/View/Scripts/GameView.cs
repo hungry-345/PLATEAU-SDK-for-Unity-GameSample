@@ -26,14 +26,6 @@ public class GameView : ViewBase
 
     void Awake()
     {
-        if (transform.hasChanged)
-        {
-            // 変更ログを出力
-            print("Transformが変更された！");
-
-            // 変更フラグをクリア
-            transform.hasChanged = false;
-        }
         Cursor.lockState = CursorLockMode.Confined;
         cursor = GameObject.Find("Cursor");
         cursorManage = cursor.GetComponent<CursorManager>();

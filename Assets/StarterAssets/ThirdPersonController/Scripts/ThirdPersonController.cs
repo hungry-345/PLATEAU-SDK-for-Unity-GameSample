@@ -2,7 +2,6 @@
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
 #endif
-using PLATEAU.Samples;
 
 /* Note: animations are called via the controller for both the character and capsule using animator null checks
  */
@@ -127,7 +126,6 @@ namespace StarterAssets
 
         // ============================================================
 
-        private UIManage UIManageScript;
         public bool isDied = false;
 
         private void Awake()
@@ -160,7 +158,6 @@ namespace StarterAssets
 
             // ===========================================
 
-            UIManageScript = GameObject.Find("UIManager").GetComponent<UIManage>();
         }
 
         private void Update()

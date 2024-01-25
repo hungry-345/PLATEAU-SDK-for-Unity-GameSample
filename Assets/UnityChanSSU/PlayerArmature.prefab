@@ -78,7 +78,7 @@ MonoBehaviour:
   radius: 0.06
   height: 0.3
   linkedRenderer: {fileID: 0}
-  shouldDrawGizmosThisFrame: 1
+  shouldDrawGizmosThisFrame: 0
 --- !u!1 &6418349745960478999
 GameObject:
   m_ObjectHideFlags: 0
@@ -174,7 +174,7 @@ MonoBehaviour:
   radius: 0.04
   height: 0.2
   linkedRenderer: {fileID: 0}
-  shouldDrawGizmosThisFrame: 1
+  shouldDrawGizmosThisFrame: 0
 --- !u!1 &6418349746007285427
 GameObject:
   m_ObjectHideFlags: 0
@@ -222,7 +222,7 @@ MonoBehaviour:
   radius: 0.04
   height: 0.12
   linkedRenderer: {fileID: 0}
-  shouldDrawGizmosThisFrame: 1
+  shouldDrawGizmosThisFrame: 0
 --- !u!1 &6418349746077356309
 GameObject:
   m_ObjectHideFlags: 0
@@ -269,7 +269,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   radius: 0.078
   linkedRenderer: {fileID: 0}
-  shouldDrawGizmosThisFrame: 1
+  shouldDrawGizmosThisFrame: 0
 --- !u!1 &6418349746198520262
 GameObject:
   m_ObjectHideFlags: 0
@@ -317,7 +317,7 @@ MonoBehaviour:
   radius: 0.11
   height: 0.09
   linkedRenderer: {fileID: 0}
-  shouldDrawGizmosThisFrame: 1
+  shouldDrawGizmosThisFrame: 0
 --- !u!1 &6418349746199332137
 GameObject:
   m_ObjectHideFlags: 0
@@ -365,7 +365,7 @@ MonoBehaviour:
   radius: 0.04
   height: 0.2
   linkedRenderer: {fileID: 0}
-  shouldDrawGizmosThisFrame: 1
+  shouldDrawGizmosThisFrame: 0
 --- !u!1 &6418349746301300572
 GameObject:
   m_ObjectHideFlags: 0
@@ -413,7 +413,7 @@ MonoBehaviour:
   radius: 0.04
   height: 0.12
   linkedRenderer: {fileID: 0}
-  shouldDrawGizmosThisFrame: 1
+  shouldDrawGizmosThisFrame: 0
 --- !u!1 &6418349746407293475
 GameObject:
   m_ObjectHideFlags: 0
@@ -509,7 +509,7 @@ MonoBehaviour:
   radius: 0.05
   height: 0.18
   linkedRenderer: {fileID: 0}
-  shouldDrawGizmosThisFrame: 1
+  shouldDrawGizmosThisFrame: 0
 --- !u!1 &6418349746591606647
 GameObject:
   m_ObjectHideFlags: 0
@@ -557,7 +557,7 @@ MonoBehaviour:
   radius: 0.05
   height: 0.45
   linkedRenderer: {fileID: 0}
-  shouldDrawGizmosThisFrame: 1
+  shouldDrawGizmosThisFrame: 0
 --- !u!1 &6418349746639448361
 GameObject:
   m_ObjectHideFlags: 0
@@ -666,9 +666,9 @@ ParentConstraint:
   m_TranslationAtRest: {x: -0.055786133, y: 1.481636, z: 0.076538086}
   m_RotationAtRest: {x: 0, y: 0, z: 0}
   m_TranslationOffsets:
-  - {x: -0.055862427, y: 0.07562256, z: 0.099243164}
+  - {x: -0.055862427, y: 0.07563019, z: 0.099243164}
   m_RotationOffsets:
-  - {x: -6.829918, y: 0, z: 0}
+  - {x: -6.829919, y: 0, z: 0}
   m_AffectTranslationX: 1
   m_AffectTranslationY: 1
   m_AffectTranslationZ: 1
@@ -747,7 +747,7 @@ MonoBehaviour:
   radius: 0.05
   height: 0.18
   linkedRenderer: {fileID: 0}
-  shouldDrawGizmosThisFrame: 1
+  shouldDrawGizmosThisFrame: 0
 --- !u!1 &6418349746897507071
 GameObject:
   m_ObjectHideFlags: 0
@@ -795,7 +795,7 @@ MonoBehaviour:
   radius: 0.06
   height: 0.3
   linkedRenderer: {fileID: 0}
-  shouldDrawGizmosThisFrame: 1
+  shouldDrawGizmosThisFrame: 0
 --- !u!1 &6418349746963492585
 GameObject:
   m_ObjectHideFlags: 0
@@ -843,7 +843,7 @@ MonoBehaviour:
   radius: 0.028
   height: 0.03
   linkedRenderer: {fileID: 0}
-  shouldDrawGizmosThisFrame: 1
+  shouldDrawGizmosThisFrame: 0
 --- !u!1 &6418349747092230409
 GameObject:
   m_ObjectHideFlags: 0
@@ -891,7 +891,7 @@ MonoBehaviour:
   radius: 0.07
   height: 0.15
   linkedRenderer: {fileID: 0}
-  shouldDrawGizmosThisFrame: 1
+  shouldDrawGizmosThisFrame: 0
 --- !u!1 &6418349747248099378
 GameObject:
   m_ObjectHideFlags: 0
@@ -939,7 +939,7 @@ MonoBehaviour:
   radius: 0.028
   height: 0.03
   linkedRenderer: {fileID: 0}
-  shouldDrawGizmosThisFrame: 1
+  shouldDrawGizmosThisFrame: 0
 --- !u!1 &6418349747263612014
 GameObject:
   m_ObjectHideFlags: 0
@@ -987,7 +987,7 @@ MonoBehaviour:
   radius: 0.05
   height: 0.45
   linkedRenderer: {fileID: 0}
-  shouldDrawGizmosThisFrame: 1
+  shouldDrawGizmosThisFrame: 0
 --- !u!1 &6418349747450424096
 GameObject:
   m_ObjectHideFlags: 0
@@ -1096,9 +1096,9 @@ ParentConstraint:
   m_TranslationAtRest: {x: 0.05581665, y: 1.481636, z: 0.076538086}
   m_RotationAtRest: {x: 0, y: 0, z: 0}
   m_TranslationOffsets:
-  - {x: 0.055740356, y: 0.07562256, z: 0.099243164}
+  - {x: 0.055740356, y: 0.07563019, z: 0.099243164}
   m_RotationOffsets:
-  - {x: -6.829918, y: 0, z: 0}
+  - {x: -6.829919, y: 0, z: 0}
   m_AffectTranslationX: 1
   m_AffectTranslationY: 1
   m_AffectTranslationZ: 1
@@ -1177,7 +1177,7 @@ MonoBehaviour:
   radius: 0.13
   height: 0.18
   linkedRenderer: {fileID: 0}
-  shouldDrawGizmosThisFrame: 1
+  shouldDrawGizmosThisFrame: 0
 --- !u!1 &6418349747892810899
 GameObject:
   m_ObjectHideFlags: 0
@@ -1224,7 +1224,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   radius: 0.1
   linkedRenderer: {fileID: 0}
-  shouldDrawGizmosThisFrame: 1
+  shouldDrawGizmosThisFrame: 0
 --- !u!1 &8284149526652946837
 GameObject:
   m_ObjectHideFlags: 0
@@ -2323,7 +2323,7 @@ RotationConstraint:
   m_Enabled: 1
   m_Weight: 0.5
   m_RotationAtRest: {x: 0.08953212, y: 133.42175, z: -0.62634903}
-  m_RotationOffset: {x: -46.360508, y: 0.42012846, z: 91.31451}
+  m_RotationOffset: {x: -46.360516, y: 0.42013338, z: 91.3145}
   m_AffectRotationX: 1
   m_AffectRotationY: 1
   m_AffectRotationZ: 1
@@ -3618,7 +3618,6 @@ MonoBehaviour:
   quality: 0
   waveCount: 0
   waveHeight: 0
-  isreached: 0
 --- !u!114 &1947612120170235258
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3913,7 +3912,7 @@ RotationConstraint:
   m_Enabled: 1
   m_Weight: 0.9
   m_RotationAtRest: {x: 52.30223, y: -35.606056, z: 55.946404}
-  m_RotationOffset: {x: 29.690374, y: 114.08372, z: -85.6722}
+  m_RotationOffset: {x: 29.690372, y: 114.08371, z: -85.6722}
   m_AffectRotationX: 1
   m_AffectRotationY: 1
   m_AffectRotationZ: 1
@@ -4352,7 +4351,7 @@ RotationConstraint:
   m_Enabled: 1
   m_Weight: 0.2
   m_RotationAtRest: {x: -40.976955, y: -32.97183, z: -59.236115}
-  m_RotationOffset: {x: 42.03465, y: -118.80173, z: -101.56226}
+  m_RotationOffset: {x: 42.034634, y: -118.80174, z: -101.56226}
   m_AffectRotationX: 1
   m_AffectRotationY: 1
   m_AffectRotationZ: 1

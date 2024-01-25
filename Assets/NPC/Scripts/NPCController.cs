@@ -15,7 +15,7 @@ public class NPCController : MonoBehaviour
         Goal,//ゴールへ向かう
     };
 
-    [SerializeField]private float RunSpeed=15f;
+    [SerializeField]private float runSpeed=15f;
 
     private CharacterController characterController;
     private GameManage gameManage;
@@ -38,7 +38,7 @@ public class NPCController : MonoBehaviour
     //移動方向
     private Vector3 direction;
     //目的地
-    private Vector3 NPCdestination;
+    private Vector3 NPCdDestination;
 
     void Start()
     {
@@ -62,9 +62,9 @@ public class NPCController : MonoBehaviour
             SetNPCDestination(player.transform.position);
 
             velocity = Vector3.zero;
-            animator.SetFloat("MoveSpeed", RunSpeed);
-            direction = (NPCdestination - transform.position).normalized;
-            velocity = direction * RunSpeed;
+            animator.SetFloat("MoveSpeed", runSpeed);
+            direction = (NPCdDestination - transform.position).normalized;
+            velocity = direction * runSpeed;
 
             //プレイヤーに十分近づいたら待機状態にする
             if (currentDistance < followDistance)
@@ -79,8 +79,8 @@ public class NPCController : MonoBehaviour
         }
         else if (state == NPCState.Goal) //ゴールに向かう
         {
-            direction = (NPCdestination - transform.position).normalized;
-            velocity = direction * RunSpeed;
+            direction = (NPCdDestination - transform.position).normalized;
+            velocity = direction * runSpeed;
         }
 
         velocity.y += Physics.gravity.y * Time.deltaTime;
@@ -94,7 +94,7 @@ public class NPCController : MonoBehaviour
         if (tempState == NPCState.Follow)
         {
             //agent.isStopped = false;
-            animator.SetFloat("MoveSpeed", RunSpeed);
+            animator.SetFloat("MoveSpeed", runSpeed);
             animator.SetBool("IsWalking", true);
             SetNPCDestination(player.transform.position);
             //Debug.Log("追いかける状態になった");
@@ -110,7 +110,7 @@ public class NPCController : MonoBehaviour
         }
         else if (tempState == NPCState.Goal)
         {
-            animator.SetFloat("MoveSpeed", RunSpeed);
+            animator.SetFloat("MoveSpeed", runSpeed);
             animator.SetBool("IsWalking", true);
 
         }
@@ -155,7 +155,7 @@ public class NPCController : MonoBehaviour
             //    //プレイヤーに十分近づいたら待機状態にする
             //    if (distance < followDistance)
             //    {
-            //        SetNPCDestination(collider.transform.position);
+            //        SetNPCdDestination(collider.transform.position);
             //    }
 
             //}
@@ -194,6 +194,6 @@ public class NPCController : MonoBehaviour
     //NPCの目的地を設定
     public void SetNPCDestination(Vector3 destination)
     {
-        NPCdestination=destination;
+        NPCdDestination=destination;
     }
 }
