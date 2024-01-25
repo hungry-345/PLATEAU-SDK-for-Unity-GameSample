@@ -9,9 +9,6 @@ using Cursor = UnityEngine.Cursor;
 
 public class GameView : ViewBase
 {
-
-
-
     [SerializeField] private GameManage gameManage;
     [SerializeField, Tooltip("ゲームオーバーUI")] private UIDocument gameOverUI;
     [SerializeField, Tooltip("ゲームフィニッシュUI")] private UIDocument gameFinishUI;

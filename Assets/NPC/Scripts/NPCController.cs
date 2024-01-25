@@ -9,8 +9,8 @@ public class NPCController : MonoBehaviour
 {
     public enum NPCState
     {
-        Stroll,//巡回する
         Wait,//待機する
+        Stroll,//巡回する
         Follow,//ついていく
         Goal,//ゴールへ向かう
         Escape //敵から逃げる
@@ -50,6 +50,7 @@ public class NPCController : MonoBehaviour
         //agent = GetComponent<NavMeshAgent>();
         velocity = Vector3.zero;
         isArrived = false;
+        //SetState(NPCState.Wait);
     }
 
     void FixedUpdate()

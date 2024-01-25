@@ -731,7 +731,7 @@ GameObject:
   - component: {fileID: 5156207580563759514}
   - component: {fileID: -3016226902766136906}
   - component: {fileID: 1022228020296266657}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: NPC_03
   m_TagString: NPC
   m_Icon: {fileID: 0}
@@ -832,7 +832,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c39907cd987b00149b2a2c0504c301e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RunSpeed: 15
+  runSpeed: 15
 --- !u!143 &1022228020296266657
 CharacterController:
   m_ObjectHideFlags: 0
