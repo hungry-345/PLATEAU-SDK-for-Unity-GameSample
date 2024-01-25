@@ -11,11 +11,8 @@ public class NPCManager : MonoBehaviour
     //生成数
     [SerializeField, Tooltip("NPCNum")]private int NPCNum = 50;
 
-    //マップにいるNPCを管理するリスト
-    public GameObject[] NPCArray = new GameObject[50];
-
-
-
+    //連れているNPCを管理するリスト
+    List<GameObject> followNPCList = new List<GameObject>(); 
 
     //初期化処理
     public void InitializeNPC()
@@ -52,5 +49,11 @@ public class NPCManager : MonoBehaviour
         {
             GameObject.Destroy(n.gameObject);
         }
+    }
+
+    //followNPCListの追加
+    public void AddFollowList(GameObject NPC)
+    {
+
     }
 }

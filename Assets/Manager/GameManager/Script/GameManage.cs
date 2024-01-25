@@ -22,6 +22,10 @@ namespace PLATEAU.Samples
         
         [SerializeField, Tooltip("ターゲットフラッグ")] private GameObject targetFlag;
 
+        //ゲーム終了時にプレイヤーを操作不能にするために取得
+        [SerializeField] private PlayerInput playerInput;
+
+
         public SampleAttribute correctGMLdata;
         public Dictionary<string,GoalInfo> GoalAttributeDict;
         public int sonarCount;
@@ -29,7 +33,7 @@ namespace PLATEAU.Samples
         public int rescuingNum;
 
         private InputGameManage inputActions;
-        private ThirdPersonController thirdpersonController;
+        //private ThirdPersonController thirdpersonController;
         private System.Random rnd;
         private UIManage UIManageScript;
         private TimeManage TimeManageScript;
@@ -74,9 +78,8 @@ namespace PLATEAU.Samples
         {
             rnd = new System.Random();
             inputActions.InputGame.AddCallbacks(this);
-            //操作不能にするために取得
-            // GameObject.Find("PlayerArmature").transform.position = new Vector3(170,30,1400);
-            thirdpersonController = GameObject.Find("PlayerArmature").GetComponent<ThirdPersonController>();
+            
+            //thirdpersonController = GameObject.Find("PlayerArmature").GetComponent<ThirdPersonController>();
 
             //SceneManagerからShow.csにアクセスする
             UIManageScript = GameObject.Find("UIManager").GetComponent<UIManage>();
@@ -84,6 +87,7 @@ namespace PLATEAU.Samples
             EnemyManageScript = GameObject.Find("EnemyManager").GetComponent<EnemyManage>();
             ItemManageScript = GameObject.Find("ItemManager").GetComponent<ItemManage>();
             NPCManageScript= GameObject.Find("NPCManager").GetComponent<NPCManager>();
+
             //Hintのリストを作る
             HintLst = GameObject.FindGameObjectsWithTag("HintText");
             buildingDirName = new List<string>();
@@ -378,6 +382,7 @@ namespace PLATEAU.Samples
                     clickedBuilding.gameObject.tag = "Untagged";
                     UIManageScript.DeleteAnswer(clickedBuilding.name);
                     GoalAttributeDict.Remove(clickedBuilding.name);
+                    
                     GameObject flag = GameObject.Find(clickedBuilding.name + "flag");
                     GameObject Marker = GameObject.Find(clickedBuilding.name + "Marker");
                     Destroy(flag);
@@ -454,7 +459,7 @@ namespace PLATEAU.Samples
             UIManageScript.PlayerPosCamera.enabled = false;          
             UIManageScript.HideGameUI();
             NPCManageScript.DestroyNPC();
-            thirdpersonController.enabled = false;
+            playerInput.enabled = false;
         }
     }
 }
