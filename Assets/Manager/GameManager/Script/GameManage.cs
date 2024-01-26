@@ -354,26 +354,43 @@ namespace PLATEAU.Samples
         }
 
         // --------------------------------------------------------------------------------------------------------------
-        //ゴールの建物を選択したときの処理
-        public void selectBuildingAction(Transform clickedBuilding)
+        //プレイヤーがゴールの建物にたどり着いた時の処理
+        public void SelectBuildingAction(Transform clickedBuilding)
         {
             GoalInfo tmpGoalAttribute = GoalAttributeDict[clickedBuilding.name];
-            int vacant;
-            vacant = tmpGoalAttribute.capacity - tmpGoalAttribute.evacueeNum;
 
             if(rescuingNum > 0)
             {
+                //建物に収容できる残り人数
+                int remainingNum = tmpGoalAttribute.capacity - tmpGoalAttribute.evacueeNum;
+                //救助された(建物に送り出された)人数
+                int sendNum;
+
+                //救助中の人数>残り収容人数ならば救助中の人数ー残り収容人数、そうでなければ0
+                if(rescuingNum > remainingNum)
+                {
+                    tmpGoalAttribute.evacueeNum += remainingNum;
+                    sendNum = remainingNum;
+                    rescuingNum -= remainingNum;
+                }
+                else
+                {
+                    tmpGoalAttribute.evacueeNum += rescuingNum;
+                    sendNum = rescuingNum;
+                    rescuingNum = 0;
+                }
+
                 //救助中の人数-1
-                rescuingNum -= 1;
+                //rescuingNum -= 1;
                 //建物にはいった救助者+1
-                tmpGoalAttribute.evacueeNum += 1;
+                //tmpGoalAttribute.evacueeNum += 1;
+
                 //NPCが向かうTransformの値をセット
                 Transform goalTransform = GameObject.Find(clickedBuilding.name + "flag").transform;
+                //NPCを救助する
+                NPCManageScript.SendBuilding(sendNum);
 
-                //NPCを建物に向かわせる
-                NPCManageScript.SendBuilding(goalTransform);
-
-                rescuedNum += 1;
+                //rescuedNum += 1;
 
                 //収容人数の最後の1人が入る時
                 if(tmpGoalAttribute.capacity == tmpGoalAttribute.evacueeNum)
@@ -395,23 +412,8 @@ namespace PLATEAU.Samples
                     GoalAttributeDict[clickedBuilding.name] = tmpGoalAttribute;
                 }
 
+                UIManageScript.SelectCityObject(clickedBuilding);
                 UIManageScript.EditMissionText();
-                // if(vacant > rescuingNum)
-                // {
-                //     // そのまま足す
-                //     tmpGoalAttribute.evacueeNum += rescuingNum;
-                //     rescuingNum = 0;
-                // }
-                // else if(vacant == rescuingNum)
-                // {
-                //     rescuingNum = 0;
-                //     // deleteGoal;
-                // }
-                // else
-                // {
-                //     rescuingNum -= vacant;
-                //     // deleteGoal;
-                // }
             }
         }
         //助けた人数を追加する処理

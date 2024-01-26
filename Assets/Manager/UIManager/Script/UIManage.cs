@@ -384,35 +384,28 @@ namespace PLATEAU.Samples
         }
 
         /// <summary>
-        /// 建物を選択した時の処理
+        /// UI表示の変更
         /// </summary>
-        private void SelectCityObject()
+        public void SelectCityObject(Transform buildingTrans)
         {
             // 目の前の建物のTransform情報を得る(GameObject -> Transform)
-            Transform trans = Lookforward();
-            if(trans == null || trans.parent.parent == null)
+            //Transform trans = Lookforward();
+            if (buildingTrans == null || buildingTrans.parent.parent == null)
             {
                 // selectedCityObject = null;
                 return;
             }
 
-            // 建物の色を変える
-            //選択された状態の建物の色を元に戻す
-            // colorCodeType = (ColorCodeType)Enum.Parse(typeof(ColorCodeType), filterStatus);
-            // ColorCode(filterStatus,nearestBuildingName);
-            // // 選択した建物の色を変更する
-            // selectCityObject = gmls[trans.parent.parent.name].CityObjects[trans.name];
-            // selectCityObject.SetMaterialColor(selectedColor);
             //ゴールの建物だった場合
-            if(BuildingInfoDict.ContainsKey(trans.name))
+            //if(BuildingInfoDict.ContainsKey(buildingTrans.name))
+            //{
+            //GameManageScript.selectBuildingAction(trans);
+            rescuedNumLabel.text = GameManageScript.rescuedNum.ToString();
+            rescuingNumLabel.text = GameManageScript.rescuingNum.ToString();
+            //}
+            if (BuildingInfoDict.ContainsKey(buildingTrans.name))
             {
-                GameManageScript.selectBuildingAction(trans);
-                rescuedNumLabel.text = GameManageScript.rescuedNum.ToString();
-                rescuingNumLabel.text = GameManageScript.rescuingNum.ToString();
-            }
-            if(BuildingInfoDict.ContainsKey(trans.name))
-            {
-                BuildingInfoDict[trans.name].capacityLabel.text = GameManageScript.GoalAttributeDict[trans.name].evacueeNum + "/" + GameManageScript.GoalAttributeDict[trans.name].capacity;
+                BuildingInfoDict[buildingTrans.name].capacityLabel.text = GameManageScript.GoalAttributeDict[buildingTrans.name].evacueeNum + "/" + GameManageScript.GoalAttributeDict[buildingTrans.name].capacity;
             }
         }
 
@@ -496,7 +489,7 @@ namespace PLATEAU.Samples
             {
                 if(isInitialiseFinish)
                 {
-                    SelectCityObject();
+                    //SelectCityObject();
                 }
             }
         }
