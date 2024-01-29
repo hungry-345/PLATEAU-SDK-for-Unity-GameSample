@@ -33,13 +33,14 @@ public class EnemyManage : MonoBehaviour
     {
         enemyCount += 1;
         //ランダムな子オブジェクトの位置を取得する
-        int n = Random.Range(0, spawnTransformObjects.transform.childCount);
-        center = spawnTransformObjects.transform.GetChild(n).gameObject.GetComponent<Renderer>().bounds.center;
+        int r = Random.Range(0, spawnTransformObjects.transform.childCount);
+        center = spawnTransformObjects.transform.GetChild(r).gameObject.GetComponent<Renderer>().bounds.center;
         // 円の半径
         float radius = 1;
         // 指定された半径の円内のランダム位置を取得
         var circlePos = radius * Random.insideUnitCircle;
         //円内のランダム位置を計算
+        //var spawnPos = new Vector3(circlePos.x,0f, circlePos.y) + center;
         var spawnPos = new Vector3(circlePos.x,0f, circlePos.y) + center;
         //EnamyManagerの配下に敵を生成
         GameObject zombie = Instantiate(Zombie, spawnPos, Quaternion.identity,this.gameObject.transform) as GameObject;

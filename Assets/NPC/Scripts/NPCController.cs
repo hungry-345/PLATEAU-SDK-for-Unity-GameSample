@@ -9,25 +9,26 @@ public class NPCController : MonoBehaviour
 {
     public enum NPCState
     {
-        Wait,//待機する
-        Stroll,//巡回する
+        Wait,//待機
+        Stroll,//
         Follow,//ついていく
         Goal,//ゴールへ向かう
         Escape //敵から逃げる
     };
 
+    [SerializeField]private float walkSpeed=5f;
     [SerializeField]private float runSpeed=15f;
-
+    [SerializeField]private Renderer renderer;
     private CharacterController characterController;
     private GameManage gameManage;
     private NPCManager npcManager;
     private Animator animator;
     private GameObject player;
-    //private NavMeshAgent agent;
+    //private NavMeshAgent navMeshAgent;
 
     //状態
     private NPCState state;
-    //NPCとプレイヤーの現在の距離
+    //目的地との距離
     private float currentDistance;
     //プレイヤーがこの距離まで近づいたらついてくるようになる
     private float followDistance=1.5f;
@@ -50,51 +51,80 @@ public class NPCController : MonoBehaviour
 
         player = GameObject.FindGameObjectWithTag("Player");
         animator = GetComponent<Animator>();
-        //agent = GetComponent<NavMeshAgent>();
+        //navMeshAgent = GetComponent<NavMeshAgent>();
         velocity = Vector3.zero;
         isArrived = false;
-        //SetState(NPCState.Wait);
+        SetState(NPCState.Wait);
     }
 
-    void FixedUpdate()
+    void Update()
     {
-        currentDistance = Vector3.Distance(this.transform.position, player.transform.position);
+        //currentDistance = Vector3.Distance(this.transform.position, player.transform.position);
 
         if (state == NPCState.Follow)//追いかける
         {
-            this.transform.LookAt(new Vector3(player.transform.position.x, this.transform.position.y, player.transform.position.z));
-
             SetNPCDestination(player.transform.position);
+
+            this.transform.LookAt(new Vector3(NPCDestination.x, this.transform.position.y, NPCDestination.z));
 
             velocity = Vector3.zero;
             animator.SetFloat("MoveSpeed", runSpeed);
             direction = (NPCDestination - transform.position).normalized;
             velocity = direction * runSpeed;
 
-            //プレイヤーに十分近づいたら待機状態にする
+            currentDistance = Vector3.Distance(this.transform.position, NPCDestination);
+
+            //プレイヤーに十分近づいたら止まる
             if (currentDistance < followDistance)
             {
-                SetState(NPCState.Wait);
+                //SetState(NPCState.Stroll);
+                velocity = Vector3.zero;
+                animator.SetFloat("MoveSpeed", 0f);
             }
+
             //プレイヤーから離れたらワープする
-            if (currentDistance > NPCWarpDistance || !characterController.isGrounded)
+            if (/*currentDistance > NPCWarpDistance || */!characterController.isGrounded)
             {
-                this.transform.position = player.transform.position;
+                //空中にいるときはNPCを表示しない
+                renderer.enabled = false;
+                this.transform.Translate(player.transform.position - this.transform.position);
+            }
+            else
+            {
+                renderer.enabled = true;
             }
         }
-        else if (state == NPCState.Wait) //待機する
+        else if(state == NPCState.Escape) //逃げる
+        {
+            this.transform.LookAt(new Vector3(NPCDestination.x, this.transform.position.y, NPCDestination.z));
+            animator.SetFloat("MoveSpeed", runSpeed);
+            direction = (NPCDestination - transform.position).normalized;
+            velocity = direction * runSpeed;
+        }
+        else if (state == NPCState.Stroll) //巡回する
+        {
+            this.transform.LookAt(new Vector3(NPCDestination.x, this.transform.position.y, NPCDestination.z));
+            animator.SetFloat("MoveSpeed",walkSpeed);
+            direction = (NPCDestination - transform.position).normalized;
+            velocity = direction * walkSpeed;
+
+            currentDistance = Vector3.Distance(this.transform.position, NPCDestination);
+            //目的地に十分近づいたら目的地を更新する
+            if (currentDistance < followDistance)
+            {
+                SetState(NPCState.Stroll);
+            }
+        }
+        else if(state == NPCState.Wait)
         {
             velocity = Vector3.zero;
             animator.SetFloat("MoveSpeed", 0f);
         }
-        //else if (state == NPCState.Goal) //ゴールに向かう
-        //{
-        //    direction = (NPCDestination - transform.position).normalized;
-        //    velocity = direction * runSpeed;
-        //}
+
         //重力の適用
-        velocity.y += (Physics.gravity.y*10f) * Time.deltaTime;
+        velocity.y += (Physics.gravity.y) * Time.deltaTime;
         characterController.Move(velocity * Time.deltaTime);
+
     }
 
     //NPCの状態変更メソッド
@@ -103,19 +133,14 @@ public class NPCController : MonoBehaviour
         state = tempState;
         if (tempState == NPCState.Follow)
         {
-            //agent.isStopped = false;
             animator.SetFloat("MoveSpeed", runSpeed);
-            animator.SetBool("IsWalking", true);
             SetNPCDestination(player.transform.position);
             //Debug.Log("追いかける状態になった");
         }
-        else if (tempState == NPCState.Wait)
+        else if (tempState == NPCState.Stroll)
         {
-            //agent.velocity = Vector3.zero;
-            //agent.isStopped = true;
-            velocity = Vector3.zero;
-            animator.SetFloat("MoveSpeed", 0f);
-            animator.SetBool("IsWalking", false);
+            Vector3 randomDestination= new Vector3( Random.Range(0, 180), this.transform.position.y, Random.Range(0, 180));
+            SetNPCDestination(randomDestination);
             //Debug.Log("待機状態になった");
         }
         else if (tempState == NPCState.Goal)
@@ -124,8 +149,10 @@ public class NPCController : MonoBehaviour
         }
         else if (tempState == NPCState.Escape)
         {
+            //逃げる先を設定
+            Vector3 escapeDestination = new Vector3(transform.position.x - targetObj.position.x, transform.position.y, transform.position.z - targetObj.position.z);
+            SetNPCDestination(escapeDestination);
             animator.SetFloat("MoveSpeed", runSpeed);
-            animator.SetBool("IsWalking", true);
 
         }
     }
@@ -149,8 +176,8 @@ public class NPCController : MonoBehaviour
         {
             //NPCの状態を取得
             state = GetState();
-            //NPCが待機状態OR巡回状態であればついていく設定に変更
-            if (state == NPCState.Wait|| state == NPCState.Stroll|| state == NPCState.Escape)
+            //NPCが待機状態or逃げる状態であればついていく設定に変更
+            if (state == NPCState.Stroll|| state == NPCState.Escape)
             {
                 //救助中の人としてカウント
                 if(isArrived==false)
@@ -163,17 +190,16 @@ public class NPCController : MonoBehaviour
                 SetState(NPCState.Follow);
             }
         }
-        //敵を発見
+        //敵
         else if(collider.CompareTag("Enemy"))
         {
-            if (state != NPCState.Follow)
+            if (state == NPCState.Stroll || state == NPCState.Escape)
             {
-                //逃げる対象をセット
-
                 //逃げる
-                SetState(NPCState.Escape);
+                SetState(NPCState.Escape, collider.gameObject.transform);
             }
         }
+
     }
 
     //検知範囲からオブジェクトが出た場合
@@ -185,7 +211,7 @@ public class NPCController : MonoBehaviour
             //NPCの状態を取得
             state = GetState();
             //NPCが逃げる状態であれば巡回状態に変更
-            if (state == NPCState.Wait)
+            if (state == NPCState.Stroll)
             {
                 SetState(NPCState.Follow);
             }
@@ -196,7 +222,7 @@ public class NPCController : MonoBehaviour
             //NPCの状態を取得
             state = GetState();
             //NPCが逃げる状態であれば巡回状態に変更
-            if (state == NPCState.Wait)
+            if (state == NPCState.Escape)
             {
                 SetState(NPCState.Stroll);
             }
@@ -205,17 +231,19 @@ public class NPCController : MonoBehaviour
     // 衝突があった場合
     void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        ////ゴールの建物
-        //if (hit.gameObject.CompareTag("Goal"))
-        //{
-        //    //自身を助けた人数としてカウントさせる
-        //    gameManage.AddRescueNum();
-        //    //自身を消す
-        //    Destroy(this.gameObject);
-        //}
+        if (hit.gameObject.CompareTag("Enemy"))
+        {
+            //NPCの状態を取得
+            state = GetState();
+            //敵に当たったら死ぬ
+            if (state != NPCState.Follow)
+            {
+                Destroy(this.gameObject);
+            }
+        }
     }
 
-    //NPCの対象を設定
+    //NPCの目的地を設定
     public void SetNPCDestination(Vector3 destination)
     {
         NPCDestination=destination;

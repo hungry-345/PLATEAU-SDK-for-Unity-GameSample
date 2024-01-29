@@ -32,7 +32,7 @@ namespace PLATEAU.Samples
             if(hit.gameObject.CompareTag ("Hint"))
             {
                 //UIManageスクリプトのヒント関数を発動
-                GameManageScript.GetHintItem(hit.gameObject.name);
+                GameManageScript.GetHintItem();
                 //アイテムを削除
                 ItemManageScript.GetItem(hit.gameObject);
             }

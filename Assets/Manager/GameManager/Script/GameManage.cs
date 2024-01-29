@@ -277,7 +277,7 @@ namespace PLATEAU.Samples
         /// <summary>
         /// アイテムを拾った時の処理
         /// </summary>
-        public void GetHintItem(string itemName)
+        public void GetHintItem()
         {          
             GoalInfo hintBuildingValue;
             string hintBuildingName = "";
@@ -290,6 +290,7 @@ namespace PLATEAU.Samples
                 {
                     hintBuildingName = goalAttribute.Key;
                     hintBuildingValue = goalAttribute.Value;
+
                     UIManageScript.DisplayAnswer(hintBuildingName,hintBuildingValue.measuredheight,hintBuildingValue.capacity.ToString(),hintBuildingValue.evacueeNum.ToString());
                     break;
                 }

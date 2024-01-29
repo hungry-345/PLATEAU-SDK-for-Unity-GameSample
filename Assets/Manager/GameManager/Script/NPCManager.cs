@@ -12,7 +12,7 @@ public class NPCManager : MonoBehaviour
     [SerializeField, Tooltip("NPCNum")]private int NPCNum = 5;
 
     //連れているNPCを管理するリスト
-    List<GameObject> followNPCList = new List<GameObject>(); 
+    [SerializeField]List<GameObject> followNPCList = new List<GameObject>(); 
 
     //初期化処理
     public void InitializeNPC()
