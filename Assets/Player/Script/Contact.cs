@@ -29,29 +29,24 @@ namespace PLATEAU.Samples
         }
         private void OnControllerColliderHit(ControllerColliderHit hit)
         {
-            if(hit.gameObject.tag == "Hint")
+            if(hit.gameObject.CompareTag ("Hint"))
             {
                 //UIManageスクリプトのヒント関数を発動
-                GameManageScript.GetHintItem(hit.gameObject.name);
+                GameManageScript.GetHintItem();
                 //アイテムを削除
                 ItemManageScript.GetItem(hit.gameObject);
             }
-            if (hit.gameObject.name == "HumanBody")
-            {
-                GameManageScript.ContactHumanAction();
-                //UIManageScript.DisplayRescuingNum();
-            }
-            if (hit.gameObject.name == "zombie")
+            if (hit.gameObject.CompareTag("Enemy"))
             {
                 ThirdPersonControllerScript.DyingMotion();
                 //一番上の親（GameView）にゲームオーバーを通知
                 GameViewScript.isGameOver = true ; 
+            }
+            if(hit.gameObject.CompareTag("Goal"))
+            {
+                //救助する
+                GameManageScript.SelectBuildingAction(hit.transform);
 
-                //#if UNITY_EDITOR
-                //    UnityEditor.EditorApplication.isPlaying = false;//ゲームプレイ終了
-                //#else
-                //    Application.Quit();//ゲームプレイ終了
-                //#endif
             }
         }
     }

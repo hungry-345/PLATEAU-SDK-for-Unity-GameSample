@@ -731,7 +731,7 @@ GameObject:
   - component: {fileID: 5156207580563759514}
   - component: {fileID: -3016226902766136906}
   - component: {fileID: 1022228020296266657}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: NPC_03
   m_TagString: NPC
   m_Icon: {fileID: 0}
@@ -832,7 +832,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c39907cd987b00149b2a2c0504c301e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RunSpeed: 15
+  runSpeed: 15
+  renderer: {fileID: 575132244225455006}
 --- !u!143 &1022228020296266657
 CharacterController:
   m_ObjectHideFlags: 0
@@ -847,7 +848,7 @@ CharacterController:
   m_Height: 1.55
   m_Radius: 0.3
   m_SlopeLimit: 45
-  m_StepOffset: 0
+  m_StepOffset: 0.5
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.8, z: 0}

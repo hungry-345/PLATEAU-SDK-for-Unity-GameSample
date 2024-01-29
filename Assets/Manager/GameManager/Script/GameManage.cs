@@ -22,6 +22,10 @@ namespace PLATEAU.Samples
         
         [SerializeField, Tooltip("ターゲットフラッグ")] private GameObject targetFlag;
 
+        //ゲーム終了時にプレイヤーを操作不能にするために取得
+        [SerializeField] private PlayerInput playerInput;
+
+
         public SampleAttribute correctGMLdata;
         public Dictionary<string,GoalInfo> GoalAttributeDict;
         public int sonarCount;
@@ -29,7 +33,7 @@ namespace PLATEAU.Samples
         public int rescuingNum;
 
         private InputGameManage inputActions;
-        private ThirdPersonController thirdpersonController;
+        //private ThirdPersonController thirdpersonController;
         private System.Random rnd;
         private UIManage UIManageScript;
         private TimeManage TimeManageScript;
@@ -74,9 +78,8 @@ namespace PLATEAU.Samples
         {
             rnd = new System.Random();
             inputActions.InputGame.AddCallbacks(this);
-            //操作不能にするために取得
-            // GameObject.Find("PlayerArmature").transform.position = new Vector3(170,30,1400);
-            thirdpersonController = GameObject.Find("PlayerArmature").GetComponent<ThirdPersonController>();
+            
+            //thirdpersonController = GameObject.Find("PlayerArmature").GetComponent<ThirdPersonController>();
 
             //SceneManagerからShow.csにアクセスする
             UIManageScript = GameObject.Find("UIManager").GetComponent<UIManage>();
@@ -84,6 +87,7 @@ namespace PLATEAU.Samples
             EnemyManageScript = GameObject.Find("EnemyManager").GetComponent<EnemyManage>();
             ItemManageScript = GameObject.Find("ItemManager").GetComponent<ItemManage>();
             NPCManageScript= GameObject.Find("NPCManager").GetComponent<NPCManager>();
+
             //Hintのリストを作る
             HintLst = GameObject.FindGameObjectsWithTag("HintText");
             buildingDirName = new List<string>();
@@ -273,7 +277,7 @@ namespace PLATEAU.Samples
         /// <summary>
         /// アイテムを拾った時の処理
         /// </summary>
-        public void GetHintItem(string itemName)
+        public void GetHintItem()
         {          
             GoalInfo hintBuildingValue;
             string hintBuildingName = "";
@@ -286,6 +290,7 @@ namespace PLATEAU.Samples
                 {
                     hintBuildingName = goalAttribute.Key;
                     hintBuildingValue = goalAttribute.Value;
+
                     UIManageScript.DisplayAnswer(hintBuildingName,hintBuildingValue.measuredheight,hintBuildingValue.capacity.ToString(),hintBuildingValue.evacueeNum.ToString());
                     break;
                 }
@@ -350,26 +355,43 @@ namespace PLATEAU.Samples
         }
 
         // --------------------------------------------------------------------------------------------------------------
-        //ゴールの建物を選択したときの処理
-        public void selectBuildingAction(Transform clickedBuilding)
+        //プレイヤーがゴールの建物にたどり着いた時の処理
+        public void SelectBuildingAction(Transform clickedBuilding)
         {
             GoalInfo tmpGoalAttribute = GoalAttributeDict[clickedBuilding.name];
-            int vacant;
-            vacant = tmpGoalAttribute.capacity - tmpGoalAttribute.evacueeNum;
 
             if(rescuingNum > 0)
             {
+                //建物に収容できる残り人数
+                int remainingNum = tmpGoalAttribute.capacity - tmpGoalAttribute.evacueeNum;
+                //救助された(建物に送り出された)人数
+                int sendNum;
+
+                //救助中の人数>残り収容人数ならば救助中の人数ー残り収容人数、そうでなければ0
+                if(rescuingNum > remainingNum)
+                {
+                    tmpGoalAttribute.evacueeNum += remainingNum;
+                    sendNum = remainingNum;
+                    rescuingNum -= remainingNum;
+                }
+                else
+                {
+                    tmpGoalAttribute.evacueeNum += rescuingNum;
+                    sendNum = rescuingNum;
+                    rescuingNum = 0;
+                }
+
                 //救助中の人数-1
-                rescuingNum -= 1;
+                //rescuingNum -= 1;
                 //建物にはいった救助者+1
-                tmpGoalAttribute.evacueeNum += 1;
+                //tmpGoalAttribute.evacueeNum += 1;
+
                 //NPCが向かうTransformの値をセット
                 Transform goalTransform = GameObject.Find(clickedBuilding.name + "flag").transform;
+                //NPCを救助する
+                NPCManageScript.SendBuilding(sendNum);
 
-                //NPCを建物に向かわせる
-                NPCManageScript.SendBuilding(goalTransform);
-
-                rescuedNum += 1;
+                //rescuedNum += 1;
 
                 //収容人数の最後の1人が入る時
                 if(tmpGoalAttribute.capacity == tmpGoalAttribute.evacueeNum)
@@ -378,6 +400,7 @@ namespace PLATEAU.Samples
                     clickedBuilding.gameObject.tag = "Untagged";
                     UIManageScript.DeleteAnswer(clickedBuilding.name);
                     GoalAttributeDict.Remove(clickedBuilding.name);
+                    
                     GameObject flag = GameObject.Find(clickedBuilding.name + "flag");
                     GameObject Marker = GameObject.Find(clickedBuilding.name + "Marker");
                     Destroy(flag);
@@ -390,23 +413,8 @@ namespace PLATEAU.Samples
                     GoalAttributeDict[clickedBuilding.name] = tmpGoalAttribute;
                 }
 
+                UIManageScript.SelectCityObject(clickedBuilding);
                 UIManageScript.EditMissionText();
-                // if(vacant > rescuingNum)
-                // {
-                //     // そのまま足す
-                //     tmpGoalAttribute.evacueeNum += rescuingNum;
-                //     rescuingNum = 0;
-                // }
-                // else if(vacant == rescuingNum)
-                // {
-                //     rescuingNum = 0;
-                //     // deleteGoal;
-                // }
-                // else
-                // {
-                //     rescuingNum -= vacant;
-                //     // deleteGoal;
-                // }
             }
         }
         //助けた人数を追加する処理
@@ -454,7 +462,7 @@ namespace PLATEAU.Samples
             UIManageScript.PlayerPosCamera.enabled = false;          
             UIManageScript.HideGameUI();
             NPCManageScript.DestroyNPC();
-            thirdpersonController.enabled = false;
+            playerInput.enabled = false;
         }
     }
 }
