@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using StarterAssets;
 using PLATEAU.Samples;
+using UnityEngine.AI;
 
 public class EnemyController : MonoBehaviour
 {
@@ -17,23 +17,26 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private float runSpeed = 5f;
     //歩くスピード
     [SerializeField] private float walkSpeed = 1f;
+    //巡回地点の親オブジェクト
+    private GameObject strollPosObjects;
 
     private CharacterController characterController;
     private Animator animator;
     private GameObject player;
+    private NavMeshAgent navMeshAgent;
 
-    // 敵の状態
+    // 状態
     private EnemyState state;
-    //待ち時間
-    private float waitTime = 0.5f;
+    //目的地との距離
+    private float currentDistance;
+    //待機時間
+    private float waitTime = 1.5f;
+    //みつけてから追いかけるまでの時間
+    private float chaseOffsetTime = 0.5f;
     //経過時間
     private float elapsedTime;
     //見失うフラグ
     private bool isLost;
-    //速度
-    private Vector3 velocity;
-    //移動方向
-    private Vector3 direction;
     //目的地
     private Vector3 enemyDestination;
 
@@ -43,40 +46,40 @@ public class EnemyController : MonoBehaviour
     void Start()
     {
         characterController = GetComponent<CharacterController>();
+        navMeshAgent = GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("Player");
+        strollPosObjects = GameObject.Find("RoadObjects");
         animator = GetComponent<Animator>();
         contact = GameObject.Find("PlayerArmature").GetComponent<Contact>();
-        velocity = Vector3.zero;
-        SetState(EnemyState.Stroll);
+        //velocity = Vector3.zero;
+        SetState(EnemyState.Wait);
     }
 
     void FixedUpdate()
     {
+        currentDistance = Vector3.Distance(this.transform.position, enemyDestination);
         if (state == EnemyState.Chase)//追いかける
         {
-            this.transform.LookAt(new Vector3(player.transform.position.x, this.transform.position.y, player.transform.position.z));
-            //transform.position -= transform.forward * 0.1f;
+            //this.transform.LookAt(new Vector3(player.transform.position.x, this.transform.position.y, player.transform.position.z));
             SetEnemyDestination(player.transform.position);
-
-            velocity = Vector3.zero;
+            navMeshAgent.SetDestination(enemyDestination);
             elapsedTime += Time.deltaTime;
                
-            
-            if (elapsedTime > waitTime)
+            if (isLost == true)//見失ったら待機する
             {
-                if (isLost == true)//待機時間を超えたら待機する
-                {
+                if (elapsedTime > waitTime)
                     SetState(EnemyState.Wait);
-                }
-                else //待機時間を超えたら追いかける
+            }
+            else //待機時間を超えたら追いかける
+            {
+                if (elapsedTime > chaseOffsetTime)
                 {
                     animator.SetFloat("MoveSpeed", runSpeed);
-                    direction = (enemyDestination - transform.position).normalized;
-                    velocity = direction * runSpeed;
+                    navMeshAgent.speed = runSpeed;
                 }
             }
 
-            //キャラクターが死んだら待機状態にする
+            //キャラクターが死んだら巡回状態にする
             distance = Vector3.Distance(this.transform.position, player.transform.position);
             if (distance < 2f)
             {
@@ -86,49 +89,58 @@ public class EnemyController : MonoBehaviour
         }
         else if (state == EnemyState.Stroll)//巡回する
         {
-            this.transform.LookAt(new Vector3(enemyDestination.x, this.transform.position.y, enemyDestination.z));
-            velocity = Vector3.zero;
-            animator.SetFloat("MoveSpeed", walkSpeed);
-            direction = (enemyDestination - transform.position).normalized;
-            velocity = direction * walkSpeed;
+
+            //巡回地点まである程度ちかづいたら別の地点へ移動
+            if (currentDistance<1f)
+            {
+               SetStrollDestination();
+            }
         }
         else if (state == EnemyState.Wait) //待機する
         {
             elapsedTime += Time.deltaTime;
             animator.SetFloat("MoveSpeed", 0f);
-            velocity = Vector3.zero;
+            navMeshAgent.velocity = Vector3.zero;
             //　待ち時間を越えたら巡回を始める
             if (elapsedTime > waitTime)
             {
                 SetState(EnemyState.Stroll);
             }
         }
-        velocity.y += Physics.gravity.y * Time.deltaTime;
-        characterController.Move(velocity * Time.deltaTime);
+    }
+    //ランダムな巡回地点を取得する
+    private void SetStrollDestination()
+    {
+        //ランダムな子オブジェクトの位置を取得する
+        int r = Random.Range(0, strollPosObjects.transform.childCount);
+        Vector3 newStrollPoint = strollPosObjects.transform.GetChild(r).gameObject.GetComponent<Renderer>().bounds.center;
+        //目的地に設定
+        SetEnemyDestination(new Vector3(newStrollPoint.x, this.transform.position.y, newStrollPoint.z));
+        navMeshAgent.SetDestination(enemyDestination);
     }
 
     //　敵キャラクターの状態変更メソッド
     public void SetState(EnemyState tempState, Transform targetObj = null)
     {
+        state = tempState;
+        elapsedTime = 0f;
         if (tempState == EnemyState.Stroll)
         {
-            state = tempState;
-            elapsedTime = 0f;
             animator.SetFloat("MoveSpeed", walkSpeed);
+            navMeshAgent.speed = walkSpeed;
+            //ランダムな目的地へ向かう
+            SetStrollDestination();
             //Debug.Log("巡回状態になった");
         }
         else if (tempState == EnemyState.Chase)
         {
-            state = tempState;
-            elapsedTime = 0f;
             isLost = false;
-            SetEnemyDestination(player.transform.position);
+            //SetEnemyDestination(player.transform.position);
+            navMeshAgent.SetDestination(player.transform.position);
             //Debug.Log("追いかける状態になった");
         }
         else if (tempState == EnemyState.Wait)
         {
-            state = tempState;
-            elapsedTime = 0f;
             isLost = false;
             animator.SetFloat("MoveSpeed", 0f);
             //Debug.Log("待機状態になった");
@@ -144,7 +156,7 @@ public class EnemyController : MonoBehaviour
     public void OnCharacterEnter(Collider collider)
     {
         //キャラクターを発見
-        if (collider.CompareTag("Player"))
+        if (collider.CompareTag("Player")/*|| collider.CompareTag("NPC")*/)
         {
             //　敵キャラクターの状態を取得
             EnemyController.EnemyState state = GetState();
@@ -156,14 +168,23 @@ public class EnemyController : MonoBehaviour
     //索敵範囲から出たら待機状態にする
     public void OnCharacterExit(Collider collider)
     {
-        if (collider.CompareTag("Player"))
+        if (collider.CompareTag("Player")/* || collider.CompareTag("NPC")*/)
         {
             //Debug.Log("見失う");
             isLost = true;
             //経過時間をリセット
             elapsedTime = 0;
-            //SetState(EnemyController.EnemyState.Wait);
         }
+    }
+
+    // 衝突があった場合
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        //if (hit.gameObject.CompareTag("Player"))
+        //{
+        //    contact.GameOverFunc();
+        //    SetState(EnemyState.Stroll);
+        //}
     }
     //NPCの目的地を設定
     public void SetEnemyDestination(Vector3 destination)

@@ -9,10 +9,10 @@ public class NPCManager : MonoBehaviour
     //NPCのスポーン位置が入ったオブジェクト
     [SerializeField, Tooltip("NPCSpawnPositions")] private Transform[] NPCSpawnPositions;
     //生成数
-    [SerializeField, Tooltip("NPCNum")]private int NPCNum = 50;
+    [SerializeField, Tooltip("NPCNum")]private int NPCNum = 5;
 
     //連れているNPCを管理するリスト
-    List<GameObject> followNPCList = new List<GameObject>(); 
+    [SerializeField]List<GameObject> followNPCList = new List<GameObject>(); 
 
     //初期化処理
     public void InitializeNPC()
@@ -32,15 +32,16 @@ public class NPCManager : MonoBehaviour
 
     }
     //ランダムなNPCを建物に向かわせる
-    public void SendBuilding(Transform buildingTransform)
+    public void SendBuilding(int NPCNum)
     {
-        //ランダムなNPCを選択
-        int n = Random.Range(0, transform.childCount);
-        NPCController npcController = transform.GetChild(n).gameObject.GetComponent<NPCController>();
-        //対象のNPCの目的地を設定する
-        npcController.SetNPCDestination(buildingTransform.position);
-        //NPCをゴールへ向かう状態に変更する
-        npcController.SetState(NPCController.NPCState.Goal);
+        for(int i=0;i<NPCNum;i++)
+        {
+            //ランダムなNPCを選択
+            int n = Random.Range(0, followNPCList.Count);
+            NPCController npcController = followNPCList[n].GetComponent<NPCController>();
+            //NPCをゴールへ向かう状態に変更する
+            npcController.SetState(NPCController.NPCState.Goal);
+        }
     }
     //NPCの削除
     public void DestroyNPC()
@@ -54,6 +55,11 @@ public class NPCManager : MonoBehaviour
     //followNPCListの追加
     public void AddFollowList(GameObject NPC)
     {
-
+        followNPCList.Add(NPC);
+    }
+    //followNPCListの除外
+    public void RemoveFollowList(GameObject NPC)
+    {
+        followNPCList.Remove(NPC);
     }
 }
