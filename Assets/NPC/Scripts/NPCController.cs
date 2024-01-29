@@ -177,7 +177,7 @@ public class NPCController : MonoBehaviour
             //NPCの状態を取得
             state = GetState();
             //NPCが待機状態or逃げる状態であればついていく設定に変更
-            if (state == NPCState.Stroll|| state == NPCState.Escape)
+            if (state == NPCState.Wait||state == NPCState.Stroll|| state == NPCState.Escape)
             {
                 //救助中の人としてカウント
                 if(isArrived==false)

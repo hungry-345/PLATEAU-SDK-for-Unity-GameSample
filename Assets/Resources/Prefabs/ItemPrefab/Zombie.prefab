@@ -2657,7 +2657,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   runSpeed: 6
   walkSpeed: 1
-  strollPosArray: []
 --- !u!143 &389644991953794357
 CharacterController:
   m_ObjectHideFlags: 0
@@ -3270,7 +3269,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 32726554365205106, guid: 2b781b1770e2e9c41836fea8bca148ef, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -250
+      value: -480
       objectReference: {fileID: 0}
     - target: {fileID: 32726554365205106, guid: 2b781b1770e2e9c41836fea8bca148ef, type: 3}
       propertyPath: m_LocalPosition.z
