@@ -29,7 +29,7 @@ public class ItemManage : MonoBehaviour
         {
             //スポーン位置にセット
             GameObject hintItem = Instantiate(UsageItem, this.gameObject.transform) as GameObject;
-            Vector3 spawnPos = new Vector3(Random.Range(-140f,470f), 100f, Random.Range(1300f,1700f));
+            Vector3 spawnPos = new Vector3(Random.Range(-126f, 444f), 100f, Random.Range(1300f, 1562f));
             hintItem.name = itemCount + "hintItem";
             hintItem.transform.position = spawnPos;
 
