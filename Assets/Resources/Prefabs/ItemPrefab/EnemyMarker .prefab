@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8792609687859130453}
   - component: {fileID: 7333771209149288729}
   m_Layer: 0
-  m_Name: ZombieMarker 1
+  m_Name: 'EnemyMarker '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
