@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyManage : MonoBehaviour
 {
     //生成する敵
-    [SerializeField, Tooltip("ゾンビ")] private GameObject Zombie;
+    [SerializeField, Tooltip("敵")] private GameObject enemyPrefab;
     //生成範囲
     private GameObject spawnTransformObjects;  //敵のスポーン位置の候補が入ったオブジェクト
     //生成数
@@ -43,9 +43,9 @@ public class EnemyManage : MonoBehaviour
         //var spawnPos = new Vector3(circlePos.x,0f, circlePos.y) + center;
         var spawnPos = new Vector3(circlePos.x,0f, circlePos.y) + center;
         //EnamyManagerの配下に敵を生成
-        GameObject zombie = Instantiate(Zombie, spawnPos, Quaternion.identity,this.gameObject.transform) as GameObject;
-        //zombie.transform.position = spawnPos;
-        zombie.name = enemyCount + "Zombie";
+        GameObject enemy = Instantiate(enemyPrefab, spawnPos, Quaternion.identity,this.gameObject.transform) as GameObject;
+        //Enemy.transform.position = spawnPos;
+        enemy.name = enemyCount + "Enemy";
 
 
     }

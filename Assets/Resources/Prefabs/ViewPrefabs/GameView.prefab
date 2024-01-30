@@ -3366,7 +3366,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49dafa99c79849c4e87da73885083d26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Zombie: {fileID: 4499006457938000447, guid: fb053e6284418514c8e4d21657cde374, type: 3}
+  enemyPrefab: {fileID: 6384892266296077313, guid: df3cf9612016ee140804c4a9423abb2c, type: 3}
 --- !u!1 &4318306186368076200
 GameObject:
   m_ObjectHideFlags: 0

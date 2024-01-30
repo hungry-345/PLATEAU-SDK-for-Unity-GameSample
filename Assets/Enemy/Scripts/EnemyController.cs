@@ -70,18 +70,15 @@ public class EnemyController : MonoBehaviour
                 if (elapsedTime > waitTime)
                     SetState(EnemyState.Wait);
             }
-            else //待機時間を超えたら追いかける
+            else //追いかける
             {
-                if (elapsedTime > chaseOffsetTime)
-                {
-                    animator.SetFloat("MoveSpeed", runSpeed);
-                    navMeshAgent.speed = runSpeed;
-                }
+                animator.SetFloat("MoveSpeed", runSpeed);
+                navMeshAgent.speed = runSpeed;
             }
 
             //キャラクターが死んだら巡回状態にする
             distance = Vector3.Distance(this.transform.position, player.transform.position);
-            if (distance < 2f)
+            if (distance < 0.5f)
             {
                 contact.GameOverFunc();
                 SetState(EnemyState.Stroll);
