@@ -45,7 +45,7 @@ public class NPCController : MonoBehaviour
     //particle
     private GameObject particle;
     //particleを消すタイミング
-    private float duration = 5f;
+    private float duration = 2f;
 
     void Start()
     {
