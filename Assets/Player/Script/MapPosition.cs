@@ -22,7 +22,7 @@ public class MapPosition : MonoBehaviour
     {
         Player.rotation.ToAngleAxis(out float angle, out Vector3 axis);
         // プレイヤーの座標に合わせてカメラの位置を変更する
-        PlayerPositionMarker.localEulerAngles = new Vector3(-90,angle+180,0);
+        PlayerPositionMarker.localEulerAngles = new Vector3(0f,angle+180f,0f);
         PlayerPositionMarker.position = new Vector3(Player.position.x,-490,Player.position.z);
         PlayerPositionCamera.position = new Vector3(Player.position.x,-80,Player.position.z);
     }
