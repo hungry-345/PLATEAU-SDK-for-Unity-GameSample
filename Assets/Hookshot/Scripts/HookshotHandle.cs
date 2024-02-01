@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem.XR;
@@ -17,16 +17,21 @@ namespace StarterAssets
         private CharacterController _controller;
         private ActionManager actionManager;
         private ThirdPersonController _thirdPersonController;
-
         private float gravity;
-
 
 
         [Header("Hookshot")]
         //[SerializeField] private Transform debugHitPosition;
+        //HookshotできるLayerを設定
         [SerializeField] private LayerMask Hookable;
+        //敵の判別用Layerを設定
+        [SerializeField] private LayerMask attackable;
         [SerializeField] private Transform hookshotTransform;
         [SerializeField] private AnimationCurve AnimationCurve;
+        //移動するときの判別
+        private bool isHookshotMove;
+        //攻撃するときの判別
+        private bool isHookshotAttack;
         private bool isHookshot;
         private bool isFirstClosed;
         public bool hookshotAble;
@@ -57,6 +62,8 @@ namespace StarterAssets
             _thirdPersonController = GetComponent<ThirdPersonController>();
             lr = GetComponent<LineRenderer>();
             lr.enabled = false;
+            isHookshotAttack = false;
+            isHookshotMove = false;
             isHookshot = false;
             isFirstClosed = false;
             hookshotDir = Vector3.zero;
@@ -72,22 +79,25 @@ namespace StarterAssets
         {
             if(isHookshot)
             {
-                PlayerMove();
-                if(distance < Vector3.Distance(transform.position, hookshotPosition))
+                if (isHookshotMove)
                 {
-                    isFirstClosed = true;
-                    reachedPosY = player.transform.position.y;
-                }
-                if(Vector3.Distance(transform.position, hookshotPosition) < reachedHookshotPositionDistance)
-                {
-                    HookDelete();
-                    if(hookshotAngleY > 0)
+                    PlayerMove();
+                    if (distance < Vector3.Distance(transform.position, hookshotPosition))
                     {
-                        _controller.Move(new Vector3(0f, 4f, 0f));
+                        isFirstClosed = true;
+                        reachedPosY = player.transform.position.y;
                     }
-                    isHookshot = false;
+                    if (Vector3.Distance(transform.position, hookshotPosition) < reachedHookshotPositionDistance)
+                    {
+                        HookDelete();
+                        if (hookshotAngleY > 0)
+                        {
+                            _controller.Move(new Vector3(0f, 4f, 0f));
+                        }
+                        isHookshot = false;
+                    }
+                    distance = Mathf.Abs(Vector3.Distance(transform.position, hookshotPosition));
                 }
-                distance = Mathf.Abs(Vector3.Distance(transform.position, hookshotPosition));
             }
             CheckClickRightMouseButton();
         }
@@ -118,13 +128,16 @@ namespace StarterAssets
             }
             _controller.Move(moveDirection * hookshotSpeed * hookshotSpeedMultipulier * Time.deltaTime);
         }
-        //Hookshot
+
+        //Hookshotしたか確認
         private void CheckClickRightMouseButton()
         {
             if(Input.GetMouseButtonDown(1))
             {
                 if(isHookshot)
                 {
+                    isHookshotMove = false;
+                    isHookshotAttack = false;
                     isHookshot = false;
                     RemoveHook();
                 }
@@ -144,8 +157,10 @@ namespace StarterAssets
         }
         private void HangHook()
         {
+            //Hookshotで移動する場合
             if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit, 50f, Hookable))
             {
+                isHookshotMove = true;
                 isHookshot = true;
                 lr.enabled = true;
                 hookshotPosition = hit.point;
