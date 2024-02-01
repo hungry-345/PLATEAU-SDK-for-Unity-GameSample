@@ -38,8 +38,12 @@ namespace StarterAssets
         public int quality;
         public float waveCount;
         public float waveHeight;
-        private float reachedHookshotPositionDistance = 3f;
 
+        //攻撃する敵の情報取得設定
+        private EnemyController enemyController;
+
+        //Hookshotの調整
+        private float reachedHookshotPositionDistance = 3f;
         private float hookshotSpeedMin = 10f;
         private float hookshotSpeedMax = 40f;
         private float hookshotSpeed = 0;
@@ -98,6 +102,10 @@ namespace StarterAssets
                     }
                     distance = Mathf.Abs(Vector3.Distance(transform.position, hookshotPosition));
                 }
+                else if (isHookshotAttack)
+                {
+
+                }
             }
             CheckClickRightMouseButton();
         }
@@ -139,6 +147,7 @@ namespace StarterAssets
                     isHookshotMove = false;
                     isHookshotAttack = false;
                     isHookshot = false;
+                    
                     RemoveHook();
                 }
                 else
@@ -157,14 +166,26 @@ namespace StarterAssets
         }
         private void HangHook()
         {
-            //Hookshotで移動する場合
+            
             if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit, 50f, Hookable))
+            //Hookshotで移動する場合
             {
                 isHookshotMove = true;
                 isHookshot = true;
                 lr.enabled = true;
                 hookshotPosition = hit.point;
                 hookshotAngleY = Camera.main.transform.forward.y;
+            }
+            else if(Physics.Raycast(Camera.main.transform.position,Camera.main.transform.forward,out RaycastHit hitAttack, 50f, attackable))
+            //Hookshotで攻撃する場合
+            {
+                isHookshotAttack = true;
+                isHookshot = true;
+                lr.enabled = true;
+                hookshotPosition = hitAttack.point;
+                enemyController = hitAttack.collider.GetComponent<EnemyController>();
+                enemyController.SetState(EnemyController.EnemyState.hit);
+             
             }
         }
         public void DrawRope()

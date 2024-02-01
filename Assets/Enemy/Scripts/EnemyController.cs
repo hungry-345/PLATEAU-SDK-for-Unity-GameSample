@@ -11,7 +11,8 @@ public class EnemyController : MonoBehaviour
     {
         Stroll,//巡回する
         Wait,//待機する（キャラクターを見失った/倒した）
-        Chase//追いかける
+        Chase,//追いかける
+        hit//攻撃を受けた
     };
     //走るスピード
     [SerializeField] private float runSpeed = 5f;
@@ -19,6 +20,7 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private float walkSpeed = 1f;
     //視界の範囲
     [SerializeField] private float sightAngle = 90f;
+
 
     //巡回地点の親オブジェクト
     private GameObject strollPosObjects;
@@ -168,6 +170,13 @@ public class EnemyController : MonoBehaviour
             animator.SetFloat("MoveSpeed", 0f);
             //Debug.Log("待機状態になった");
         }
+        else if(tempState == EnemyState.hit)
+        {
+            isLost = true;
+            //animator.SetBool(Animator.StringToHash("Dying"), true);
+            animator.SetFloat("MoveSpeed", 0f);
+            
+        }
     }
     //　敵キャラクターの状態取得メソッド
     public EnemyState GetState()
@@ -184,17 +193,25 @@ public class EnemyController : MonoBehaviour
 
             //NPCの状態を取得
             state = GetState();
+            
             if(state!= EnemyState.Chase)
             {
-                //視界に入っているかの判定
-                //Vector3 posDelta = collider.transform.position - transform.position;
-                //float targetAngle = Vector3.Angle(transform.forward, posDelta);
-                //if(targetAngle<sightAngle)
-                //{
-                //追いかける状態にする
-                SetState(EnemyController.EnemyState.Chase, collider.transform);
-                isLost = false;
-                //}
+                if (state == EnemyState.hit)
+                {
+                    isLost = true;
+                }
+                else
+                {
+                    //視界に入っているかの判定
+                    //Vector3 posDelta = collider.transform.position - transform.position;
+                    //float targetAngle = Vector3.Angle(transform.forward, posDelta);
+                    //if(targetAngle<sightAngle)
+                    //{
+                    //追いかける状態にする
+                    SetState(EnemyController.EnemyState.Chase, collider.transform);
+                    isLost = false;
+                    //}
+                }
             }
         }
     }
