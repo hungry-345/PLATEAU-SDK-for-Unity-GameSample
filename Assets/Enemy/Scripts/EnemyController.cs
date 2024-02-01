@@ -17,9 +17,11 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private float runSpeed = 5f;
     //歩くスピード
     [SerializeField] private float walkSpeed = 1f;
+    //視界の範囲
+    [SerializeField] private float sightAngle = 90f;
+
     //巡回地点の親オブジェクト
     private GameObject strollPosObjects;
-
     private CharacterController characterController;
     private Animator animator;
     private GameObject player;
@@ -32,14 +34,19 @@ public class EnemyController : MonoBehaviour
     //待機時間
     private float waitTime = 1.5f;
     //みつけてから追いかけるまでの時間
-    private float chaseOffsetTime = 0.5f;
+    private float chaseOffsetTime = 0f;
     //経過時間
     private float elapsedTime;
     //見失うフラグ
     private bool isLost;
     //目的地
     private Vector3 enemyDestination;
-
+    //追いかける相手
+    private Transform target;
+    //速度
+    private Vector3 velocity;
+    //移動方向
+    private Vector3 direction;
     private float distance;
     private Contact contact;
 
@@ -60,35 +67,50 @@ public class EnemyController : MonoBehaviour
         currentDistance = Vector3.Distance(this.transform.position, enemyDestination);
         if (state == EnemyState.Chase)//追いかける
         {
-            //this.transform.LookAt(new Vector3(player.transform.position.x, this.transform.position.y, player.transform.position.z));
-            SetEnemyDestination(player.transform.position);
-            navMeshAgent.SetDestination(enemyDestination);
+            this.transform.LookAt(new Vector3(player.transform.position.x, this.transform.position.y, player.transform.position.z));
+
+            SetEnemyDestination(target.position);
+            //navMeshAgent.SetDestination(enemyDestination);
             elapsedTime += Time.deltaTime;
                
             if (isLost == true)//見失ったら待機する
             {
                 if (elapsedTime > waitTime)
+                {
                     SetState(EnemyState.Wait);
+                }
             }
             else //追いかける
             {
-                animator.SetFloat("MoveSpeed", runSpeed);
-                navMeshAgent.speed = runSpeed;
+                if (elapsedTime > chaseOffsetTime)
+                {
+                    velocity = Vector3.zero;
+                    animator.SetFloat("MoveSpeed", runSpeed);
+                    direction = new Vector3(enemyDestination.x - transform.position.x, 0f, enemyDestination.z - transform.position.z).normalized;
+                    velocity = direction * runSpeed;                
+                    //navMeshAgent.speed = runSpeed;
+                }
+
             }
 
-            //キャラクターが死んだら巡回状態にする
+            //キャラクターを倒す
             distance = Vector3.Distance(this.transform.position, player.transform.position);
-            if (distance < 0.5f)
+            if (distance < 1f)
             {
                 contact.GameOverFunc();
                 SetState(EnemyState.Stroll);
             }
+
+            //重力の適用
+            //velocity.y += (Physics.gravity.y) * Time.deltaTime;
+            characterController.Move(velocity * Time.deltaTime);
+
         }
         else if (state == EnemyState.Stroll)//巡回する
         {
 
             //巡回地点まである程度ちかづいたら別の地点へ移動
-            if (currentDistance<1f)
+            if (currentDistance<2f)
             {
                SetStrollDestination();
             }
@@ -123,6 +145,9 @@ public class EnemyController : MonoBehaviour
         elapsedTime = 0f;
         if (tempState == EnemyState.Stroll)
         {
+            //navMeshをアクティブにする
+            navMeshAgent.enabled = true;
+
             animator.SetFloat("MoveSpeed", walkSpeed);
             navMeshAgent.speed = walkSpeed;
             //ランダムな目的地へ向かう
@@ -131,10 +156,11 @@ public class EnemyController : MonoBehaviour
         }
         else if (tempState == EnemyState.Chase)
         {
+            //navMeshを非アクティブにする
+            navMeshAgent.enabled = false;
+            //追いかけるターゲットを設定
             isLost = false;
-            //SetEnemyDestination(player.transform.position);
-            navMeshAgent.SetDestination(player.transform.position);
-            //Debug.Log("追いかける状態になった");
+            target = targetObj;
         }
         else if (tempState == EnemyState.Wait)
         {
@@ -149,28 +175,39 @@ public class EnemyController : MonoBehaviour
         return state;
     }
 
-    //索敵範囲に入ったら追いかける状態にする
+    //索敵範囲に入ったら
     public void OnCharacterEnter(Collider collider)
     {
-        //キャラクターを発見
-        if (collider.CompareTag("Player")/*|| collider.CompareTag("NPC")*/)
+        //キャラクターを発見(Playerは優先的に追いかける)
+        if (collider.CompareTag("Player") || (!target.CompareTag("Player")&&(collider.CompareTag("NPC"))))
         {
-            //　敵キャラクターの状態を取得
-            EnemyController.EnemyState state = GetState();
-            //Debug.Log("プレイヤー発見");
-            SetState(EnemyController.EnemyState.Chase, collider.transform);
-            isLost = false;
+
+            //NPCの状態を取得
+            state = GetState();
+            if(state!= EnemyState.Chase)
+            {
+                //視界に入っているかの判定
+                //Vector3 posDelta = collider.transform.position - transform.position;
+                //float targetAngle = Vector3.Angle(transform.forward, posDelta);
+                //if(targetAngle<sightAngle)
+                //{
+                //追いかける状態にする
+                SetState(EnemyController.EnemyState.Chase, collider.transform);
+                isLost = false;
+                //}
+            }
         }
     }
-    //索敵範囲から出たら待機状態にする
+    //索敵範囲から出たら見失う
     public void OnCharacterExit(Collider collider)
     {
-        if (collider.CompareTag("Player")/* || collider.CompareTag("NPC")*/)
+        if (collider.transform==target)
         {
             //Debug.Log("見失う");
             isLost = true;
             //経過時間をリセット
             elapsedTime = 0;
+            target = null;
         }
     }
 
