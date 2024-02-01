@@ -41,9 +41,11 @@ namespace StarterAssets
         private float hookshotSpeedMultipulier = 2f;
         private float distance;
         private float reachedPosY;
+        private float hookshotAngleY;
         private Vector3 hookshotDir;
         private Vector3 moveDirection;
         private Vector3 currentHookshot;
+
 
 
 
@@ -79,9 +81,9 @@ namespace StarterAssets
                 if(Vector3.Distance(transform.position, hookshotPosition) < reachedHookshotPositionDistance)
                 {
                     HookDelete();
-                    if(hookshotDir.y > 0.1f || hookshotPosition.y > 10f);
+                    if(hookshotAngleY > 0)
                     {
-                        _controller.Move(new Vector3(0f, 5f, 0f));
+                        _controller.Move(new Vector3(0f, 4f, 0f));
                     }
                     isHookshot = false;
                 }
@@ -147,6 +149,7 @@ namespace StarterAssets
                 isHookshot = true;
                 lr.enabled = true;
                 hookshotPosition = hit.point;
+                hookshotAngleY = Camera.main.transform.forward.y;
             }
         }
         public void DrawRope()
@@ -162,66 +165,5 @@ namespace StarterAssets
                 lr.enabled = false;
             }
         }
-        // public void HandleHookshotStart()
-        // {
-        //     if (Input.GetMouseButtonDown(1))
-        //     {
-        //         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit, 100f, Hookable))
-        //         {
-        //             hookshotAble = true;
-        //             hookshotPosition = hit.point;
-        //         }
-                
-        //     }
-        // }
-
-        // public void HandleHookshotMovement()
-        // {
-        //     lr.enabled = true;
-
-        //     if(isHookshot == false)
-        //     {
-        //         isHookshot = true;
-        //         //フックショットのポイント計算
-        //         Vector3 hookshotDir = (hookshotPosition - transform.position).normalized;
-        //         if (hookshotDir.magnitude > 0.01)
-        //         {
-        //             // Playerの姿勢が崩れるためy軸削除
-        //             player.transform.rotation = Quaternion.LookRotation(new Vector3(hookshotDir.x,0,hookshotDir.z));
-        //         }
-        //         // 移動処理
-        //         float hookshotSpeedMin = 10f;
-        //         float hookshotSpeedMax = 40f;
-        //         float hookshotSpeed = Mathf.Clamp(Vector3.Distance(transform.position, hookshotPosition), hookshotSpeedMin, hookshotSpeedMax);
-        //         float hookshotSpeedMultipulier = 2f;
-        //         // _controller.Move(hookshotDir * hookshotSpeed * hookshotSpeedMultipulier * Time.deltaTime);
-        //     }
-        //    else
-        //    {
-        //         isHookshot = false;
-        //         // フックショットが終わるときの処理
-        //         float reachedHookshotPositionDistance = 3f;
-        //         isreached = Vector3.Distance(transform.position, hookshotPosition) < reachedHookshotPositionDistance;
-        //         if (isreached)
-        //         {
-        //             HookDelete();
-        //             _controller.Move(new Vector3(0.4f, 3f, 0.4f));
-        //             hookshotAble = false;
-        //             return;
-        //         }
-
-        //         // フックショットが途中で解除されたときの処理
-        //         if (Input.GetMouseButtonDown(1))
-        //         {
-        //             float momentumExtraSpeed = 7f;
-        //             characterVelocityMomentum = hookshotDir * hookshotSpeed * momentumExtraSpeed;
-        //             float jumpSpeed = 40f;
-        //             characterVelocityMomentum += Vector3.up * jumpSpeed;
-        //             HookDelete();
-        //             return;
-        //         }
-        //    }
-        // }
-
     }
 }

@@ -82,11 +82,14 @@ namespace PLATEAU.Samples
         void Start()
         {
             // 他オブジェクトのスクリプトのインスタンス(GameManagerの関数や変数を参照できる)
-            GameManageScript = GameObject.Find("GameManager").GetComponent<GameManage>();
-            TimeManageScript = GameObject.Find("TimeManager").GetComponent<TimeManage>();
+            // GameManageScript = GameObject.Find("GameManager").GetComponent<GameManage>();
+            // TimeManageScript = GameObject.Find("TimeManager").GetComponent<TimeManage>();
         }
         public void InitializeUI()
         {
+            GameManageScript = GameObject.Find("GameManager").GetComponent<GameManage>();
+            TimeManageScript = GameObject.Find("TimeManager").GetComponent<TimeManage>();
+
             //InputSystemの入力を登録
             inputActions.SelectScene.AddCallbacks(this);
             //コルーチン開始(Plateauのデータの取得が終わった後の処理を実行)
@@ -94,10 +97,9 @@ namespace PLATEAU.Samples
             //変数の初期化
             filterStatus = "None";
             correctBuildingName = "";
-            PlayerPosCamera.enabled = false;
-
+            // PlayerPosCamera.enabled = false;
             // 共通タグのオブジェクトを一つの配列にまとめる
-            HintTexts = GameObject.FindGameObjectsWithTag("HintText");
+            // HintTexts = GameObject.FindGameObjectsWithTag("HintText");
         }
 
         // Plateauのデータのロードに関する処理
@@ -164,10 +166,10 @@ namespace PLATEAU.Samples
                 
 
                 EditMissionText();
+                // // Map用のカメラを起動する
+                // PlayerPosCamera.enabled = true;
                 // ゴールの位置を設定する
                 GameManageScript.SelectGoals();
-                // // Map用のカメラを起動する
-                PlayerPosCamera.enabled = true; 
             }
             return isInitialiseFinish;
         }

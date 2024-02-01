@@ -51,12 +51,18 @@ public class NPCController : MonoBehaviour
     float radius = 10f;
     //逃げる相手
     private Transform target;
+    //particle
+    private GameObject particle;
+    //particleを消すタイミング
+    private float duration = 2f;
+
 
     void Start()
     {
         characterController = GetComponent<CharacterController>();
         gameManage = GameObject.Find("GameManager").GetComponent<GameManage>();
         npcManager = GameObject.Find("NPCManager").GetComponent<NPCManager>();
+        particle = GameObject.Find("SaveParticle");
 
         player = GameObject.FindGameObjectWithTag("Player");
         animator = GetComponent<Animator>();
@@ -189,7 +195,9 @@ public class NPCController : MonoBehaviour
     {
         gameManage.AddRescueNum();
         npcManager.RemoveFollowList(this.gameObject);
+        GameObject particleInstance =  Instantiate(particle, this.gameObject.transform.position,Quaternion.Euler(-90,0,0));
         Destroy(this.gameObject);
+        Destroy(particleInstance,duration);
     }
     //NPCの状態取得メソッド
     public NPCState GetState()
