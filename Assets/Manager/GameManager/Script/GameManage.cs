@@ -95,17 +95,16 @@ namespace PLATEAU.Samples
 
             getHintNum = 0;
             rescuedNum = 0;
+            rescuingNum = 0;
             goalNum = 3;
             sonarCount = 5;
+
             //GMLデータの初期化コルーチンを含む処理
             UIManageScript.InitializeUI();
-
             //アイテム・NPCの初期化
             EnemyManageScript.InitializeEnemy();
             ItemManageScript.InitializeItem();
             NPCManageScript.InitializeNPC();
-
-            rescuingNum = 0;
         }
 
         private string GetAttribute(string attributeName,SampleAttribute attribeteData)
