@@ -237,7 +237,7 @@ GameObject:
   - component: {fileID: 2071570655792928843}
   m_Layer: 2
   m_Name: SearchArea
-  m_TagString: Untagged
+  m_TagString: NPC
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -542,7 +542,7 @@ GameObject:
   - component: {fileID: 8112213758686650714}
   m_Layer: 0
   m_Name: Hips
-  m_TagString: Untagged
+  m_TagString: NPC
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -731,6 +731,7 @@ GameObject:
   - component: {fileID: 5156207580563759514}
   - component: {fileID: -3016226902766136906}
   - component: {fileID: 1022228020296266657}
+  - component: {fileID: 4926039356999764700}
   m_Layer: 6
   m_Name: NPC_03
   m_TagString: NPC
@@ -833,7 +834,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c39907cd987b00149b2a2c0504c301e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 5
+  walkSpeed: 3
   runSpeed: 15
   renderer: {fileID: 575132244225455006}
 --- !u!143 &1022228020296266657
@@ -850,10 +851,32 @@ CharacterController:
   m_Height: 1.55
   m_Radius: 0.3
   m_SlopeLimit: 45
-  m_StepOffset: 0.5
+  m_StepOffset: 0
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.8, z: 0}
+--- !u!195 &4926039356999764700
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5462281806239948006}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &5898569579786952695
 GameObject:
   m_ObjectHideFlags: 0

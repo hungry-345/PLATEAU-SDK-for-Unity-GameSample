@@ -38,10 +38,9 @@ public class EnemyManage : MonoBehaviour
         // 円の半径
         float radius = 1;
         // 指定された半径の円内のランダム位置を取得
-        var circlePos = radius * Random.insideUnitCircle;
+        Vector3 circlePos = radius * Random.insideUnitCircle;
         //円内のランダム位置を計算
-        //var spawnPos = new Vector3(circlePos.x,0f, circlePos.y) + center;
-        var spawnPos = new Vector3(circlePos.x,0f, circlePos.y) + center;
+        Vector3 spawnPos = new Vector3(circlePos.x,1f, circlePos.y) + center;
         //EnamyManagerの配下に敵を生成
         GameObject enemy = Instantiate(enemyPrefab, spawnPos, Quaternion.identity,this.gameObject.transform) as GameObject;
         //Enemy.transform.position = spawnPos;
