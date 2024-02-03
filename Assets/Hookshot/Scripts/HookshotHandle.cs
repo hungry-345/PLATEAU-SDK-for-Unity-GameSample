@@ -167,25 +167,29 @@ namespace StarterAssets
         private void HangHook()
         {
             
-            if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit, 50f, Hookable))
-            //Hookshotで移動する場合
-            {
-                isHookshotMove = true;
-                isHookshot = true;
-                lr.enabled = true;
-                hookshotPosition = hit.point;
-                hookshotAngleY = Camera.main.transform.forward.y;
-            }
-            else if(Physics.Raycast(Camera.main.transform.position,Camera.main.transform.forward,out RaycastHit hitAttack, 50f, attackable))
+            
+            if(Physics.Raycast(Camera.main.transform.position,Camera.main.transform.forward,out RaycastHit hitAttack, 50f, attackable))
             //Hookshotで攻撃する場合
             {
+                
                 isHookshotAttack = true;
                 isHookshot = true;
                 lr.enabled = true;
                 hookshotPosition = hitAttack.point;
                 enemyController = hitAttack.collider.GetComponent<EnemyController>();
                 enemyController.SetState(EnemyController.EnemyState.hit);
-             
+                //UnityEditor.EditorApplication.isPaused = true;
+
+            }
+            else if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit, 50f, Hookable))
+            //Hookshotで移動する場合
+            {
+               
+                isHookshotMove = true;
+                isHookshot = true;
+                lr.enabled = true;
+                hookshotPosition = hit.point;
+                hookshotAngleY = Camera.main.transform.forward.y;
             }
         }
         public void DrawRope()
