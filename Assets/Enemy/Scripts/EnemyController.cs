@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEditor;
 using PLATEAU.Samples;
 using UnityEngine.AI;
+using UnityEngine.Scripting;
 
 public class EnemyController : MonoBehaviour
 {
@@ -51,6 +52,11 @@ public class EnemyController : MonoBehaviour
     private Vector3 direction;
     private float distance;
     private Contact contact;
+    //マテリアル
+    private GameObject meshObj;
+    private Transform meshTrans;
+    private Material material;
+    
 
     void Start()
     {
@@ -60,6 +66,26 @@ public class EnemyController : MonoBehaviour
         strollPosObjects = GameObject.Find("RoadObjects");
         animator = GetComponent<Animator>();
         contact = GameObject.Find("PlayerArmature").GetComponent<Contact>();
+        //色変更
+        //meshTrans = transform.Find("Armature_Mesh");
+        //meshObj = meshTrans.gameObject;
+        //Renderer render = meshTrans.GetComponent<Renderer>();
+        //if(render != null )
+        //{
+        //    for(int i = 0;i< render.materials.Length; i++)
+        //    {
+        //        render.materials[i].SetColor("_BaseColor", Color.red);
+        //    }
+        //}
+        meshObj = GameObject.Find("Armature_Mesh");
+        if(meshObj != null)
+        {
+            Renderer render = meshObj.GetComponent<Renderer>();
+            for (int i = 0; i < render.sharedMaterials.Length; i++)
+           {
+               render.materials[i].SetColor("_BaseColor", Color.red);
+           }
+        }
         //velocity = Vector3.zero;
         SetState(EnemyState.Wait);
     }
@@ -176,6 +202,7 @@ public class EnemyController : MonoBehaviour
             //animator.SetBool(Animator.StringToHash("Dying"), true);
             animator.SetFloat("MoveSpeed", 0f);
             
+
         }
     }
     //　敵キャラクターの状態取得メソッド
