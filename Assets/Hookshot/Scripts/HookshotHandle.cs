@@ -178,6 +178,27 @@ namespace StarterAssets
                 hookshotPosition = hitAttack.point;
                 enemyController = hitAttack.collider.GetComponent<EnemyController>();
                 enemyController.SetState(EnemyController.EnemyState.hit);
+                //色変更
+                Transform armatureMeshTransform = hitAttack.transform.Find("Armature_Mesh");
+               
+               
+                
+                 // Armature_Meshが見つからない場合、子孫オブジェクトを再帰的に検索
+                 Renderer[] renderers = hitAttack.transform.GetComponentsInChildren<Renderer>();
+                 foreach (Renderer rend in renderers)
+                 {
+                     if (rend.gameObject.name == "Armature_Mesh") // 名前で比較
+                    {
+                         Debug.Log(rend.materials.Length); ; // 色を変更
+                        foreach (Material mat in rend.materials)
+                        {
+                            mat.color = Color.yellow;
+                        }
+                         break; // 見つかったらループを抜ける
+                    }
+                 }
+                
+
                 //UnityEditor.EditorApplication.isPaused = true;
 
             }

@@ -66,7 +66,7 @@ public class EnemyController : MonoBehaviour
         strollPosObjects = GameObject.Find("RoadObjects");
         animator = GetComponent<Animator>();
         contact = GameObject.Find("PlayerArmature").GetComponent<Contact>();
-        //色変更
+        ////色変更
         //meshTrans = transform.Find("Armature_Mesh");
         //meshObj = meshTrans.gameObject;
         //Renderer render = meshTrans.GetComponent<Renderer>();
@@ -77,15 +77,7 @@ public class EnemyController : MonoBehaviour
         //        render.materials[i].SetColor("_BaseColor", Color.red);
         //    }
         //}
-        meshObj = GameObject.Find("Armature_Mesh");
-        if(meshObj != null)
-        {
-            Renderer render = meshObj.GetComponent<Renderer>();
-            for (int i = 0; i < render.sharedMaterials.Length; i++)
-           {
-               render.materials[i].SetColor("_BaseColor", Color.red);
-           }
-        }
+
         //velocity = Vector3.zero;
         SetState(EnemyState.Wait);
     }
@@ -201,7 +193,7 @@ public class EnemyController : MonoBehaviour
             isLost = true;
             //animator.SetBool(Animator.StringToHash("Dying"), true);
             animator.SetFloat("MoveSpeed", 0f);
-            
+         
 
         }
     }
