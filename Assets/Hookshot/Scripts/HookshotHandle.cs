@@ -166,12 +166,10 @@ namespace StarterAssets
         }
         private void HangHook()
         {
-            
-    
+              
             if(Physics.Raycast(Camera.main.transform.position,Camera.main.transform.forward,out RaycastHit hitAttack, 50f, attackable))
             //Hookshotで攻撃する場合
-            {
-                
+            {                
                 isHookshotAttack = true;
                 isHookshot = true;
                 lr.enabled = true;
@@ -179,12 +177,9 @@ namespace StarterAssets
                 enemyController = hitAttack.collider.GetComponent<EnemyController>();
                 enemyController.SetState(EnemyController.EnemyState.hit);
                 //色変更
-                Transform armatureMeshTransform = hitAttack.transform.Find("Armature_Mesh");
-               
-               
-                
-                 // Armature_Meshが見つからない場合、子孫オブジェクトを再帰的に検索
-                 Renderer[] renderers = hitAttack.transform.GetComponentsInChildren<Renderer>();
+                Transform armatureMeshTransform = hitAttack.transform.Find("Armature_Mesh");  
+                // Armature_Meshが見つからない場合、子孫オブジェクトを再帰的に検索
+                Renderer[] renderers = hitAttack.transform.GetComponentsInChildren<Renderer>();
                  foreach (Renderer rend in renderers)
                  {
                      if (rend.gameObject.name == "Armature_Mesh") // 名前で比較
@@ -194,11 +189,10 @@ namespace StarterAssets
                         {
                             mat.color = Color.yellow;
                         }
-                         break; // 見つかったらループを抜ける
+                        break; // 見つかったらループを抜ける
                     }
                  }
-                
-
+                RemoveHook();  
                 //UnityEditor.EditorApplication.isPaused = true;
 
             }
