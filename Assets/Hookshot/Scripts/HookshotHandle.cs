@@ -197,10 +197,20 @@ namespace StarterAssets
                 isHookshot = true;
                 lr.enabled = true;
                 hookshotPosition = hitAttack.point;
+                //enemyのstate変更
                 enemyController = hitAttack.collider.GetComponent<EnemyController>();
-                enemyController.SetState(EnemyController.EnemyState.hit);
+                if(enemyController != null )
+                {
+                    enemyController.SetState(EnemyController.EnemyState.hit);
+                }
+                else
+                {
+                    Transform parent = hitAttack.transform.parent;
+                    enemyController = parent.GetComponent<EnemyController>();
+                    enemyController.SetState(EnemyController.EnemyState.hit);
+                }
+
                 //色変更
-                Transform armatureMeshTransform = hitAttack.transform.Find("Armature_Mesh");
                 // Armature_Meshが見つからない場合、子孫オブジェクトを再帰的に検索
                 Renderer[] renderers = hitAttack.transform.GetComponentsInChildren<Renderer>();
                 foreach (Renderer rend in renderers)
@@ -215,6 +225,7 @@ namespace StarterAssets
                         break; // 見つかったらループを抜ける
                     }
                 }
+
                 RemoveHook();
                 //UnityEditor.EditorApplication.isPaused = true;
 
