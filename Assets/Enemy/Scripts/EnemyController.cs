@@ -118,7 +118,7 @@ public class EnemyController : MonoBehaviour
             //キャラクターを倒す
             distance = Vector3.Distance(this.transform.position, player.transform.position);
          
-           if (distance < 1f)
+           if (distance < 2f)
           {
                    
              contact.GameOverFunc();
