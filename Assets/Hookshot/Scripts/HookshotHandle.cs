@@ -187,7 +187,7 @@ namespace StarterAssets
             characterVelocityMomentum += Vector3.up * jumpSpeed;
             HookDelete();
         }
-
+        //攻撃する場合
         private void AttackHook()
         {
             if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hitAttack, 50f, attackable))
@@ -231,6 +231,7 @@ namespace StarterAssets
 
             }
         }
+        //フックショットで移動する場合
         private void HangHook()
         {
               

@@ -36,6 +36,8 @@ public class EnemyController : MonoBehaviour
     private float currentDistance;
     //待機時間
     private float waitTime = 1.5f;
+    //麻痺時間
+    private float paralysisTime = 30f;
     //みつけてから追いかけるまでの時間
     private float chaseOffsetTime = 0f;
     //経過時間
@@ -115,11 +117,16 @@ public class EnemyController : MonoBehaviour
 
             //キャラクターを倒す
             distance = Vector3.Distance(this.transform.position, player.transform.position);
-            if (distance < 1f)
-            {
-                contact.GameOverFunc();
-                SetState(EnemyState.Stroll);
-            }
+         
+           if (distance < 1f)
+          {
+                   
+             contact.GameOverFunc();
+             SetState(EnemyState.Stroll);
+                    
+          }
+        
+            
 
             //重力の適用
             //velocity.y += (Physics.gravity.y) * Time.deltaTime;
@@ -128,7 +135,6 @@ public class EnemyController : MonoBehaviour
         }
         else if (state == EnemyState.Stroll)//巡回する
         {
-
             //巡回地点まである程度ちかづいたら別の地点へ移動
             if (currentDistance<2f)
             {
@@ -145,6 +151,19 @@ public class EnemyController : MonoBehaviour
             {
                 SetState(EnemyState.Stroll);
             }
+        }
+        else if(state == EnemyState.hit)
+        {
+            elapsedTime += Time.deltaTime;
+            if(elapsedTime > paralysisTime)
+            {
+                SetState(EnemyState.Stroll);
+            }
+            else
+            {
+                animator.SetFloat("MoveSpeed", 0f);
+            }
+            
         }
     }
     //ランダムな巡回地点を取得する
@@ -194,7 +213,6 @@ public class EnemyController : MonoBehaviour
             //animator.SetBool(Animator.StringToHash("Dying"), true);
             animator.SetFloat("MoveSpeed", 0f);
          
-
         }
     }
     //　敵キャラクターの状態取得メソッド
