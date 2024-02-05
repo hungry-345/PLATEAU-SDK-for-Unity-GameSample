@@ -108,6 +108,7 @@ namespace StarterAssets
                 }
             }
             CheckClickRightMouseButton();
+            CheckClickLeftMouseButton();
         }
 
         private void LateUpdate()
@@ -140,14 +141,14 @@ namespace StarterAssets
         //Hookshotしたか確認
         private void CheckClickRightMouseButton()
         {
-            if(Input.GetMouseButtonDown(1))
+            if (Input.GetMouseButtonDown(1))
             {
-                if(isHookshot)
+                if (isHookshot)
                 {
                     isHookshotMove = false;
                     isHookshotAttack = false;
                     isHookshot = false;
-                    
+
                     RemoveHook();
                 }
                 else
@@ -158,18 +159,40 @@ namespace StarterAssets
                 }
             }
         }
+
+        private void CheckClickLeftMouseButton()
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                if (isHookshot)
+                {
+                    isHookshotMove = false;
+                    isHookshotAttack = false;
+                    isHookshot = false;
+
+                    RemoveHook();
+                }
+                else
+                {
+                    isFirstClosed = false;
+                    distance = 1000f;
+                    AttackHook();
+                }
+            }
+        }
+
         private void RemoveHook()
         {
             float jumpSpeed = 40f;
             characterVelocityMomentum += Vector3.up * jumpSpeed;
             HookDelete();
         }
-        private void HangHook()
+
+        private void AttackHook()
         {
-              
-            if(Physics.Raycast(Camera.main.transform.position,Camera.main.transform.forward,out RaycastHit hitAttack, 50f, attackable))
+            if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hitAttack, 50f, attackable))
             //Hookshotで攻撃する場合
-            {                
+            {
                 isHookshotAttack = true;
                 isHookshot = true;
                 lr.enabled = true;
@@ -177,26 +200,30 @@ namespace StarterAssets
                 enemyController = hitAttack.collider.GetComponent<EnemyController>();
                 enemyController.SetState(EnemyController.EnemyState.hit);
                 //色変更
-                Transform armatureMeshTransform = hitAttack.transform.Find("Armature_Mesh");  
+                Transform armatureMeshTransform = hitAttack.transform.Find("Armature_Mesh");
                 // Armature_Meshが見つからない場合、子孫オブジェクトを再帰的に検索
                 Renderer[] renderers = hitAttack.transform.GetComponentsInChildren<Renderer>();
-                 foreach (Renderer rend in renderers)
-                 {
-                     if (rend.gameObject.name == "Armature_Mesh") // 名前で比較
+                foreach (Renderer rend in renderers)
+                {
+                    if (rend.gameObject.name == "Armature_Mesh") // 名前で比較
                     {
-                         Debug.Log(rend.materials.Length); ; // 色を変更
+                        Debug.Log(rend.materials.Length); ; // 色を変更
                         foreach (Material mat in rend.materials)
                         {
                             mat.color = Color.yellow;
                         }
                         break; // 見つかったらループを抜ける
                     }
-                 }
-                RemoveHook();  
+                }
+                RemoveHook();
                 //UnityEditor.EditorApplication.isPaused = true;
 
             }
-            else if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit, 50f, Hookable))
+        }
+        private void HangHook()
+        {
+              
+           if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit, 50f, Hookable))
             //Hookshotで移動する場合
             {
                
