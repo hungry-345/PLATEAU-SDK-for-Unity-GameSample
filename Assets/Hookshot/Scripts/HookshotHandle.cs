@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem.XR;
@@ -17,24 +17,33 @@ namespace StarterAssets
         private CharacterController _controller;
         private ActionManager actionManager;
         private ThirdPersonController _thirdPersonController;
-
         private float gravity;
-
 
 
         [Header("Hookshot")]
         //[SerializeField] private Transform debugHitPosition;
+        //HookshotできるLayerを設定
         [SerializeField] private LayerMask Hookable;
+        //敵の判別用Layerを設定
+        [SerializeField] private LayerMask attackable;
         [SerializeField] private Transform hookshotTransform;
         [SerializeField] private AnimationCurve AnimationCurve;
+        //移動するときの判別
+        private bool isHookshotMove;
+        //攻撃するときの判別
+        private bool isHookshotAttack;
         private bool isHookshot;
         private bool isFirstClosed;
         public bool hookshotAble;
         public int quality;
         public float waveCount;
         public float waveHeight;
-        private float reachedHookshotPositionDistance = 3f;
 
+        //攻撃する敵の情報取得設定
+        private EnemyController enemyController;
+
+        //Hookshotの調整
+        private float reachedHookshotPositionDistance = 3f;
         private float hookshotSpeedMin = 10f;
         private float hookshotSpeedMax = 40f;
         private float hookshotSpeed = 0;
@@ -57,6 +66,8 @@ namespace StarterAssets
             _thirdPersonController = GetComponent<ThirdPersonController>();
             lr = GetComponent<LineRenderer>();
             lr.enabled = false;
+            isHookshotAttack = false;
+            isHookshotMove = false;
             isHookshot = false;
             isFirstClosed = false;
             hookshotDir = Vector3.zero;
@@ -72,24 +83,32 @@ namespace StarterAssets
         {
             if(isHookshot)
             {
-                PlayerMove();
-                if(distance < Vector3.Distance(transform.position, hookshotPosition))
+                if (isHookshotMove)
                 {
-                    isFirstClosed = true;
-                    reachedPosY = player.transform.position.y;
-                }
-                if(Vector3.Distance(transform.position, hookshotPosition) < reachedHookshotPositionDistance)
-                {
-                    HookDelete();
-                    if(hookshotAngleY > 0)
+                    PlayerMove();
+                    if (distance < Vector3.Distance(transform.position, hookshotPosition))
                     {
-                        _controller.Move(new Vector3(0f, 4f, 0f));
+                        isFirstClosed = true;
+                        reachedPosY = player.transform.position.y;
                     }
-                    isHookshot = false;
+                    if (Vector3.Distance(transform.position, hookshotPosition) < reachedHookshotPositionDistance)
+                    {
+                        HookDelete();
+                        if (hookshotAngleY > 0)
+                        {
+                            _controller.Move(new Vector3(0f, 4f, 0f));
+                        }
+                        isHookshot = false;
+                    }
+                    distance = Mathf.Abs(Vector3.Distance(transform.position, hookshotPosition));
                 }
-                distance = Mathf.Abs(Vector3.Distance(transform.position, hookshotPosition));
+                else if (isHookshotAttack)
+                {
+
+                }
             }
             CheckClickRightMouseButton();
+            CheckClickLeftMouseButton();
         }
 
         private void LateUpdate()
@@ -118,14 +137,18 @@ namespace StarterAssets
             }
             _controller.Move(moveDirection * hookshotSpeed * hookshotSpeedMultipulier * Time.deltaTime);
         }
-        //Hookshot
+
+        //Hookshotしたか確認
         private void CheckClickRightMouseButton()
         {
-            if(Input.GetMouseButtonDown(1))
+            if (Input.GetMouseButtonDown(1))
             {
-                if(isHookshot)
+                if (isHookshot)
                 {
+                    isHookshotMove = false;
+                    isHookshotAttack = false;
                     isHookshot = false;
+
                     RemoveHook();
                 }
                 else
@@ -136,16 +159,90 @@ namespace StarterAssets
                 }
             }
         }
+
+        private void CheckClickLeftMouseButton()
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                if (isHookshot)
+                {
+                    isHookshotMove = false;
+                    isHookshotAttack = false;
+                    isHookshot = false;
+
+                    RemoveHook();
+                }
+                else
+                {
+                    isFirstClosed = false;
+                    distance = 1000f;
+                    AttackHook();
+                }
+            }
+        }
+
         private void RemoveHook()
         {
             float jumpSpeed = 40f;
             characterVelocityMomentum += Vector3.up * jumpSpeed;
             HookDelete();
         }
+        //攻撃する場合
+        private void AttackHook()
+        {
+            if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hitAttack, 50f, attackable))
+            //Hookshotで攻撃する場合
+            {
+                isHookshotAttack = true;
+                isHookshot = true;
+                lr.enabled = true;
+                hookshotPosition = hitAttack.point;
+                //enemyのstate変更
+                enemyController = hitAttack.collider.GetComponent<EnemyController>();
+                if(enemyController != null )
+                {
+                    enemyController.SetState(EnemyController.EnemyState.hit);
+                    enemyController.EnemyColorYellow(hitAttack);
+                }
+                else
+                {
+                    Transform parent = hitAttack.transform.parent;
+                    enemyController = parent.GetComponent<EnemyController>();
+                    enemyController.SetState(EnemyController.EnemyState.hit);
+                    enemyController.EnemyColorYellow(hitAttack);
+                }
+
+                //色変更
+
+                // 孫オブジェクトを再帰的に検索
+                //Renderer[] renderers = hitAttack.transform.GetComponentsInChildren<Renderer>();
+                //foreach (Renderer rend in renderers)
+                //{
+                //    if (rend.gameObject.name == "Armature_Mesh") // 名前で比較
+                //    {
+                //        Debug.Log(rend.materials.Length); ; // 色を変更
+                //        foreach (Material mat in rend.materials)
+                //        {
+                //            mat.color = Color.yellow;
+                //        }
+                //        break; // 見つかったらループを抜ける
+                //    }
+                //}
+
+                RemoveHook();
+                //UnityEditor.EditorApplication.isPaused = true;
+
+            }
+        }
+        //フックショットで移動する場合
         private void HangHook()
         {
-            if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit, 50f, Hookable))
+              
+           if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit, 50f, Hookable))
+            //Hookshotで移動する場合
             {
+               
+                isHookshotMove = true;
                 isHookshot = true;
                 lr.enabled = true;
                 hookshotPosition = hit.point;
