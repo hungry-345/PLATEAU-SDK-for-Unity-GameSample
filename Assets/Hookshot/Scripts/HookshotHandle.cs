@@ -202,29 +202,32 @@ namespace StarterAssets
                 if(enemyController != null )
                 {
                     enemyController.SetState(EnemyController.EnemyState.hit);
+                    enemyController.EnemyColorYellow(hitAttack);
                 }
                 else
                 {
                     Transform parent = hitAttack.transform.parent;
                     enemyController = parent.GetComponent<EnemyController>();
                     enemyController.SetState(EnemyController.EnemyState.hit);
+                    enemyController.EnemyColorYellow(hitAttack);
                 }
 
                 //色変更
-                // Armature_Meshが見つからない場合、子孫オブジェクトを再帰的に検索
-                Renderer[] renderers = hitAttack.transform.GetComponentsInChildren<Renderer>();
-                foreach (Renderer rend in renderers)
-                {
-                    if (rend.gameObject.name == "Armature_Mesh") // 名前で比較
-                    {
-                        Debug.Log(rend.materials.Length); ; // 色を変更
-                        foreach (Material mat in rend.materials)
-                        {
-                            mat.color = Color.yellow;
-                        }
-                        break; // 見つかったらループを抜ける
-                    }
-                }
+
+                // 孫オブジェクトを再帰的に検索
+                //Renderer[] renderers = hitAttack.transform.GetComponentsInChildren<Renderer>();
+                //foreach (Renderer rend in renderers)
+                //{
+                //    if (rend.gameObject.name == "Armature_Mesh") // 名前で比較
+                //    {
+                //        Debug.Log(rend.materials.Length); ; // 色を変更
+                //        foreach (Material mat in rend.materials)
+                //        {
+                //            mat.color = Color.yellow;
+                //        }
+                //        break; // 見つかったらループを抜ける
+                //    }
+                //}
 
                 RemoveHook();
                 //UnityEditor.EditorApplication.isPaused = true;

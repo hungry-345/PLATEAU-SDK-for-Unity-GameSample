@@ -36,12 +36,12 @@ namespace PLATEAU.Samples
                 //アイテムを削除
                 ItemManageScript.GetItem(hit.gameObject);
             }
-            if (hit.gameObject.CompareTag("Enemy"))
-            {
-                ThirdPersonControllerScript.DyingMotion();
-                //一番上の親（GameView）にゲームオーバーを通知
-                GameViewScript.isGameOver = true ; 
-            }
+            //if (hit.gameObject.CompareTag("Enemy"))
+            //{
+            //    ThirdPersonControllerScript.DyingMotion();
+            //    //一番上の親（GameView）にゲームオーバーを通知
+            //    GameViewScript.isGameOver = true ; 
+            //}
             if(hit.gameObject.CompareTag("Goal"))
             {
                 //救助する

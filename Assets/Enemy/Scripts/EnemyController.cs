@@ -158,6 +158,7 @@ public class EnemyController : MonoBehaviour
             if(elapsedTime > paralysisTime)
             {
                 SetState(EnemyState.Stroll);
+                EnemyColorRed();
             }
             else
             {
@@ -278,5 +279,41 @@ public class EnemyController : MonoBehaviour
     public void SetEnemyDestination(Vector3 destination)
     {
         enemyDestination = destination;
+    }
+
+    //黄色にする
+    public void EnemyColorYellow(RaycastHit hitAttack)
+    {
+        Renderer[] renderers = hitAttack.transform.GetComponentsInChildren<Renderer>();
+        foreach (Renderer rend in renderers)
+        {
+            if (rend.gameObject.name == "Armature_Mesh") // 名前で比較
+            {
+                Debug.Log(rend.materials.Length); ; // 色を変更
+                foreach (Material mat in rend.materials)
+                {
+                    mat.color = Color.yellow;
+                }
+                break; // 見つかったらループを抜ける
+            }
+        }
+    }
+
+    //赤色に戻す
+    public void EnemyColorRed()
+    {
+        Renderer[] renderers = this.transform.GetComponentsInChildren<Renderer>();
+        foreach (Renderer rend in renderers)
+        {
+            if (rend.gameObject.name == "Armature_Mesh") // 名前で比較
+            {
+                Debug.Log(rend.materials.Length); ; // 色を変更
+                foreach (Material mat in rend.materials)
+                {
+                    mat.color = Color.red;
+                }
+                break; // 見つかったらループを抜ける
+            }
+        }
     }
 }
