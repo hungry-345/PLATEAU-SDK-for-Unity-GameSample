@@ -162,6 +162,7 @@ public class EnemyController : MonoBehaviour
             else
             {
                 animator.SetFloat("MoveSpeed", 0f);
+                navMeshAgent.velocity = Vector3.zero;
             }
             
         }
