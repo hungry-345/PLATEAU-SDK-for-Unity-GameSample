@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem.XR;
 
@@ -104,7 +105,8 @@ namespace StarterAssets
                 }
                 else if (isHookshotAttack)
                 {
-
+                    //isHookshot = false;
+                    isHookshotAttack = false;
                 }
             }
             CheckClickRightMouseButton();
@@ -198,7 +200,21 @@ namespace StarterAssets
                 isHookshotAttack = true;
                 isHookshot = true;
                 lr.enabled = true;
-                hookshotPosition = hitAttack.point;
+                //hookをArmature_Meshにくっつける
+                Transform geometry = hitAttack.transform.Find("Geometry");
+                Transform mesh = geometry.Find("Armature_Mesh");
+                hookshotPosition = new Vector3(mesh.position.x,mesh.position.y + 1f,mesh.position.z);
+
+                //hookshotPosition = hitAttack.point;
+                //Transform parentTrans = hitAttack.transform;
+                //for (int i = 0; i < parentTrans.childCount; i++)
+                //{
+                //    // 子オブジェクトのTransformを取得
+                //    Transform childTransform = parentTrans.GetChild(i);
+
+                //    // 子オブジェクトの名前を出力
+                //    Debug.Log("Child " + i + ": " + childTransform.name);
+                //}
                 //enemyのstate変更
                 enemyController = hitAttack.collider.GetComponent<EnemyController>();
                 if(enemyController != null )
@@ -231,7 +247,7 @@ namespace StarterAssets
                 //    }
                 //}
 
-                RemoveHook();
+                //RemoveHook();
                 //UnityEditor.EditorApplication.isPaused = true;
 
             }
