@@ -54,10 +54,8 @@ public class EnemyController : MonoBehaviour
     private Vector3 direction;
     private float distance;
     private Contact contact;
-    //マテリアル
-    private GameObject meshObj;
-    private Transform meshTrans;
-    private Material material;
+    //麻痺
+    private GameObject kaminari;
     
 
     void Start()
@@ -68,6 +66,7 @@ public class EnemyController : MonoBehaviour
         strollPosObjects = GameObject.Find("RoadObjects");
         animator = GetComponent<Animator>();
         contact = GameObject.Find("PlayerArmature").GetComponent<Contact>();
+        kaminari = GameObject.Find("kaminari");
         ////色変更
         //meshTrans = transform.Find("Armature_Mesh");
         //meshObj = meshTrans.gameObject;
@@ -118,7 +117,7 @@ public class EnemyController : MonoBehaviour
             //キャラクターを倒す
             distance = Vector3.Distance(this.transform.position, player.transform.position);
          
-           if (distance < 2f)
+           if (distance < 2.5f)
           {
                    
              contact.GameOverFunc();
@@ -213,7 +212,9 @@ public class EnemyController : MonoBehaviour
             isLost = true;
             //animator.SetBool(Animator.StringToHash("Dying"), true);
             animator.SetFloat("MoveSpeed", 0f);
-         
+            GameObject kaminariInstance = Instantiate(kaminari, new Vector3(this.transform.position.x, this.transform.position.y + 1.5f, this.transform.position.z), Quaternion.Euler(0, 0, 0));
+            Destroy(kaminariInstance, 5f);
+
         }
     }
     //　敵キャラクターの状態取得メソッド
