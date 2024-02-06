@@ -154,6 +154,7 @@ namespace StarterAssets
                 else
                 {
                     isFirstClosed = false;
+                    isHookshotAttack = false;
                     distance = 1000f;
                     HangHook();
                 }
@@ -175,6 +176,7 @@ namespace StarterAssets
                 else
                 {
                     isFirstClosed = false;
+                    isHookshotMove = false;
                     distance = 1000f;
                     AttackHook();
                 }
