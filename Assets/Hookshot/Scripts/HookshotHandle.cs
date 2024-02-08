@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem.XR;
 
@@ -28,6 +29,8 @@ namespace StarterAssets
         [SerializeField] private LayerMask attackable;
         [SerializeField] private Transform hookshotTransform;
         [SerializeField] private AnimationCurve AnimationCurve;
+        [SerializeField] private Material black;
+        [SerializeField] private Material orange;
         //移動するときの判別
         private bool isHookshotMove;
         //攻撃するときの判別
@@ -35,9 +38,8 @@ namespace StarterAssets
         private bool isHookshot;
         private bool isFirstClosed;
         public bool hookshotAble;
-        public int quality;
-        public float waveCount;
-        public float waveHeight;
+        
+        
 
         //攻撃する敵の情報取得設定
         private EnemyController enemyController;
@@ -54,6 +56,13 @@ namespace StarterAssets
         private Vector3 hookshotDir;
         private Vector3 moveDirection;
         private Vector3 currentHookshot;
+
+        //ロープアニメーション
+        private float lerpTime = 0f;
+        //public int quality = 500;
+        //public float waveHeight = 1f; // 波の高さ
+        //public float waveFrequency = 3f; // 波の頻度
+        //public int wavePoints = 10; // ウェーブを形成するための中間ポイント数
 
 
 
@@ -104,7 +113,8 @@ namespace StarterAssets
                 }
                 else if (isHookshotAttack)
                 {
-
+                    //isHookshot = false;
+                    isHookshotAttack = false;
                 }
             }
             CheckClickRightMouseButton();
@@ -154,6 +164,7 @@ namespace StarterAssets
                 else
                 {
                     isFirstClosed = false;
+                    isHookshotAttack = false;
                     distance = 1000f;
                     HangHook();
                 }
@@ -175,6 +186,7 @@ namespace StarterAssets
                 else
                 {
                     isFirstClosed = false;
+                    isHookshotMove = false;
                     distance = 1000f;
                     AttackHook();
                 }
@@ -196,7 +208,21 @@ namespace StarterAssets
                 isHookshotAttack = true;
                 isHookshot = true;
                 lr.enabled = true;
-                hookshotPosition = hitAttack.point;
+                //hookをArmature_Meshにくっつける
+                Transform geometry = hitAttack.transform.Find("Geometry");
+                Transform mesh = geometry.Find("Armature_Mesh");
+                hookshotPosition = new Vector3(mesh.position.x,mesh.position.y + 1f,mesh.position.z);
+
+                //hookshotPosition = hitAttack.point;
+                //Transform parentTrans = hitAttack.transform;
+                //for (int i = 0; i < parentTrans.childCount; i++)
+                //{
+                //    // 子オブジェクトのTransformを取得
+                //    Transform childTransform = parentTrans.GetChild(i);
+
+                //    // 子オブジェクトの名前を出力
+                //    Debug.Log("Child " + i + ": " + childTransform.name);
+                //}
                 //enemyのstate変更
                 enemyController = hitAttack.collider.GetComponent<EnemyController>();
                 if(enemyController != null )
@@ -229,7 +255,7 @@ namespace StarterAssets
                 //    }
                 //}
 
-                RemoveHook();
+                //RemoveHook();
                 //UnityEditor.EditorApplication.isPaused = true;
 
             }
@@ -251,15 +277,26 @@ namespace StarterAssets
         }
         public void DrawRope()
         {
-            currentHookshot = Vector3.Lerp(currentHookshot, hookshotTransform.position, Time.deltaTime * 8f);
+            if (isHookshotMove) 
+            {
+                lr.material = black;
+            }
+            else if (isHookshotAttack)
+            {
+                lr.material = orange;
+            }
+
             lr.SetPosition(0, hookshotTransform.position);
             lr.SetPosition(1, hookshotPosition);
+
+
         }
         private void HookDelete()
         {
             if (lr != null)
             {
                 lr.enabled = false;
+                lerpTime = 0f;
             }
         }
     }

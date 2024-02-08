@@ -883,6 +883,7 @@ MonoBehaviour:
   walkSpeed: 3
   runSpeed: 15
   renderer: {fileID: 8596271420465163005}
+  particle: {fileID: 1837947354677370815, guid: 789b77970a5135140b92a679131ceff2, type: 3}
 --- !u!143 &7855209206807856236
 CharacterController:
   m_ObjectHideFlags: 0

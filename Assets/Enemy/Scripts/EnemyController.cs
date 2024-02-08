@@ -31,6 +31,8 @@ public class EnemyController : MonoBehaviour
 
     // 状態
     private EnemyState state;
+    //麻痺フラグ
+    private bool paralysis = false;
     //目的地との距離
     private float currentDistance;
     //待機時間
@@ -53,10 +55,10 @@ public class EnemyController : MonoBehaviour
     private Vector3 direction;
     private float distance;
     private Contact contact;
-    //マテリアル
-    private GameObject meshObj;
-    private Transform meshTrans;
-    private Material material;
+    //麻痺
+    [SerializeField] private GameObject kaminari;
+    private ParticleSystem ps;
+    //private float emission;
     
 
     void Start()
@@ -67,6 +69,7 @@ public class EnemyController : MonoBehaviour
         strollPosObjects = GameObject.Find("RoadObjects");
         animator = GetComponent<Animator>();
         contact = GameObject.Find("PlayerArmature").GetComponent<Contact>();
+        //kaminari = GameObject.Find("kaminari");
         ////色変更
         //meshTrans = transform.Find("Armature_Mesh");
         //meshObj = meshTrans.gameObject;
@@ -115,6 +118,7 @@ public class EnemyController : MonoBehaviour
             //キャラクターを倒す
             distance = Vector3.Distance(this.transform.position, player.transform.position);
          
+
            if (distance < 2f)
           {                 
              contact.GameOverFunc();
@@ -150,10 +154,21 @@ public class EnemyController : MonoBehaviour
             {
                 SetState(EnemyState.Stroll);
                 EnemyColorRed();
+                
             }
             else
             {
                 animator.SetFloat("MoveSpeed", 0f);
+                navMeshAgent.velocity = Vector3.zero;
+                //雷の量を少なく
+                if (ps)
+                {
+                    var emission = ps.emission;
+                    if(elapsedTime > 5f)
+                    {
+                        emission.rateOverTime = new ParticleSystem.MinMaxCurve(10f,20f);
+                    }
+                }
             }
         }
         //重力の適用
@@ -198,9 +213,17 @@ public class EnemyController : MonoBehaviour
         else if(tempState == EnemyState.hit)
         {
             isLost = true;
+            
             //animator.SetBool(Animator.StringToHash("Dying"), true);
             animator.SetFloat("MoveSpeed", 0f);
-         
+            navMeshAgent.velocity = Vector3.zero;
+            GameObject kaminariInstance = Instantiate(kaminari, new Vector3(this.transform.position.x, this.transform.position.y + 1.5f, this.transform.position.z), Quaternion.Euler(0, 0, 0));
+            ps = kaminariInstance.GetComponent<ParticleSystem>();
+            
+            Destroy(kaminariInstance,paralysisTime);
+            
+            
+
         }
     }
     //　敵キャラクターの状態取得メソッド

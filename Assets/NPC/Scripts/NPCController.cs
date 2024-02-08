@@ -52,7 +52,7 @@ public class NPCController : MonoBehaviour
     //逃げる相手
     private Transform target;
     //particle
-    private GameObject particle;
+    [SerializeField]private GameObject particle;
     //particleを消すタイミング
     private float duration = 2f;
 
@@ -62,7 +62,7 @@ public class NPCController : MonoBehaviour
         characterController = GetComponent<CharacterController>();
         gameManage = GameObject.Find("GameManager").GetComponent<GameManage>();
         npcManager = GameObject.Find("NPCManager").GetComponent<NPCManager>();
-        particle = GameObject.Find("SaveParticle");
+        //particle = GameObject.Find("SaveParticle");
 
         player = GameObject.FindGameObjectWithTag("Player");
         animator = GetComponent<Animator>();
