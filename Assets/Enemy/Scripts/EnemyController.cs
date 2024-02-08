@@ -57,7 +57,7 @@ public class EnemyController : MonoBehaviour
     private float distance;
     private Contact contact;
     //麻痺
-    private GameObject kaminari;
+    [SerializeField] private GameObject kaminari;
     private ParticleSystem ps;
     //private float emission;
     
@@ -70,7 +70,7 @@ public class EnemyController : MonoBehaviour
         strollPosObjects = GameObject.Find("RoadObjects");
         animator = GetComponent<Animator>();
         contact = GameObject.Find("PlayerArmature").GetComponent<Contact>();
-        kaminari = GameObject.Find("kaminari");
+        //kaminari = GameObject.Find("kaminari");
         ////色変更
         //meshTrans = transform.Find("Armature_Mesh");
         //meshObj = meshTrans.gameObject;
