@@ -58,6 +58,8 @@ public class EnemyController : MonoBehaviour
     private Contact contact;
     //麻痺
     private GameObject kaminari;
+    private ParticleSystem ps;
+    //private float emission;
     
 
     void Start()
@@ -166,6 +168,15 @@ public class EnemyController : MonoBehaviour
             {
                 animator.SetFloat("MoveSpeed", 0f);
                 navMeshAgent.velocity = Vector3.zero;
+                //雷の量を少なく
+                if (ps)
+                {
+                    var emission = ps.emission;
+                    if(elapsedTime > 5f)
+                    {
+                        emission.rateOverTime = new ParticleSystem.MinMaxCurve(10f,20f);
+                    }
+                }
             }
             
         }
@@ -219,7 +230,8 @@ public class EnemyController : MonoBehaviour
             animator.SetFloat("MoveSpeed", 0f);
             navMeshAgent.velocity = Vector3.zero;
             GameObject kaminariInstance = Instantiate(kaminari, new Vector3(this.transform.position.x, this.transform.position.y + 1.5f, this.transform.position.z), Quaternion.Euler(0, 0, 0));
-           
+            ps = kaminariInstance.GetComponent<ParticleSystem>();
+            
             Destroy(kaminariInstance,paralysisTime);
             
             
