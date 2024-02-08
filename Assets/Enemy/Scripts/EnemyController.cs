@@ -32,6 +32,8 @@ public class EnemyController : MonoBehaviour
 
     // 状態
     private EnemyState state;
+    //麻痺フラグ
+    private bool paralysis = false;
     //目的地との距離
     private float currentDistance;
     //待機時間
@@ -158,6 +160,7 @@ public class EnemyController : MonoBehaviour
             {
                 SetState(EnemyState.Stroll);
                 EnemyColorRed();
+                
             }
             else
             {
@@ -211,10 +214,15 @@ public class EnemyController : MonoBehaviour
         else if(tempState == EnemyState.hit)
         {
             isLost = true;
+            
             //animator.SetBool(Animator.StringToHash("Dying"), true);
             animator.SetFloat("MoveSpeed", 0f);
+            navMeshAgent.velocity = Vector3.zero;
             GameObject kaminariInstance = Instantiate(kaminari, new Vector3(this.transform.position.x, this.transform.position.y + 1.5f, this.transform.position.z), Quaternion.Euler(0, 0, 0));
-            Destroy(kaminariInstance, 5f);
+           
+            Destroy(kaminariInstance,paralysisTime);
+            
+            
 
         }
     }
