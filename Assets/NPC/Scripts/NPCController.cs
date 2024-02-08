@@ -24,7 +24,7 @@ public class NPCController : MonoBehaviour
     private NPCManager npcManager;
     private Animator animator;
     private GameObject player;
-    private NavMeshAgent navMeshAgent;
+    //private NavMeshAgent navMeshAgent;
     private NavMeshHit navMeshHit;
 
     //状態
@@ -66,7 +66,7 @@ public class NPCController : MonoBehaviour
 
         player = GameObject.FindGameObjectWithTag("Player");
         animator = GetComponent<Animator>();
-        navMeshAgent = GetComponent<NavMeshAgent>();
+        //navMeshAgent = GetComponent<NavMeshAgent>();
         velocity = Vector3.zero;
         isArrived = false;
         SetState(NPCState.Stroll);
@@ -74,25 +74,22 @@ public class NPCController : MonoBehaviour
 
     void Update()
     {
-        //currentDistance = Vector3.Distance(this.transform.position, player.transform.position);
+        this.transform.LookAt(new Vector3(NPCDestination.x, this.transform.position.y, NPCDestination.z));
 
         if (state == NPCState.Follow)//ついていく
         {
             SetNPCDestination(player.transform.position);
             animator.SetFloat("MoveSpeed", runSpeed);
-            navMeshAgent.speed = runSpeed;
 
-            //this.transform.LookAt(new Vector3(NPCDestination.x, this.transform.position.y, NPCDestination.z));
-            //velocity = Vector3.zero;
-            //direction = (NPCDestination - transform.position).normalized;
-            //velocity = direction * runSpeed;
+            velocity = Vector3.zero;
+            direction = (NPCDestination - transform.position).normalized;
+            velocity = direction * runSpeed;
 
             currentDistance = Vector3.Distance(this.transform.position, NPCDestination);
             //プレイヤーに十分近づいたら止まる
             if (currentDistance < followDistance)
             {
-                //velocity = Vector3.zero;
-                navMeshAgent.velocity = Vector3.zero;   
+                velocity = Vector3.zero;
                 animator.SetFloat("MoveSpeed", 0f);
             }
 
@@ -100,8 +97,8 @@ public class NPCController : MonoBehaviour
             if (currentDistance > NPCWarpDistance || !characterController.isGrounded)
             {
                 //空中にいるときはNPCを表示しない
-                //renderer.enabled = false;
-                //this.transform.Translate(player.transform.position - this.transform.position);
+                renderer.enabled = false;
+                this.transform.Translate(player.transform.position - this.transform.position);
             }
             else
             {
@@ -112,21 +109,19 @@ public class NPCController : MonoBehaviour
         {
             SetNPCDestination(new Vector3(transform.position.x - target.position.x, transform.position.y, transform.position.z - target.position.z));
 
-            //animator.SetFloat("MoveSpeed", runSpeed);
-            //navMeshAgent.speed = runSpeed;
-            //this.transform.LookAt(new Vector3(NPCDestination.x, this.transform.position.y, NPCDestination.z));
-            //direction = (NPCDestination - transform.position).normalized;
-            //velocity = direction * runSpeed;
+            animator.SetFloat("MoveSpeed", runSpeed);
+            this.transform.LookAt(new Vector3(NPCDestination.x, this.transform.position.y, NPCDestination.z));
+            direction = (NPCDestination - transform.position).normalized;
+            velocity = direction * runSpeed;
         }
         else if (state == NPCState.Stroll) //巡回する
         {
             elapsedTime += Time.deltaTime;
 
-            //animator.SetFloat("MoveSpeed",walkSpeed);
-            //navMeshAgent.speed = walkSpeed;
-            //this.transform.LookAt(new Vector3(NPCDestination.x, this.transform.position.y, NPCDestination.z));
-            //direction = (NPCDestination - transform.position).normalized;
-            //velocity = direction * walkSpeed;
+            animator.SetFloat("MoveSpeed", walkSpeed);
+            this.transform.LookAt(new Vector3(NPCDestination.x, this.transform.position.y, NPCDestination.z));
+            direction = (NPCDestination - transform.position).normalized;
+            velocity = direction * walkSpeed;
 
             currentDistance = Vector3.Distance(this.transform.position, NPCDestination);
             //一定時間経過または目的地に十分近づいたら目的地を更新する
@@ -137,14 +132,13 @@ public class NPCController : MonoBehaviour
         }
         else if(state == NPCState.Wait)
         {
-            navMeshAgent.velocity = Vector3.zero;
             animator.SetFloat("MoveSpeed", 0f);
-            //velocity = Vector3.zero;
+            velocity = Vector3.zero;
         }
 
         //重力の適用
-        //velocity.y += (Physics.gravity.y) * Time.deltaTime;
-        //characterController.Move(velocity * Time.deltaTime);
+        velocity.y += (Physics.gravity.y*10f) * Time.deltaTime;
+        characterController.Move(velocity * Time.deltaTime);
 
     }
 
@@ -161,8 +155,6 @@ public class NPCController : MonoBehaviour
         else if (tempState == NPCState.Stroll)//ランダムに巡回する目的地を設定する
         {
             animator.SetFloat("MoveSpeed", walkSpeed);
-            navMeshAgent.speed = walkSpeed;
-
 
             // 指定された半径の円内のランダム位置を取得
             Vector3 circlePos = radius * Random.insideUnitCircle;
@@ -187,7 +179,6 @@ public class NPCController : MonoBehaviour
             Vector3 escapeDestination = new Vector3(transform.position.x - targetObj.position.x, transform.position.y, transform.position.z - targetObj.position.z);
             SetNPCDestination(escapeDestination);
             animator.SetFloat("MoveSpeed", runSpeed);
-            navMeshAgent.speed = runSpeed;
         }
     }
     //ゴールの建物にはいる（救助される）
@@ -235,7 +226,6 @@ public class NPCController : MonoBehaviour
                 SetState(NPCState.Escape, collider.gameObject.transform);
             }
         }
-
     }
 
     //検知範囲からオブジェクトが出た場合
@@ -283,6 +273,5 @@ public class NPCController : MonoBehaviour
     public void SetNPCDestination(Vector3 destination)
     {
         NPCDestination=destination;
-        navMeshAgent.SetDestination(destination);
     }
 }
