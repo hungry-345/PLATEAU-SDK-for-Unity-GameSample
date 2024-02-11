@@ -53,7 +53,8 @@ public class EnemyController : MonoBehaviour
     private Vector3 velocity;
     //移動方向
     private Vector3 direction;
-    private float distance;
+    //攻撃が届く範囲
+    private float attackDistance=2.0f;
     private Contact contact;
     //麻痺
     [SerializeField] private GameObject kaminari;
@@ -116,10 +117,10 @@ public class EnemyController : MonoBehaviour
             }
 
             //キャラクターを倒す
-            distance = Vector3.Distance(this.transform.position, player.transform.position);
+            float distance = Vector3.Distance(this.transform.position, player.transform.position);
          
 
-           if (distance < 2f)
+           if (distance < attackDistance)
           {                 
              contact.GameOverFunc();
              SetState(EnemyState.Stroll);

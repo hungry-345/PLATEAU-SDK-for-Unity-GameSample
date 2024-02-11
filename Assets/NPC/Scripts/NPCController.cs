@@ -22,6 +22,7 @@ public class NPCController : MonoBehaviour
     private CharacterController characterController;
     private GameManage gameManage;
     private NPCManager npcManager;
+    private PathManager pathManager;
     private Animator animator;
     private GameObject player;
     //private NavMeshAgent navMeshAgent;
@@ -55,18 +56,19 @@ public class NPCController : MonoBehaviour
     [SerializeField]private GameObject particle;
     //particleを消すタイミング
     private float duration = 2f;
-
+    //現在いる道路オブジェクト
+    private GameObject currentRoadObj;
+    private GameObject nextRoadObj;
 
     void Start()
     {
         characterController = GetComponent<CharacterController>();
         gameManage = GameObject.Find("GameManager").GetComponent<GameManage>();
+        pathManager = GameObject.Find("RoadObjects").GetComponent<PathManager>();
         npcManager = GameObject.Find("NPCManager").GetComponent<NPCManager>();
-        //particle = GameObject.Find("SaveParticle");
 
         player = GameObject.FindGameObjectWithTag("Player");
         animator = GetComponent<Animator>();
-        //navMeshAgent = GetComponent<NavMeshAgent>();
         velocity = Vector3.zero;
         isArrived = false;
         SetState(NPCState.Stroll);
@@ -117,7 +119,6 @@ public class NPCController : MonoBehaviour
         else if (state == NPCState.Stroll) //巡回する
         {
             elapsedTime += Time.deltaTime;
-
             animator.SetFloat("MoveSpeed", walkSpeed);
             this.transform.LookAt(new Vector3(NPCDestination.x, this.transform.position.y, NPCDestination.z));
             direction = (NPCDestination - transform.position).normalized;
@@ -127,7 +128,10 @@ public class NPCController : MonoBehaviour
             //一定時間経過または目的地に十分近づいたら目的地を更新する
             if (/*elapsedTime > waitTime||*/currentDistance < followDistance)
             {
-                SetState(NPCState.Stroll);
+                //自身の周辺のランダムな道路オブジェクトを新たな目的地として設定する
+                nextRoadObj = pathManager.GetRandomNeighbor(currentRoadObj);
+                currentRoadObj = nextRoadObj;
+                SetNPCDestination(nextRoadObj.GetComponent<Renderer>().bounds.center);
             }
         }
         else if(state == NPCState.Wait)
@@ -155,17 +159,10 @@ public class NPCController : MonoBehaviour
         else if (tempState == NPCState.Stroll)//ランダムに巡回する目的地を設定する
         {
             animator.SetFloat("MoveSpeed", walkSpeed);
-
-            // 指定された半径の円内のランダム位置を取得
-            Vector3 circlePos = radius * Random.insideUnitCircle;
-            // 円内のランダム位置を計算
-            Vector3 randomDestination = new Vector3(circlePos.x, 0f, circlePos.y) + transform.position;
-
-            //自身の周辺の到達可能なランダムな位置を目的地として設定する
-            if (NavMesh.SamplePosition(randomDestination, out navMeshHit, radius, 1))
-            {
-                SetNPCDestination(navMeshHit.position); 
-            }
+            //現在いる道路オブジェクトを取得し，中央へ移動する
+            currentRoadObj=pathManager.GetNearestRoadObject(transform);
+            SetNPCDestination(currentRoadObj.GetComponent<Renderer>().bounds.center);
+            Debug.Log(currentRoadObj);
 
         }
         else if (tempState == NPCState.Goal)
@@ -223,10 +220,16 @@ public class NPCController : MonoBehaviour
             if (state == NPCState.Stroll || state == NPCState.Escape)
             {
                 //逃げる
-                SetState(NPCState.Escape, collider.gameObject.transform);
+                //SetState(NPCState.Escape, collider.gameObject.transform);
             }
         }
     }
+
+    public void OnObjectStay(Collider collider)
+    {
+
+    }
+
 
     //検知範囲からオブジェクトが出た場合
     public void OnObjectExit(Collider collider)
@@ -253,21 +256,14 @@ public class NPCController : MonoBehaviour
                 SetState(NPCState.Stroll);
             }
         }
+
     }
     // 衝突があった場合
     void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        if (hit.gameObject.CompareTag("Enemy"))
-        {
-            //NPCの状態を取得
-            state = GetState();
-            //敵に当たったら死ぬ
-            if (state != NPCState.Follow)
-            {
-                Destroy(this.gameObject);
-            }
-        }
+
     }
+
 
     //NPCの目的地を設定
     public void SetNPCDestination(Vector3 destination)
