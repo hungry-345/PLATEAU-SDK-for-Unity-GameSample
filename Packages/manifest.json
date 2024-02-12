@@ -17,7 +17,7 @@
     "com.unity.textmeshpro": "3.0.6",
     "com.unity.timeline": "1.6.5",
     "com.unity.toonshader": "0.9.5-preview",
-    "com.unity.universaltoonshader.urp": "file:../Assets/Samples/UnityChanToonShaderVer2_Project",
+    "com.unity.universaltoonshader.urp": "file:./UnityChanToonShaderVer2_Project",
     "com.unity.visualscripting": "1.9.1",
     "com.unity.xr.legacyinputhelpers": "2.1.10",
     "com.unity.modules.ai": "1.0.0",
