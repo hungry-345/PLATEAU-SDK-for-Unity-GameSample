@@ -1,15 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using StarterAssets;
 using PLATEAU.Samples;
-using UnityEngine.AI;
 
 public class NPCController : MonoBehaviour
 {
     public enum NPCState
     {
-        Wait,//待機
         Stroll,//
         Follow,//ついていく
         Goal,//ゴールへ向かう
@@ -22,10 +19,9 @@ public class NPCController : MonoBehaviour
     private CharacterController characterController;
     private GameManage gameManage;
     private NPCManager npcManager;
+    private PathManager pathManager;
     private Animator animator;
     private GameObject player;
-    //private NavMeshAgent navMeshAgent;
-    private NavMeshHit navMeshHit;
 
     //状態
     private NPCState state;
@@ -33,22 +29,24 @@ public class NPCController : MonoBehaviour
     private float currentDistance;
     //待機時間
     private float waitTime = 3f;
-    //プレイヤーがこの距離まで近づいたらついてくるようになる
-    private float followDistance=1.5f;
+    //目的地に到着した判定距離
+    private float arrivedDistance=1.5f;
     //他のNPCとこの距離まで接近したらワープする
     private float NPCWarpDistance=10f;
     //目的地に到着したかフラグ
     private bool isArrived;
-    //経過時間
-    private float elapsedTime;
     //速度
     private Vector3 velocity;
+    //スピード
+    private float speed;
     //移動方向
     private Vector3 direction;
+    //経過時間
+    private float elapsedTime;
+    //敵を見失ったフラグ
+    private bool isLost;
     //目的地
     private Vector3 NPCDestination;
-    //ランダムウォークするときの範囲の半径
-    float radius = 10f;
     //逃げる相手
     private Transform target;
     //particle
@@ -57,17 +55,20 @@ public class NPCController : MonoBehaviour
     //particleを消すタイミング
     private float duration = 2f;
 
+    //現在いる道路オブジェクト
+    private GameObject pastRoadObj;
+    private GameObject currentRoadObj;
+    private GameObject nextRoadObj;
 
     void Start()
     {
         characterController = GetComponent<CharacterController>();
         gameManage = GameObject.Find("GameManager").GetComponent<GameManage>();
+        pathManager = GameObject.Find("RoadObjects").GetComponent<PathManager>();
         npcManager = GameObject.Find("NPCManager").GetComponent<NPCManager>();
-        //particle = GameObject.Find("SaveParticle");
 
         player = GameObject.FindGameObjectWithTag("Player");
         animator = GetComponent<Animator>();
-        //navMeshAgent = GetComponent<NavMeshAgent>();
         velocity = Vector3.zero;
         isArrived = false;
         SetState(NPCState.Stroll);
@@ -84,11 +85,11 @@ public class NPCController : MonoBehaviour
 
             velocity = Vector3.zero;
             direction = (NPCDestination - transform.position).normalized;
-            velocity = direction * runSpeed;
+            velocity = direction * speed;
 
             currentDistance = Vector3.Distance(this.transform.position, NPCDestination);
             //プレイヤーに十分近づいたら止まる
-            if (currentDistance < followDistance)
+            if (currentDistance < arrivedDistance)
             {
                 velocity = Vector3.zero;
                 animator.SetFloat("MoveSpeed", 0f);
@@ -106,35 +107,53 @@ public class NPCController : MonoBehaviour
                 renderer.enabled = true;
             }
         }
-        else if(state == NPCState.Escape) //逃げる
+        else if(state == NPCState.Escape|| state == NPCState.Stroll) //逃げる,巡回する
         {
-            SetNPCDestination(new Vector3(transform.position.x - target.position.x, transform.position.y, transform.position.z - target.position.z));
+            animator.SetFloat("MoveSpeed", speed);
 
-            animator.SetFloat("MoveSpeed", runSpeed);
+
+            if (isLost == true)//敵からまいた場合
+            {
+                elapsedTime += Time.deltaTime;  
+                if (elapsedTime > waitTime)
+                {
+                    SetState(NPCState.Stroll);
+                }
+            }
+            //SetNPCDestination(new Vector3(transform.position.x - target.position.x, transform.position.y, transform.position.z - target.position.z));
+
+            //animator.SetFloat("MoveSpeed", runSpeed);
+            //    this.transform.LookAt(new Vector3(NPCDestination.x, this.transform.position.y, NPCDestination.z));
+            //    direction = (NPCDestination - transform.position).normalized;
+            //    velocity = direction * runSpeed;
+
+            //    //一定時間経過または目的地に十分近づいたら目的地を更新する
+            //    if (/*elapsedTime > waitTime||*/currentDistance < arrivedDistance)
+            //    {
+            //        //自身の周辺のランダムな道路オブジェクトを新たな目的地として設定する
+            //        nextRoadObj = pathManager.GetRandomNeighbor(nextRoadObj, currentRoadObj);
+            //        currentRoadObj = nextRoadObj;
+            //        SetNPCDestination(nextRoadObj.GetComponent<Renderer>().bounds.center);
+            //    }
+            //}
+            //else if (state == NPCState.Stroll) //巡回する
+            //{
+            //animator.SetFloat("MoveSpeed", walkSpeed);
             this.transform.LookAt(new Vector3(NPCDestination.x, this.transform.position.y, NPCDestination.z));
             direction = (NPCDestination - transform.position).normalized;
-            velocity = direction * runSpeed;
-        }
-        else if (state == NPCState.Stroll) //巡回する
-        {
-            elapsedTime += Time.deltaTime;
-
-            animator.SetFloat("MoveSpeed", walkSpeed);
-            this.transform.LookAt(new Vector3(NPCDestination.x, this.transform.position.y, NPCDestination.z));
-            direction = (NPCDestination - transform.position).normalized;
-            velocity = direction * walkSpeed;
+            velocity = direction * speed;
 
             currentDistance = Vector3.Distance(this.transform.position, NPCDestination);
             //一定時間経過または目的地に十分近づいたら目的地を更新する
-            if (/*elapsedTime > waitTime||*/currentDistance < followDistance)
+            if (/*elapsedTime > waitTime||*/currentDistance < arrivedDistance)
             {
-                SetState(NPCState.Stroll);
+                //かつての目的地を現在地にセット
+                pastRoadObj = currentRoadObj;
+                currentRoadObj = nextRoadObj;
+                //自身の周辺のランダムな道路オブジェクトを新たな目的地として設定する
+                nextRoadObj = pathManager.GetRandomNeighbor(currentRoadObj,pastRoadObj);
+                SetNPCDestination(nextRoadObj.GetComponent<Renderer>().bounds.center);
             }
-        }
-        else if(state == NPCState.Wait)
-        {
-            animator.SetFloat("MoveSpeed", 0f);
-            velocity = Vector3.zero;
         }
 
         //重力の適用
@@ -147,39 +166,40 @@ public class NPCController : MonoBehaviour
     public void SetState(NPCState tempState, Transform targetObj = null)
     {
         state = tempState;
-        elapsedTime = 0f;
         if (tempState == NPCState.Follow)//ついていく
         {
             animator.SetFloat("MoveSpeed", runSpeed);
+            speed = runSpeed;
             SetNPCDestination(player.transform.position);
         }
-        else if (tempState == NPCState.Stroll)//ランダムに巡回する目的地を設定する
+        else if (tempState == NPCState.Stroll)//巡回する
         {
+            isLost = false;
             animator.SetFloat("MoveSpeed", walkSpeed);
-
-            // 指定された半径の円内のランダム位置を取得
-            Vector3 circlePos = radius * Random.insideUnitCircle;
-            // 円内のランダム位置を計算
-            Vector3 randomDestination = new Vector3(circlePos.x, 0f, circlePos.y) + transform.position;
-
-            //自身の周辺の到達可能なランダムな位置を目的地として設定する
-            if (NavMesh.SamplePosition(randomDestination, out navMeshHit, radius, 1))
-            {
-                SetNPCDestination(navMeshHit.position); 
-            }
+            speed = walkSpeed;
+            //現在いる道路オブジェクトを取得し，中央へ移動する
+            nextRoadObj =pathManager.GetNearestRoadObject(transform);
+            currentRoadObj = nextRoadObj;
+            SetNPCDestination(nextRoadObj.GetComponent<Renderer>().bounds.center);
 
         }
-        else if (tempState == NPCState.Goal)
+        else if (tempState == NPCState.Goal)//ゴール建物に入る
         {
             EnterGoal();
         }
-        else if (tempState == NPCState.Escape)
+        else if (tempState == NPCState.Escape)//逃げる
         {
+            //１つ前に来た道に戻る
+            pastRoadObj = nextRoadObj;
+            nextRoadObj = currentRoadObj;
+            currentRoadObj = pastRoadObj;
+
             //逃げる相手を設定
-            target = targetObj;
-            Vector3 escapeDestination = new Vector3(transform.position.x - targetObj.position.x, transform.position.y, transform.position.z - targetObj.position.z);
-            SetNPCDestination(escapeDestination);
+            //target = targetObj;
+            //Vector3 escapeDestination = new Vector3(transform.position.x - targetObj.position.x, transform.position.y, transform.position.z - targetObj.position.z);
+            SetNPCDestination(nextRoadObj.GetComponent<Renderer>().bounds.center);
             animator.SetFloat("MoveSpeed", runSpeed);
+            speed = runSpeed;
         }
     }
     //ゴールの建物にはいる（救助される）
@@ -205,7 +225,7 @@ public class NPCController : MonoBehaviour
             //NPCの状態を取得
             state = GetState();
             //NPCが待機状態or逃げる状態であればついていく設定に変更
-            if (state == NPCState.Wait || state == NPCState.Stroll|| state == NPCState.Escape)
+            if (state == NPCState.Stroll|| state == NPCState.Escape)
             {
                 //救助中の人としてカウント
                 if(isArrived==false)
@@ -221,14 +241,13 @@ public class NPCController : MonoBehaviour
         //敵
         else if(collider.CompareTag("Enemy"))
         {
-            if (state == NPCState.Stroll || state == NPCState.Escape)
+            if (state == NPCState.Stroll)
             {
                 //逃げる
                 SetState(NPCState.Escape, collider.gameObject.transform);
             }
         }
     }
-
     //検知範囲からオブジェクトが出た場合
     public void OnObjectExit(Collider collider)
     {
@@ -246,29 +265,18 @@ public class NPCController : MonoBehaviour
         //敵
         if (collider.CompareTag("Enemy"))
         {
-            //NPCの状態を取得
-            state = GetState();
-            //NPCが逃げる状態であれば巡回状態に変更
-            if (state == NPCState.Escape)
-            {
-                SetState(NPCState.Stroll);
-            }
+            isLost = true;
+            //経過時間をリセット
+            elapsedTime = 0;
         }
+
     }
     // 衝突があった場合
     void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        if (hit.gameObject.CompareTag("Enemy"))
-        {
-            //NPCの状態を取得
-            state = GetState();
-            //敵に当たったら死ぬ
-            if (state != NPCState.Follow)
-            {
-                Destroy(this.gameObject);
-            }
-        }
+
     }
+
 
     //NPCの目的地を設定
     public void SetNPCDestination(Vector3 destination)
