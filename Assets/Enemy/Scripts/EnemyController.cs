@@ -76,7 +76,7 @@ public class EnemyController : MonoBehaviour
         pathManager = strollPosObjects.GetComponent<PathManager>();
         animator = GetComponent<Animator>();
         contact = GameObject.Find("PlayerArmature").GetComponent<Contact>();
-
+        //初期状態
         SetState(EnemyState.Wait);
     }
 
