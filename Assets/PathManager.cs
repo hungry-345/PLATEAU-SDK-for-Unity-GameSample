@@ -26,12 +26,36 @@ public class PathManager : MonoBehaviour
     }
 
     // 指定された道路オブジェクトに隣接する道路オブジェクトのPositionを取得するメソッド
-    public GameObject GetRandomNeighbor(GameObject roadObj)
+    //一つ前に通った道路オブジェクトは候補から除外する
+    public GameObject GetRandomNeighbor(GameObject roadObj, GameObject lastVisitedRoad)
     {
         if (neighborDic.ContainsKey(roadObj) && neighborDic[roadObj]!= null)
         {
-            int randomIndex = Random.Range(0, neighborDic[roadObj].Count);
-            return neighborDic[roadObj][randomIndex].gameObject; 
+            if(roadObj.CompareTag("Road"))//道路
+            {
+                //既に通った道ではない道路オブジェクトを返す
+                for(int i=0;i< neighborDic[roadObj].Count;i++)
+                {
+                    if (neighborDic[roadObj][i].gameObject == lastVisitedRoad)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        return neighborDic[roadObj][i].gameObject;    
+                    }
+                }
+            }
+            else//交差点
+            {
+                while(true)//一つ前に通った以外の道路オブジェクトが選択されるまで繰り返す
+                {
+                    int randomIndex = Random.Range(0, neighborDic[roadObj].Count);
+                    if (neighborDic[roadObj][randomIndex].gameObject == lastVisitedRoad) continue;
+                    return neighborDic[roadObj][randomIndex].gameObject;
+                }
+
+            }
         }
         return null;
     }
