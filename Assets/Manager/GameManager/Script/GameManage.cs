@@ -462,6 +462,9 @@ namespace PLATEAU.Samples
             UIManageScript.HideGameUI();
             NPCManageScript.DestroyNPC();
             playerInput.enabled = false;
+
+            // 建物の色を初期化
+            UIManageScript.ColorCode("None");
         }
     }
 }

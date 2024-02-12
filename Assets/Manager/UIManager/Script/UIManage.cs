@@ -98,9 +98,6 @@ namespace PLATEAU.Samples
             filterStatus = "None";
             correctBuildingName = "";
 
-            // 建物の色を初期化する
-            ColorCode("None");
-            
             // PlayerPosCamera.enabled = false;
             // 共通タグのオブジェクトを一つの配列にまとめる
             // HintTexts = GameObject.FindGameObjectsWithTag("HintText");
