@@ -59,7 +59,7 @@ public class EnemyController : MonoBehaviour
     private Contact contact;
     //麻痺
     [SerializeField] private GameObject kaminari;
-    private GameObject kaminariInstance;
+    //private GameObject kaminariInstance;
     private ParticleSystem ps;
     //private float emission;
     //ゲーム中かの確認
@@ -230,7 +230,7 @@ public class EnemyController : MonoBehaviour
             animator.SetFloat("MoveSpeed", 0f);
             //navMeshAgent.velocity = Vector3.zero;
             velocity = Vector3.zero;
-            kaminariInstance = Instantiate(kaminari, new Vector3(this.transform.position.x, this.transform.position.y + 1.5f, this.transform.position.z), Quaternion.Euler(0, 0, 0));
+            GameObject kaminariInstance = Instantiate(kaminari, new Vector3(this.transform.position.x, this.transform.position.y + 1.5f, this.transform.position.z), Quaternion.Euler(0, 0, 0),this.transform);
             ps = kaminariInstance.GetComponent<ParticleSystem>();
             
             Destroy(kaminariInstance,paralysisTime);
@@ -341,12 +341,12 @@ public class EnemyController : MonoBehaviour
     }
 
     //ゲーム終了時の処理
-    private void OnDestroy()
-    {
-        if (kaminariInstance) 
-        {
-            Destroy(kaminariInstance);
-        }
+    //private void OnDestroy()
+    //{
+    //    if (kaminariInstance) 
+    //    {
+    //        Destroy(kaminariInstance);
+    //    }
         
-    }
+    //}
 }
