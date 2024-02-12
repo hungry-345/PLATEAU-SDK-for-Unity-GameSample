@@ -159,7 +159,7 @@ public class EnemyController : MonoBehaviour
             else
             {
                 animator.SetFloat("MoveSpeed", 0f);
-                navMeshAgent.velocity = Vector3.zero;
+                //navMeshAgent.velocity = Vector3.zero;
                 //雷の量を少なく
                 if (ps)
                 {
@@ -216,7 +216,7 @@ public class EnemyController : MonoBehaviour
             
             //animator.SetBool(Animator.StringToHash("Dying"), true);
             animator.SetFloat("MoveSpeed", 0f);
-            navMeshAgent.velocity = Vector3.zero;
+            //navMeshAgent.velocity = Vector3.zero;
             GameObject kaminariInstance = Instantiate(kaminari, new Vector3(this.transform.position.x, this.transform.position.y + 1.5f, this.transform.position.z), Quaternion.Euler(0, 0, 0));
             ps = kaminariInstance.GetComponent<ParticleSystem>();
             
