@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,10 +8,15 @@ public class ActionManager : MonoBehaviour
     {
         Normal,
         HookshotFlyingPlayer,
+        Died
 
     }
     public State state;
 
+    //アニメーション管理
+    private Animator _animator;
+    private bool _hasAnimator;
+    private int _animIDDying;
 
     private StarterAssets.ThirdPersonController thirdPersonController;
 
@@ -28,15 +33,28 @@ public class ActionManager : MonoBehaviour
         state = State.Normal;
         hookshotAble = hookshotHandle.hookshotAble;
 
+        _hasAnimator = TryGetComponent(out _animator);
+
+        _animIDDying = Animator.StringToHash("Dying");
+
+        
+
 
     }
 
     private void Update()
     {
+
+        _hasAnimator = TryGetComponent(out _animator);
+        _animIDDying = Animator.StringToHash("Dying");
         if (hookshotAble == true)
         {
             thirdPersonController.enabled = false;
             state = State.HookshotFlyingPlayer;
+        }
+        else if(state == State.Died)
+        {
+            state = State.Died;
         }
         else
         {
@@ -52,6 +70,9 @@ public class ActionManager : MonoBehaviour
                 break;
             case State.HookshotFlyingPlayer:
                 thirdPersonController.enabled = false;
+                break;
+            case State.Died:
+                _animator.SetBool(_animIDDying, true);
                 break;
 
         }

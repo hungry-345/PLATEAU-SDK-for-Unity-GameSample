@@ -12,6 +12,7 @@ namespace PLATEAU.Samples
         private UIManage UIManageScript;
         private ItemManage ItemManageScript;
         private ThirdPersonController ThirdPersonControllerScript;
+        private ActionManager ActionManager;
 
         void Start()
         {
@@ -20,10 +21,12 @@ namespace PLATEAU.Samples
             UIManageScript = GameObject.Find("UIManager").GetComponent<UIManage>();
             ItemManageScript = GameObject.Find("ItemManager").GetComponent<ItemManage>();
             GameViewScript = GameObject.Find("GameView").GetComponent<GameView>();
+            ActionManager = GameObject.Find("PlayerArmature").GetComponent<ActionManager>();
         }
         public void GameOverFunc()
         {
-            ThirdPersonControllerScript.DyingMotion();
+            ActionManager.state = ActionManager.State.Died;
+            //ThirdPersonControllerScript.DyingMotion();
             //一番上の親（GameView）にゲームオーバーを通知
             GameViewScript.isGameOver = true ; 
         }
