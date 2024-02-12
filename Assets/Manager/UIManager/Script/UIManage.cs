@@ -92,8 +92,8 @@ namespace PLATEAU.Samples
 
             //InputSystemの入力を登録
             inputActions.SelectScene.AddCallbacks(this);
-            //コルーチン開始(Plateauのデータの取得が終わった後の処理を実行)
-            StartCoroutine(WatiForInitialise());
+            ////コルーチン開始(Plateauのデータの取得が終わった後の処理を実行)
+            //StartCoroutine(WatiForInitialise());
             //変数の初期化
             filterStatus = "None";
             correctBuildingName = "";
@@ -138,15 +138,15 @@ namespace PLATEAU.Samples
         /// <summary>
         /// Plateauのデータの取得が終わるまで待機する関数
         /// </summary>
-        IEnumerator WatiForInitialise()
-        {
-            // yield return ->　ある関数が終わるまで待つ
-            yield return new WaitUntil(() => IsInitialiseFinished());
-        }
+        //IEnumerator WatiForInitialise()
+        //{
+        //    // yield return ->　ある関数が終わるまで待つ
+        //    yield return new WaitUntil(() => IsInitialiseFinished());
+        //}
         /// <summary>
         /// Plateauのデータの取得が終わった後の処理を行う関数
         /// </summary> 
-        private bool IsInitialiseFinished()
+        public bool IsInitialiseFinished()
         {
             if(isInitialiseFinish)
             {

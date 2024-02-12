@@ -101,12 +101,21 @@ namespace PLATEAU.Samples
 
             //GMLデータの初期化コルーチンを含む処理
             UIManageScript.InitializeUI();
+            //コルーチン開始(Plateauのデータの取得が終わった後の処理を実行)
+            StartCoroutine(WatiForInitialise());
+
+        }
+        IEnumerator WatiForInitialise()
+        {
+            // yield return ->　ある関数が終わるまで待つ
+            playerInput.enabled = false;
+            yield return new WaitUntil(() => UIManageScript.IsInitialiseFinished());
             //アイテム・NPCの初期化
             EnemyManageScript.InitializeEnemy();
             ItemManageScript.InitializeItem();
             NPCManageScript.InitializeNPC();
+            playerInput.enabled = true;
         }
-
         private string GetAttribute(string attributeName,SampleAttribute attribeteData)
         {
             string value = "";
