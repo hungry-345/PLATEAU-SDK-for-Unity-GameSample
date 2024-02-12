@@ -25,6 +25,7 @@ public class EnemyController : MonoBehaviour
     //巡回地点の親オブジェクト
     private GameObject strollPosObjects;
     private CharacterController characterController;
+    private PathManager pathManager;
     private Animator animator;
     private GameObject player;
     //private NavMeshAgent navMeshAgent;
@@ -53,13 +54,18 @@ public class EnemyController : MonoBehaviour
     private Vector3 velocity;
     //移動方向
     private Vector3 direction;
-    private float distance;
+    //目的地に到着した判定距離
+    private float arrivedDistance = 2.0f;
     private Contact contact;
     //麻痺
     [SerializeField] private GameObject kaminari;
     private ParticleSystem ps;
     //private float emission;
-    
+
+    //現在いる道路オブジェクト
+    private GameObject pastRoadObj;
+    private GameObject currentRoadObj;
+    private GameObject nextRoadObj;
 
     void Start()
     {
@@ -67,20 +73,10 @@ public class EnemyController : MonoBehaviour
         //navMeshAgent = GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("Player");
         strollPosObjects = GameObject.Find("RoadObjects");
+        pathManager = strollPosObjects.GetComponent<PathManager>();
         animator = GetComponent<Animator>();
         contact = GameObject.Find("PlayerArmature").GetComponent<Contact>();
-        //kaminari = GameObject.Find("kaminari");
-        ////色変更
-        //meshTrans = transform.Find("Armature_Mesh");
-        //meshObj = meshTrans.gameObject;
-        //Renderer render = meshTrans.GetComponent<Renderer>();
-        //if(render != null )
-        //{
-        //    for(int i = 0;i< render.materials.Length; i++)
-        //    {
-        //        render.materials[i].SetColor("_BaseColor", Color.red);
-        //    }
-        //}
+
         SetState(EnemyState.Wait);
     }
 
@@ -116,10 +112,10 @@ public class EnemyController : MonoBehaviour
             }
 
             //キャラクターを倒す
-            distance = Vector3.Distance(this.transform.position, player.transform.position);
+            float distance = Vector3.Distance(this.transform.position, player.transform.position);
          
 
-           if (distance < 2f)
+           if (distance < arrivedDistance)
           {                 
              contact.GameOverFunc();
              SetState(EnemyState.Stroll);
@@ -130,9 +126,14 @@ public class EnemyController : MonoBehaviour
         else if (state == EnemyState.Stroll)//巡回する
         {
             //巡回地点まである程度ちかづいたら別の地点へ移動
-            if (currentDistance<2f)
+            if (currentDistance< arrivedDistance)
             {
-               SetStrollDestination();
+                //かつての目的地を現在地にセット
+                pastRoadObj = currentRoadObj;
+                currentRoadObj = nextRoadObj;
+                //自身の周辺のランダムな道路オブジェクトを新たな目的地として設定する
+                nextRoadObj = pathManager.GetRandomNeighbor(currentRoadObj, pastRoadObj);
+                SetEnemyDestination(nextRoadObj.GetComponent<Renderer>().bounds.center);
             }
             direction = new Vector3(enemyDestination.x - transform.position.x, 0f, enemyDestination.z - transform.position.z).normalized;
             velocity = direction * walkSpeed;
@@ -176,15 +177,6 @@ public class EnemyController : MonoBehaviour
         //移動
         characterController.Move(velocity * Time.deltaTime);
     }
-    //ランダムな巡回地点を取得する
-    private void SetStrollDestination()
-    {
-        //ランダムな子オブジェクトの位置を取得する
-        int r = Random.Range(0, strollPosObjects.transform.childCount);
-        Vector3 newStrollPoint = strollPosObjects.transform.GetChild(r).gameObject.GetComponent<Renderer>().bounds.center;
-        //目的地に設定
-        SetEnemyDestination(new Vector3(newStrollPoint.x, this.transform.position.y, newStrollPoint.z));
-    }
 
     //　敵キャラクターの状態変更メソッド
     public void SetState(EnemyState tempState, Transform targetObj = null)
@@ -194,9 +186,10 @@ public class EnemyController : MonoBehaviour
         if (tempState == EnemyState.Stroll)
         {
             animator.SetFloat("MoveSpeed", walkSpeed);
-            //ランダムな目的地へ向かう
-            SetStrollDestination();
-            //Debug.Log("巡回状態になった");
+            //現在いる道路オブジェクトを取得し，中央へ移動する
+            nextRoadObj = pathManager.GetNearestRoadObject(transform);
+            currentRoadObj = nextRoadObj;
+            SetEnemyDestination(nextRoadObj.GetComponent<Renderer>().bounds.center);
         }
         else if (tempState == EnemyState.Chase)
         {
@@ -299,7 +292,7 @@ public class EnemyController : MonoBehaviour
         {
             if (rend.gameObject.name == "Armature_Mesh") // 名前で比較
             {
-                Debug.Log(rend.materials.Length); ; // 色を変更
+                Debug.Log(rend.materials.Length); // 色を変更
                 foreach (Material mat in rend.materials)
                 {
                     mat.color = Color.yellow;
