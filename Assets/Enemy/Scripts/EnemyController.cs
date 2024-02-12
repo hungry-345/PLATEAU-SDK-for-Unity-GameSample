@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEditor;
 using PLATEAU.Samples;
 using UnityEngine.Scripting;
+using JetBrains.Annotations;
+using System.Drawing.Printing;
 
 public class EnemyController : MonoBehaviour
 {
@@ -59,13 +61,16 @@ public class EnemyController : MonoBehaviour
     private Contact contact;
     //麻痺
     [SerializeField] private GameObject kaminari;
+    //private GameObject kaminariInstance;
     private ParticleSystem ps;
     //private float emission;
+
 
     //現在いる道路オブジェクト
     private GameObject pastRoadObj;
     private GameObject currentRoadObj;
     private GameObject nextRoadObj;
+
 
     void Start()
     {
@@ -78,6 +83,8 @@ public class EnemyController : MonoBehaviour
         contact = GameObject.Find("PlayerArmature").GetComponent<Contact>();
 
         SetState(EnemyState.Wait);
+
+        //gameView = GameObject.Find("GameView").GetComponent<GameView>();
     }
 
     void FixedUpdate()
@@ -160,7 +167,9 @@ public class EnemyController : MonoBehaviour
             else
             {
                 animator.SetFloat("MoveSpeed", 0f);
+
                 velocity = Vector3.zero;
+
                 //雷の量を少なく
                 if (ps)
                 {
@@ -176,6 +185,11 @@ public class EnemyController : MonoBehaviour
         velocity.y += (Physics.gravity.y) * Time.deltaTime;
         //移動
         characterController.Move(velocity * Time.deltaTime);
+
+        //if (gameView.GetGameEnd() && kaminari)
+        //{
+        //    Destroy(kaminari);
+        //}
     }
 
     //　敵キャラクターの状態変更メソッド
@@ -209,8 +223,10 @@ public class EnemyController : MonoBehaviour
             
             //animator.SetBool(Animator.StringToHash("Dying"), true);
             animator.SetFloat("MoveSpeed", 0f);
+
             velocity = Vector3.zero;
             GameObject kaminariInstance = Instantiate(kaminari, new Vector3(this.transform.position.x, this.transform.position.y + 1.5f, this.transform.position.z), Quaternion.Euler(0, 0, 0));
+
             ps = kaminariInstance.GetComponent<ParticleSystem>();
             
             Destroy(kaminariInstance,paralysisTime);
@@ -319,4 +335,14 @@ public class EnemyController : MonoBehaviour
             }
         }
     }
+
+    //ゲーム終了時の処理
+    //private void OnDestroy()
+    //{
+    //    if (kaminariInstance) 
+    //    {
+    //        Destroy(kaminariInstance);
+    //    }
+        
+    //}
 }
