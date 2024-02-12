@@ -92,11 +92,12 @@ namespace PLATEAU.Samples
 
             //InputSystemの入力を登録
             inputActions.SelectScene.AddCallbacks(this);
-            //コルーチン開始(Plateauのデータの取得が終わった後の処理を実行)
-            StartCoroutine(WatiForInitialise());
+            ////コルーチン開始(Plateauのデータの取得が終わった後の処理を実行)
+            //StartCoroutine(WatiForInitialise());
             //変数の初期化
             filterStatus = "None";
             correctBuildingName = "";
+
             // PlayerPosCamera.enabled = false;
             // 共通タグのオブジェクトを一つの配列にまとめる
             // HintTexts = GameObject.FindGameObjectsWithTag("HintText");
@@ -137,15 +138,15 @@ namespace PLATEAU.Samples
         /// <summary>
         /// Plateauのデータの取得が終わるまで待機する関数
         /// </summary>
-        IEnumerator WatiForInitialise()
-        {
-            // yield return ->　ある関数が終わるまで待つ
-            yield return new WaitUntil(() => IsInitialiseFinished());
-        }
+        //IEnumerator WatiForInitialise()
+        //{
+        //    // yield return ->　ある関数が終わるまで待つ
+        //    yield return new WaitUntil(() => IsInitialiseFinished());
+        //}
         /// <summary>
         /// Plateauのデータの取得が終わった後の処理を行う関数
         /// </summary> 
-        private bool IsInitialiseFinished()
+        public bool IsInitialiseFinished()
         {
             if(isInitialiseFinish)
             {
@@ -304,10 +305,10 @@ namespace PLATEAU.Samples
 
             // 全ての建物の色を元に戻す
             // colorCodeType = (ColorCodeType)Enum.Parse(typeof(ColorCodeType), "None");
-            ColorCode("None",nearestBuildingName);
+            ColorCode("None");
             //フィルターに引っかかった建物の色を変える
             // colorCodeType = (ColorCodeType)Enum.Parse(typeof(ColorCodeType), itemName);
-            ColorCode(itemName,nearestBuildingName);
+            ColorCode(itemName);
 
 
             string filterText = SetFilterText(itemName,attributeValue); 
@@ -319,7 +320,7 @@ namespace PLATEAU.Samples
         /// <summary>
         /// すべての建物の色を変える
         /// </summary>
-        public void ColorCode(string type,string nearestName)
+        public void ColorCode(string type)
         {
             colorCodeType = (ColorCodeType)Enum.Parse(typeof(ColorCodeType), type);
             //GISSample.csのColorCode関数(上の方)を参考
@@ -337,7 +338,7 @@ namespace PLATEAU.Samples
                     default:
                         break;
                 }
-                keyValue.Value.ColorCode(colorCodeType, colorTable,nearestName);
+                keyValue.Value.ColorCode(colorCodeType, colorTable);
             }
         }
 

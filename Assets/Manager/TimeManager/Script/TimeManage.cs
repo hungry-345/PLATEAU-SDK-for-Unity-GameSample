@@ -68,7 +68,7 @@ namespace PLATEAU.Samples
             if(isCoroutine)
             {
                 StopCoroutine(coloringCoroutine);
-                UIManageScript.ColorCode("None",nearestBuildingName);
+                UIManageScript.ColorCode("None");
                 isCoroutine = false;
             }
             coloringCoroutine = StartCoroutine(Coloring(gmlName,nearestBuildingName,hint));
