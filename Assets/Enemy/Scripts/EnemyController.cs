@@ -223,7 +223,6 @@ public class EnemyController : MonoBehaviour
             
             //animator.SetBool(Animator.StringToHash("Dying"), true);
             animator.SetFloat("MoveSpeed", 0f);
-
             velocity = Vector3.zero;
             GameObject kaminariInstance = Instantiate(kaminari, new Vector3(this.transform.position.x, this.transform.position.y + 1.5f, this.transform.position.z), Quaternion.Euler(0, 0, 0));
 
