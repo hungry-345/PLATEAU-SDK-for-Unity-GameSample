@@ -41,7 +41,7 @@ public class EnemyController : MonoBehaviour
     //待機時間
     private float waitTime = 1.5f;
     //麻痺時間
-    private float paralysisTime = 30f;
+    private float paralysisTime = 5f;
     //みつけてから追いかけるまでの時間
     private float chaseOffsetTime = 0f;
     //経過時間
@@ -224,7 +224,7 @@ public class EnemyController : MonoBehaviour
             //animator.SetBool(Animator.StringToHash("Dying"), true);
             animator.SetFloat("MoveSpeed", 0f);
             velocity = Vector3.zero;
-            GameObject kaminariInstance = Instantiate(kaminari, new Vector3(this.transform.position.x, this.transform.position.y + 1.5f, this.transform.position.z), Quaternion.Euler(0, 0, 0));
+            GameObject kaminariInstance = Instantiate(kaminari, new Vector3(this.transform.position.x, this.transform.position.y + 1.5f, this.transform.position.z), Quaternion.Euler(0, 0, 0),this.transform);
 
             ps = kaminariInstance.GetComponent<ParticleSystem>();
             

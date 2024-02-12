@@ -64,6 +64,11 @@ namespace StarterAssets
         //public float waveFrequency = 3f; // 波の頻度
         //public int wavePoints = 10; // ウェーブを形成するための中間ポイント数
 
+        //経過時間
+        private float elapsedTime = 0f;
+        //麻痺させた場合のロープ解除
+        private float lorpRelease = 2f;
+
 
 
 
@@ -113,10 +118,19 @@ namespace StarterAssets
                 }
                 else if (isHookshotAttack)
                 {
+                    
                     //isHookshot = false;
-                    isHookshotAttack = false;
+                    elapsedTime += Time.deltaTime;
+                    if (elapsedTime > lorpRelease)
+                    {
+                        RemoveHook();
+                        isHookshotAttack = false;
+                        elapsedTime = 0f;
+                    }
                 }
+
             }
+               
             CheckClickRightMouseButton();
             CheckClickLeftMouseButton();
         }
