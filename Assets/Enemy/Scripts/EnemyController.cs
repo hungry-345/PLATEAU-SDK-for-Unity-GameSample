@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEditor;
 using PLATEAU.Samples;
 using UnityEngine.Scripting;
+using JetBrains.Annotations;
+using System.Drawing.Printing;
 
 public class EnemyController : MonoBehaviour
 {
@@ -57,8 +59,11 @@ public class EnemyController : MonoBehaviour
     private Contact contact;
     //麻痺
     [SerializeField] private GameObject kaminari;
+    private GameObject kaminariInstance;
     private ParticleSystem ps;
     //private float emission;
+    //ゲーム中かの確認
+    //private GameView gameView;
     
 
     void Start()
@@ -82,6 +87,8 @@ public class EnemyController : MonoBehaviour
         //    }
         //}
         SetState(EnemyState.Wait);
+
+        //gameView = GameObject.Find("GameView").GetComponent<GameView>();
     }
 
     void FixedUpdate()
@@ -175,6 +182,11 @@ public class EnemyController : MonoBehaviour
         velocity.y += (Physics.gravity.y) * Time.deltaTime;
         //移動
         characterController.Move(velocity * Time.deltaTime);
+
+        //if (gameView.GetGameEnd() && kaminari)
+        //{
+        //    Destroy(kaminari);
+        //}
     }
     //ランダムな巡回地点を取得する
     private void SetStrollDestination()
@@ -217,7 +229,8 @@ public class EnemyController : MonoBehaviour
             //animator.SetBool(Animator.StringToHash("Dying"), true);
             animator.SetFloat("MoveSpeed", 0f);
             //navMeshAgent.velocity = Vector3.zero;
-            GameObject kaminariInstance = Instantiate(kaminari, new Vector3(this.transform.position.x, this.transform.position.y + 1.5f, this.transform.position.z), Quaternion.Euler(0, 0, 0));
+            velocity = Vector3.zero;
+            kaminariInstance = Instantiate(kaminari, new Vector3(this.transform.position.x, this.transform.position.y + 1.5f, this.transform.position.z), Quaternion.Euler(0, 0, 0));
             ps = kaminariInstance.GetComponent<ParticleSystem>();
             
             Destroy(kaminariInstance,paralysisTime);
@@ -325,5 +338,15 @@ public class EnemyController : MonoBehaviour
                 break; // 見つかったらループを抜ける
             }
         }
+    }
+
+    //ゲーム終了時の処理
+    private void OnDestroy()
+    {
+        if (kaminariInstance) 
+        {
+            Destroy(kaminariInstance);
+        }
+        
     }
 }

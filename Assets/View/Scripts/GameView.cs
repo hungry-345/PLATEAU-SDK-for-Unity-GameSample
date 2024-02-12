@@ -96,4 +96,16 @@ public class GameView : ViewBase
     {
         IsClicked = true;
     }
+
+    public bool GetGameEnd()
+    {
+        if(isGameFinish||isGameOver)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }
