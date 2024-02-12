@@ -53,6 +53,7 @@ public class NPCController : MonoBehaviour
     private Transform target;
     //particle
     [SerializeField]private GameObject particle;
+    private GameObject particleInstance;
     //particleを消すタイミング
     private float duration = 2f;
 
@@ -186,7 +187,7 @@ public class NPCController : MonoBehaviour
     {
         gameManage.AddRescueNum();
         npcManager.RemoveFollowList(this.gameObject);
-        GameObject particleInstance =  Instantiate(particle, this.gameObject.transform.position,Quaternion.Euler(-90,0,0));
+        particleInstance =  Instantiate(particle, this.gameObject.transform.position,Quaternion.Euler(-90,0,0));
         Destroy(this.gameObject);
         Destroy(particleInstance,duration);
     }
