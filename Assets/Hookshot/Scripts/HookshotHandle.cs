@@ -144,10 +144,9 @@ namespace StarterAssets
         {
             // フックショット(プレイヤー)の向き(y軸0 -> プレイヤーの姿勢が崩れるから)
             hookshotDir = (hookshotPosition - transform.position).normalized;
-            if (hookshotDir.magnitude > 0.01)
-            {
-                player.transform.rotation = Quaternion.LookRotation(new Vector3(hookshotDir.x,0,hookshotDir.z));
-            }
+
+            player.transform.rotation = Quaternion.LookRotation(new Vector3(hookshotDir.x,0,hookshotDir.z));
+
             // フックショット時の移動
             if(isFirstClosed)
             {

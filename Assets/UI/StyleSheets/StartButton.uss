@@ -10,9 +10,12 @@
     border-bottom-left-radius: 40px;
     border-top-right-radius: 40px;
     border-bottom-right-radius: 40px;
-    color: rgba(0, 0, 0, 255);
+    color: rgb(0, 0, 0);
 }
 
 .StartButton:hover {
     scale: 1.2 1.2;
+}
+
+.StartButton {
 }
