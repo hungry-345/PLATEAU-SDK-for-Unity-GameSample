@@ -10,16 +10,18 @@ public class ItemManage : MonoBehaviour
     [SerializeField, Tooltip("アイテムマーカー")] private GameObject marker;
 
     //生成範囲
-    private GameObject spawnTransformObjects;
+    private GameObject spawnTransformObjects;  //敵のスポーン位置の候補が入ったオブジェクト
     private Vector3 center; //スポーン範囲の中心
     private int itemCount;
 
+    private void Start()
+    {
+        //スポーン位置）を取得
+        spawnTransformObjects = GameObject.Find("RoadObjects");
+    }
     public void InitializeItem()
     {
         itemCount = 0;
-        //ステージの範囲を取得
-        // spawnTransformObjects = GameObject.Find("StageRange");
-        //オブジェクトの中心を設定
     }
 
     //初期化
@@ -27,12 +29,19 @@ public class ItemManage : MonoBehaviour
     {
         if(itemCount < 16)
         {
-            //スポーン位置にセット
-            GameObject hintItem = Instantiate(UsageItem, this.gameObject.transform) as GameObject;
-            Vector3 spawnPos = new Vector3(Random.Range(-126f, 444f), 100f, Random.Range(1300f, 1562f));
-            hintItem.name = itemCount + "hintItem";
-            hintItem.transform.position = spawnPos;
 
+            //ランダムな子オブジェクトの位置を取得する
+            int r = Random.Range(0, spawnTransformObjects.transform.childCount);
+            center = spawnTransformObjects.transform.GetChild(r).gameObject.GetComponent<Renderer>().bounds.center;
+            // 円の半径
+            float radius = 1;
+            // 指定された半径の円内のランダム位置を取得
+            Vector3 circlePos = radius * Random.insideUnitCircle;
+            //円内のランダム位置を計算
+            Vector3 spawnPos = new Vector3(circlePos.x, 50f, circlePos.y) + center;
+            //アイテムを生成
+            GameObject item = Instantiate(UsageItem, spawnPos, Quaternion.Euler(-90f, 0f, 0f), this.gameObject.transform);
+            item.name = itemCount + "hintItem";
             GameObject itemMarker = Instantiate(marker,transform.root.gameObject.transform) as GameObject;
             itemMarker.name = itemCount + "ItemMarker";
             itemMarker.transform.localScale = new Vector3(20f, 1f, 20f);
@@ -44,6 +53,7 @@ public class ItemManage : MonoBehaviour
     {
         itemCount -= 1;
         GameObject tmpMarker = GameObject.Find(hitItem.name[0]+"ItemMarker");
+        Debug.Log(tmpMarker.name);
         Destroy(tmpMarker);
         Destroy(hitItem);
     }
