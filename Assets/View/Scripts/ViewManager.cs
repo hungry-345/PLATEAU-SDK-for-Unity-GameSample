@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class ViewManager : MonoBehaviour
 {
+    [SerializeField] private Camera mainCamera;
+
     public static ViewManager instance = null;
     public int score;
     private void Awake()
@@ -18,6 +20,7 @@ public class ViewManager : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
+        mainCamera.gameObject.SetActive(false);
     }
 
 
@@ -44,4 +47,5 @@ public class ViewManager : MonoBehaviour
         }
 #endif
     }
+
 }
