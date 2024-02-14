@@ -6374,6 +6374,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetFlag: {fileID: 3457590419111093480, guid: 62c7934ebd4d9df41b156cb38e179e15, type: 3}
   playerInput: {fileID: 8766819671267713961}
+  targetParent: {fileID: -8679921383154817045, guid: 36c6851a6321b8c4a830c83a0fe4dd2c, type: 3}
   sonarCount: 0
   rescuedNum: 0
   rescuingNum: 0
@@ -9384,21 +9385,25 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 7004220467035578020, guid: 3ffc01caff01d574d8ec16f2cfab3751, type: 3}
+      propertyPath: m_VersionIndex
+      value: 53
+      objectReference: {fileID: 0}
     - target: {fileID: 7788825656496438806, guid: 3ffc01caff01d574d8ec16f2cfab3751, type: 3}
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7788825656496438806, guid: 3ffc01caff01d574d8ec16f2cfab3751, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 145.35178
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7788825656496438806, guid: 3ffc01caff01d574d8ec16f2cfab3751, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -23.8
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7788825656496438806, guid: 3ffc01caff01d574d8ec16f2cfab3751, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1484.9603
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7788825656496438806, guid: 3ffc01caff01d574d8ec16f2cfab3751, type: 3}
       propertyPath: m_LocalRotation.w

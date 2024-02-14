@@ -6,7 +6,7 @@ public class Escape : MonoBehaviour
 {
     void Update()
     {
-        EndGame();
+        // EndGame();
     }
 
     //ゲーム終了

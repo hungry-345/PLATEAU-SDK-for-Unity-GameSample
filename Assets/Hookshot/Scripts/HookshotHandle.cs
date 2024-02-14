@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -64,7 +64,7 @@ namespace StarterAssets
         //public float waveFrequency = 3f; // 波の頻度
         //public int wavePoints = 10; // ウェーブを形成するための中間ポイント数
 
-        //経過時間
+//経過時間
         private float elapsedTime = 0f;
         //麻痺させた場合のロープ解除
         private float lorpRelease = 2f;
@@ -118,19 +118,19 @@ namespace StarterAssets
                 }
                 else if (isHookshotAttack)
                 {
-                    
+
                     //isHookshot = false;
-                    elapsedTime += Time.deltaTime;
+elapsedTime += Time.deltaTime;
                     if (elapsedTime > lorpRelease)
                     {
                         RemoveHook();
-                        isHookshotAttack = false;
-                        elapsedTime = 0f;
+                    isHookshotAttack = false;
+elapsedTime = 0f;
                     }
                 }
 
             }
-               
+
             CheckClickRightMouseButton();
             CheckClickLeftMouseButton();
         }
@@ -145,8 +145,8 @@ namespace StarterAssets
             // フックショット(プレイヤー)の向き(y軸0 -> プレイヤーの姿勢が崩れるから)
             hookshotDir = (hookshotPosition - transform.position).normalized;
 
-            player.transform.rotation = Quaternion.LookRotation(new Vector3(hookshotDir.x,0,hookshotDir.z));
-
+                player.transform.rotation = Quaternion.LookRotation(new Vector3(hookshotDir.x,0,hookshotDir.z));
+            
             // フックショット時の移動
             if(isFirstClosed)
             {
@@ -275,12 +275,12 @@ namespace StarterAssets
         }
         //フックショットで移動する場合
         private void HangHook()
-        {
-              
+        {              
+
            if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit, 50f, Hookable))
             //Hookshotで移動する場合
             {
-               
+
                 isHookshotMove = true;
                 isHookshot = true;
                 lr.enabled = true;

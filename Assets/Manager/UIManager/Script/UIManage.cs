@@ -1,4 +1,4 @@
-﻿using PLATEAU.CityInfo;
+using PLATEAU.CityInfo;
 using PLATEAU.Util.Async;
 using System.Collections;
 using System.Collections.Generic;
@@ -92,8 +92,8 @@ namespace PLATEAU.Samples
 
             //InputSystemの入力を登録
             inputActions.SelectScene.AddCallbacks(this);
-            ////コルーチン開始(Plateauのデータの取得が終わった後の処理を実行)
-            //StartCoroutine(WatiForInitialise());
+            //コルーチン開始(Plateauのデータの取得が終わった後の処理を実行)
+            StartCoroutine(WatiForInitialise());
             //変数の初期化
             filterStatus = "None";
             correctBuildingName = "";
@@ -112,20 +112,20 @@ namespace PLATEAU.Samples
         {
             // 初期化UIを起動
             initializingUi.gameObject.SetActive(true);
+
             // Plateauのデータを取得
             instancedCityModels = FindObjectsOfType<PLATEAUInstancedCityModel>();
             if (instancedCityModels == null || instancedCityModels.Length == 0)
             {
                 return;
             }
+
             foreach(var instancedCityModel in instancedCityModels)
             {
                 var rootDirName = instancedCityModel.name;
-                //Debug.Log(instancedCityModel.transform.childCount);
                 for (int i = 0; i < instancedCityModel.transform.childCount; ++i)
                 {
                     var go = instancedCityModel.transform.GetChild(i).gameObject;
-                    // サンプルではdemを除外します。
                     if (go.name.Contains("dem")) continue;
                     var cityModel = await PLATEAUCityGmlProxy.LoadAsync(go, rootDirName);
                     if (cityModel == null) continue;
@@ -133,16 +133,17 @@ namespace PLATEAU.Samples
                     gmls.Add(go.name, gml);
                 }
             }
+            
             isInitialiseFinish = true;
         }
         /// <summary>
         /// Plateauのデータの取得が終わるまで待機する関数
         /// </summary>
-        //IEnumerator WatiForInitialise()
-        //{
-        //    // yield return ->　ある関数が終わるまで待つ
-        //    yield return new WaitUntil(() => IsInitialiseFinished());
-        //}
+        IEnumerator WatiForInitialise()
+        {
+            // yield return ->　ある関数が終わるまで待つ
+            yield return new WaitUntil(() => IsInitialiseFinished());
+        }
         /// <summary>
         /// Plateauのデータの取得が終わった後の処理を行う関数
         /// </summary> 
@@ -182,7 +183,6 @@ namespace PLATEAU.Samples
         /// </summary>
         public void DisplayAnswer(string hintBuildingName,string hintBuildingHeight,string hintBuildingCapacity,string hintBuildingEvacuee)
         {
-            Debug.Log(hintBuildingCapacity);
             if(Shelter1HeightLabel.text == "")
             {
                 Shelter1HeightLabel.text = hintBuildingHeight;

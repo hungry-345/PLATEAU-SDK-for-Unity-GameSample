@@ -1,4 +1,5 @@
-﻿// 正解データがある大元
+﻿using PLATEAU.CityInfo;
+// 正解データがある大元
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,6 +25,7 @@ namespace PLATEAU.Samples
 
         //ゲーム終了時にプレイヤーを操作不能にするために取得
         [SerializeField] private PlayerInput playerInput;
+        [SerializeField] private Transform targetParent;
 
 
         public SampleAttribute correctGMLdata;
@@ -192,8 +194,23 @@ namespace PLATEAU.Samples
         /// </summary>
         private void SelectGoal()
         {
+            var cityObjGroups = targetParent.GetComponentsInChildren<PLATEAUCityObjectGroup>();
             int capacityNum = 0;
             isSetGMLdata = false;
+            Debug.Log(cityObjGroups.Length);
+            // 全ての建物
+            foreach(var cityObjGroup in cityObjGroups)
+            {
+                var target = cityObjGroup.transform;
+                foreach (var cityObj in cityObjGroup.GetAllCityObjects())
+                {
+                    var attributes = cityObj.AttributesMap;
+                    if(attributes.TryGetValue("bldg:measuredheight", out var height))
+                    {
+                    }
+                }
+            }
+
             while(!isSetGMLdata)
             {
                 var tmpdirName = buildingDirName[Random.Range(0,buildingDirName.Count)];
