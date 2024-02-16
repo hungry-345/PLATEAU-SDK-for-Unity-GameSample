@@ -57,7 +57,7 @@ public class EnemyController : MonoBehaviour
     //移動方向
     private Vector3 direction;
     //目的地に到着した判定距離
-    private float arrivedDistance = 2.0f;
+    private float arrivedDistance = 1.0f;
     private Contact contact;
     //麻痺
     [SerializeField] private GameObject kaminari;
