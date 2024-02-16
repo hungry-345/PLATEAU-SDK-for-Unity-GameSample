@@ -270,7 +270,6 @@ namespace PLATEAU.Samples
         /// <param name="areaName">浸水エリア名</param>
         public void ColorCode(ColorCodeType type, Color[] colorTable)
         {
-
             switch (type)
             {
                 case ColorCodeType.None:
