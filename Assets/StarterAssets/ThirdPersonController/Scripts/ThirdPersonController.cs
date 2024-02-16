@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-#if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
+﻿ using UnityEngine;
+#if ENABLE_INPUT_SYSTEM 
 using UnityEngine.InputSystem;
 #endif
 
@@ -9,7 +9,7 @@ using UnityEngine.InputSystem;
 namespace StarterAssets
 {
     [RequireComponent(typeof(CharacterController))]
-#if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
+#if ENABLE_INPUT_SYSTEM 
     [RequireComponent(typeof(PlayerInput))]
 #endif
     public class ThirdPersonController : MonoBehaviour
@@ -97,10 +97,8 @@ namespace StarterAssets
         private int _animIDJump;
         private int _animIDFreeFall;
         private int _animIDMotionSpeed;
-        // ----
-        private int _animIDDying;
 
-#if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
+#if ENABLE_INPUT_SYSTEM 
         private PlayerInput _playerInput;
 #endif
         private Animator _animator;
@@ -116,7 +114,7 @@ namespace StarterAssets
         {
             get
             {
-#if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
+#if ENABLE_INPUT_SYSTEM
                 return _playerInput.currentControlScheme == "KeyboardMouse";
 #else
 				return false;
@@ -124,9 +122,6 @@ namespace StarterAssets
             }
         }
 
-        // ============================================================
-
-        public bool isDied = false;
 
         private void Awake()
         {
@@ -144,7 +139,7 @@ namespace StarterAssets
             _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<StarterAssetsInputs>();
-#if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
+#if ENABLE_INPUT_SYSTEM 
             _playerInput = GetComponent<PlayerInput>();
 #else
 			Debug.LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
@@ -155,23 +150,15 @@ namespace StarterAssets
             // reset our timeouts on start
             _jumpTimeoutDelta = JumpTimeout;
             _fallTimeoutDelta = FallTimeout;
-
-            // ===========================================
-
         }
 
         private void Update()
         {
             _hasAnimator = TryGetComponent(out _animator);
-            
 
-            if(!isDied)
-            {
-                Move();
-                JumpAndGravity();
-                GroundedCheck();
-            }
-            
+            JumpAndGravity();
+            GroundedCheck();
+            Move();
         }
 
         private void LateUpdate()
@@ -186,15 +173,15 @@ namespace StarterAssets
             _animIDJump = Animator.StringToHash("Jump");
             _animIDFreeFall = Animator.StringToHash("FreeFall");
             _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
-
-            _animIDDying = Animator.StringToHash("Dying");
         }
 
         private void GroundedCheck()
         {
             // set sphere position, with offset
-            Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset,transform.position.z);
-            Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers,QueryTriggerInteraction.Ignore);
+            Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset,
+                transform.position.z);
+            Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers,
+                QueryTriggerInteraction.Ignore);
 
             // update animator if using character
             if (_hasAnimator)
@@ -208,12 +195,11 @@ namespace StarterAssets
             // if there is an input and camera position is not fixed
             if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition)
             {
-                
                 //Don't multiply mouse input by Time.deltaTime;
                 float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
 
-                _cinemachineTargetYaw += _input.look.x * 2f * deltaTimeMultiplier;
-                _cinemachineTargetPitch += _input.look.y * 2f * deltaTimeMultiplier;
+                _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplier;
+                _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier;
             }
 
             // clamp our rotations so our values are limited 360 degrees
@@ -228,14 +214,12 @@ namespace StarterAssets
         private void Move()
         {
             // set target speed based on move speed, sprint speed and if sprint is pressed
-            //走る or 歩く 
             float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
 
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
             // note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
             // if there is no input, set the target speed to 0
-            //空気抵抗
             if (_input.move == Vector2.zero) targetSpeed = 0.0f;
 
             // a reference to the players current horizontal velocity
@@ -314,13 +298,13 @@ namespace StarterAssets
                 {
                     _verticalVelocity = -2f;
                 }
-                
+
                 // Jump
-                //_jumpTimeoutDeltaを0.5以下にしないとジャンプしなくなる Time.DeltaがSceneManager関連で0.3ぐらいになる
-                if (_input.jump && _jumpTimeoutDelta <= 0.5f)
+                if (_input.jump && _jumpTimeoutDelta <= 0.0f)
                 {
                     // the square root of H * -2 * G = how much velocity needed to reach desired height
                     _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
+
                     // update animator if using character
                     if (_hasAnimator)
                     {
@@ -333,11 +317,9 @@ namespace StarterAssets
                 {
                     _jumpTimeoutDelta -= Time.deltaTime;
                 }
-  
             }
             else
             {
-
                 // reset the jump timeout timer
                 _jumpTimeoutDelta = JumpTimeout;
 
@@ -405,14 +387,6 @@ namespace StarterAssets
             {
                 AudioSource.PlayClipAtPoint(LandingAudioClip, transform.TransformPoint(_controller.center), FootstepAudioVolume);
             }
-        }
-
-
-        // -----------------------------------------------------------------------
-        public void DyingMotion()
-        {
-            isDied = true;
-            _animator.SetBool(_animIDDying, true);
         }
     }
 }
