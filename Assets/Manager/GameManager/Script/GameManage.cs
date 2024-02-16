@@ -19,6 +19,7 @@ namespace PLATEAU.Samples
             public bool isHintActive;
             public int evacueeNum;
             public int capacity;
+            public GameObject buildingObj;
         }
         
         [SerializeField, Tooltip("ターゲットフラッグ")] private GameObject targetFlag;
@@ -241,11 +242,11 @@ namespace PLATEAU.Samples
                             goalBounds = goalBuilding.GetComponent<MeshCollider>().sharedMesh.bounds;
                             goalPos = new Vector3(goalBounds.center.x+320f,goalBounds.center.y+goalBounds.size.y,goalBounds.center.z+380f);
 
-                            goalBuilding.tag = "Goal";
+                            //goalBuilding.tag = "Goal";
 
                             capacityNum =  (int)float.Parse(height.StringValue)/5;
 
-                            GoalInfo gmlData = new GoalInfo { goalPosition = goalPos, measuredheight = height.StringValue, isHintActive=false, capacity=capacityNum,evacueeNum=0};
+                            GoalInfo gmlData = new GoalInfo { goalPosition = goalPos, measuredheight = height.StringValue, isHintActive=false, capacity=capacityNum,evacueeNum=0,buildingObj= goalBuilding};
 
                             GoalAttributeDict.Add(target.name,gmlData);
                             goalPos += new Vector3(-467.28f,0f,-1869.266f);
@@ -359,6 +360,7 @@ namespace PLATEAU.Samples
                 {
                     hintBuildingName = goalAttribute.Key;
                     hintBuildingValue = goalAttribute.Value;
+                    hintBuildingValue.buildingObj.tag = "Goal";
 
                     UIManageScript.DisplayAnswer(hintBuildingName,hintBuildingValue.measuredheight,hintBuildingValue.capacity.ToString(),hintBuildingValue.evacueeNum.ToString());
                     break;
@@ -523,9 +525,26 @@ namespace PLATEAU.Samples
                 UIManageScript.DisplayDistance(distance,sonarCount);
             }
         }
+        private void ResetGoals()
+        {
+            // 建物の色を初期化
+            //ゴールタグの初期化
+            foreach (var goalAttribute in GoalAttributeDict)
+            {
+                Renderer renderer = goalAttribute.Value.buildingObj.GetComponent<Renderer>();
+                for (int i = 0; i < renderer.materials.Length; ++i)
+                {
+                    renderer.materials[i].color = Color.white;
+                }
+                goalAttribute.Value.buildingObj.tag = "Untagged";
+            }
+
+        }
+
         //ゲームの終了処理
         public void OnEndGame()
         {
+            ResetGoals();
             GoalAttributeDict.Clear();
             EnemyManageScript.DestroyEnemy();
             ItemManageScript.DestroyItem();
@@ -534,8 +553,6 @@ namespace PLATEAU.Samples
             NPCManageScript.DestroyNPC();
             playerInput.enabled = false;
 
-            // 建物の色を初期化
-            UIManageScript.ColorCode("None");
         }
     }
 }
