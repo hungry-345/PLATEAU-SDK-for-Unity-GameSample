@@ -182,7 +182,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.plateautoolkit": {
-      "version": "file:./com.unity.plateautoolkit-0.2.1-alpha1.tgz",
+      "version": "file:./com.unity.plateautoolkit-1.0.0.tgz",
       "depth": 0,
       "source": "local-tarball",
       "dependencies": {
@@ -191,8 +191,7 @@
         "com.unity.inputsystem": "1.5.1",
         "com.unity.cloud.gltfast": "5.0.4",
         "com.unity.visualeffectgraph": "12.1.10",
-        "com.unity.nuget.newtonsoft-json": "3.2.1",
-        "com.cesium.unity": "1.6.3"
+        "com.unity.nuget.newtonsoft-json": "3.2.1"
       }
     },
     "com.unity.probuilder": {

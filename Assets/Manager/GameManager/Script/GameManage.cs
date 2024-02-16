@@ -1,4 +1,5 @@
-﻿// 正解データがある大元
+﻿using PLATEAU.CityInfo;
+// 正解データがある大元
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,6 +25,7 @@ namespace PLATEAU.Samples
 
         //ゲーム終了時にプレイヤーを操作不能にするために取得
         [SerializeField] private PlayerInput playerInput;
+        private Transform targetParent;
 
 
         public SampleAttribute correctGMLdata;
@@ -53,6 +55,7 @@ namespace PLATEAU.Samples
         private void Awake()
         {
             inputActions = new InputGameManage();
+            targetParent = GameObject.Find("52385628_bldg_6697_op.gml").transform;
         }
         // InputSystemを有効化させる
         // -------------------------------------------------------------------------------------------------------------
@@ -102,20 +105,22 @@ namespace PLATEAU.Samples
             //GMLデータの初期化コルーチンを含む処理
             UIManageScript.InitializeUI();
             //コルーチン開始(Plateauのデータの取得が終わった後の処理を実行)
-            StartCoroutine(WatiForInitialise());
-
-        }
-        IEnumerator WatiForInitialise()
-        {
-            // yield return ->　ある関数が終わるまで待つ
-            playerInput.enabled = false;
-            yield return new WaitUntil(() => UIManageScript.IsInitialiseFinished());
+            // StartCoroutine(WatiForInitialise());
             //アイテム・NPCの初期化
+            playerInput.enabled = false;
             EnemyManageScript.InitializeEnemy();
             ItemManageScript.InitializeItem();
             NPCManageScript.InitializeNPC();
             playerInput.enabled = true;
+
         }
+        // IEnumerator WatiForInitialise()
+        // {
+        //     // yield return ->　ある関数が終わるまで待つ
+            
+        //     // yield return new WaitUntil(() => UIManageScript.IsInitialiseFinished());
+            
+        // }
         private string GetAttribute(string attributeName,SampleAttribute attribeteData)
         {
             string value = "";
@@ -131,6 +136,28 @@ namespace PLATEAU.Samples
         /// <summary>
         /// 正解の建物として必要な要件は満たしているか
         /// </summary>
+        private bool CheckAttributeData(string buildingName,string buildingHeight)
+        {
+            bool isOverbaseHeight = false;
+            bool isSameBuilding = false;
+
+            if(buildingHeight == "")
+            {
+                buildingHeight = "-1";
+            }
+            if(float.Parse(buildingHeight) > 10)
+            {
+                isOverbaseHeight = true;
+            }
+
+            if(GoalAttributeDict.ContainsKey(buildingName))
+            {
+                isSameBuilding = true;
+            }
+
+            return isOverbaseHeight && !isSameBuilding;
+
+        }
         private bool CheckGMLdata(SampleAttribute buildingData,string buildingName)
         {
             bool isSetData = false;
@@ -192,32 +219,66 @@ namespace PLATEAU.Samples
         /// </summary>
         private void SelectGoal()
         {
+            var cityObjGroups = targetParent.GetComponentsInChildren<PLATEAUCityObjectGroup>();
             int capacityNum = 0;
+            bool isSetAttributeData;
             isSetGMLdata = false;
-            while(!isSetGMLdata)
+            // 全ての建物
+
+            while(GoalAttributeDict.Count != 3)
             {
-                var tmpdirName = buildingDirName[Random.Range(0,buildingDirName.Count)];
-                //ランダムに建物を指定
-                rndBuilding = UIManageScript.gmls[tmpdirName].CityObjects.ElementAt(rnd.Next(0, UIManageScript.gmls[tmpdirName].CityObjects.Count));
-                //ゴールの属性情報
-                correctGMLdata = rndBuilding.Value.Attribute;
-                isSetGMLdata = CheckGMLdata(correctGMLdata,rndBuilding.Key);
+                var cityObjGroup = cityObjGroups.ElementAt(rnd.Next(0, cityObjGroups.Length));
+                var target = cityObjGroup.transform;
+                foreach (var cityObj in cityObjGroup.GetAllCityObjects())
+                {
+                    var attributes = cityObj.AttributesMap;
+                    if(attributes.TryGetValue("bldg:measuredheight", out var height))
+                    {
+                        isSetAttributeData = CheckAttributeData(target.name,height.StringValue);
+                        if(isSetAttributeData)
+                        {
+                            goalBuilding = GameObject.Find(target.name);
+                            goalBounds = goalBuilding.GetComponent<MeshCollider>().sharedMesh.bounds;
+                            goalPos = new Vector3(goalBounds.center.x+320f,goalBounds.center.y+goalBounds.size.y,goalBounds.center.z+380f);
+
+                            goalBuilding.tag = "Goal";
+
+                            capacityNum =  (int)float.Parse(height.StringValue)/5;
+
+                            GoalInfo gmlData = new GoalInfo { goalPosition = goalPos, measuredheight = height.StringValue, isHintActive=false, capacity=capacityNum,evacueeNum=0};
+
+                            GoalAttributeDict.Add(target.name,gmlData);
+                            goalPos += new Vector3(-467.28f,0f,-1869.266f);
+                            GenerateTargetFlag(goalPos,target.name);
+                        }
+                    }
+                }
             }
-            // goalPos
-            goalBuilding = GameObject.Find(rndBuilding.Key);
-            goalBounds = goalBuilding.GetComponent<MeshCollider>().sharedMesh.bounds;
-            goalPos = new Vector3(goalBounds.center.x+320f,goalBounds.center.y+goalBounds.size.y,goalBounds.center.z+380f);
 
-            //正解の建物用のタグを付ける
-            goalBuilding.tag = "Goal";
+            // while(!isSetGMLdata)
+            // {
+            //     var tmpdirName = buildingDirName[Random.Range(0,buildingDirName.Count)];
+            //     //ランダムに建物を指定ript.gmls[tmpdirName]
+            //     rndBuilding = UIManageScript.gmls[tmpdirName].CityObjects.ElementAt(rnd.Next(0, UIManageSc.CityObjects.Count));
+            //     //ゴールの属性情報
+            //     correctGMLdata = rndBuilding.Value.Attribute;
+            //     isSetGMLdata = CheckGMLdata(correctGMLdata,rndBuilding.Key);
+            // }
+            // // goalPos
+            // goalBuilding = GameObject.Find(rndBuilding.Key);
+            // goalBounds = goalBuilding.GetComponent<MeshCollider>().sharedMesh.bounds;
+            // goalPos = new Vector3(goalBounds.center.x+320f,goalBounds.center.y+goalBounds.size.y,goalBounds.center.z+380f);
 
-            //Capacity
-            capacityNum =  (int)float.Parse(GetAttribute("measuredheight",correctGMLdata))/5;
+            // //正解の建物用のタグを付ける
+            // goalBuilding.tag = "Goal";
 
-            GoalInfo gmlData = new GoalInfo { goalPosition = goalPos, measuredheight = GetAttribute("measuredheight",correctGMLdata), isHintActive=false, capacity=capacityNum,evacueeNum=0};
-            GoalAttributeDict.Add(rndBuilding.Key,gmlData);
-            goalPos += new Vector3(-467.28f,0f,-1869.266f);
-            GenerateTargetFlag(goalPos,rndBuilding.Key);
+            // //Capacity
+            // capacityNum =  (int)float.Parse(GetAttribute("measuredheight",correctGMLdata))/5;
+
+            // GoalInfo gmlData = new GoalInfo { goalPosition = goalPos, measuredheight = GetAttribute("measuredheight",correctGMLdata), isHintActive=false, capacity=capacityNum,evacueeNum=0};
+            // GoalAttributeDict.Add(rndBuilding.Key,gmlData);
+            // goalPos += new Vector3(-467.28f,0f,-1869.266f);
+            // GenerateTargetFlag(goalPos,rndBuilding.Key);
         }
 
         /// <summary>
@@ -234,10 +295,10 @@ namespace PLATEAU.Samples
                 }
             }
             
-            for(int i=0;i<goalNum;i++)
-            {
+            // for(int i=0;i<goalNum;i++)
+            // {
                 SelectGoal();
-            }
+            // }
 
             //正解の建物の情報を取得
             // goalBuilding = GameObject.Find(rndBuilding.Key);
@@ -465,6 +526,7 @@ namespace PLATEAU.Samples
         //ゲームの終了処理
         public void OnEndGame()
         {
+            GoalAttributeDict.Clear();
             EnemyManageScript.DestroyEnemy();
             ItemManageScript.DestroyItem();
             UIManageScript.PlayerPosCamera.enabled = false;          

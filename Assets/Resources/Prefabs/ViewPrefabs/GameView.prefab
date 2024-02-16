@@ -9384,21 +9384,25 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 7004220467035578020, guid: 3ffc01caff01d574d8ec16f2cfab3751, type: 3}
+      propertyPath: m_VersionIndex
+      value: 53
+      objectReference: {fileID: 0}
     - target: {fileID: 7788825656496438806, guid: 3ffc01caff01d574d8ec16f2cfab3751, type: 3}
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7788825656496438806, guid: 3ffc01caff01d574d8ec16f2cfab3751, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 145.35178
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7788825656496438806, guid: 3ffc01caff01d574d8ec16f2cfab3751, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -23.8
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7788825656496438806, guid: 3ffc01caff01d574d8ec16f2cfab3751, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1484.9603
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7788825656496438806, guid: 3ffc01caff01d574d8ec16f2cfab3751, type: 3}
       propertyPath: m_LocalRotation.w
