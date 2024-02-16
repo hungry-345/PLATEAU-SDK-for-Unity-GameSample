@@ -39,15 +39,14 @@ namespace PLATEAU.Samples
                 elapsedTime = 0f;
                 GameManageScript.SpawnHintItem();
             }
-            if(UIManageScript.isInitialiseFinish)
+
+            countdownSeconds -= Time.deltaTime;
+            timeSpan = new TimeSpan(0, 0, (int)countdownSeconds);
+            if(timeSpan != null && UIManageScript.timeLabel != null)
             {
-                countdownSeconds -= Time.deltaTime;
-                timeSpan = new TimeSpan(0, 0, (int)countdownSeconds);
-                if(timeSpan != null && UIManageScript.timeLabel != null)
-                {
-                    UIManageScript.timeLabel.text = timeSpan.ToString(@"mm\:ss");
-                }
+                UIManageScript.timeLabel.text = timeSpan.ToString(@"mm\:ss");
             }
+            
             if(countdownSeconds <= 0)
             {
                 GameViewScript.isGameFinish = true;
