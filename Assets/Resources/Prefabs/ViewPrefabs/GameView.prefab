@@ -6374,7 +6374,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetFlag: {fileID: 3457590419111093480, guid: 62c7934ebd4d9df41b156cb38e179e15, type: 3}
   playerInput: {fileID: 8766819671267713961}
-  targetParent: {fileID: -8679921383154817045, guid: 36c6851a6321b8c4a830c83a0fe4dd2c, type: 3}
   sonarCount: 0
   rescuedNum: 0
   rescuingNum: 0

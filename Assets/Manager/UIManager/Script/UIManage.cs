@@ -61,7 +61,7 @@ namespace PLATEAU.Samples
             // InputSystemのインスタンス(初期値)
             inputActions = new InputScene();
             //Plateauのデータを取得
-            InitializeAsync().ContinueWithErrorCatch();
+            // InitializeAsync().ContinueWithErrorCatch();
         }
 
         // InputSystemを有効化させる
@@ -79,12 +79,6 @@ namespace PLATEAU.Samples
             inputActions.Dispose();
         }
         // -------------------------------------------------------------------------------------------------------------
-        void Start()
-        {
-            // 他オブジェクトのスクリプトのインスタンス(GameManagerの関数や変数を参照できる)
-            // GameManageScript = GameObject.Find("GameManager").GetComponent<GameManage>();
-            // TimeManageScript = GameObject.Find("TimeManager").GetComponent<TimeManage>();
-        }
         public void InitializeUI()
         {
             GameManageScript = GameObject.Find("GameManager").GetComponent<GameManage>();
@@ -93,7 +87,28 @@ namespace PLATEAU.Samples
             //InputSystemの入力を登録
             inputActions.SelectScene.AddCallbacks(this);
             //コルーチン開始(Plateauのデータの取得が終わった後の処理を実行)
-            StartCoroutine(WatiForInitialise());
+            BaseUi.gameObject.SetActive(true);
+            // BaseUIのラベルを取得
+            timeLabel = BaseUi.rootVisualElement.Q<Label>("Time");
+            rescuedNumLabel = BaseUi.rootVisualElement.Q<Label>("Rescued_Count");
+            rescuingNumLabel = BaseUi.rootVisualElement.Q<Label>("Rescuing_Count");
+            Shelter1HeightLabel = BaseUi.rootVisualElement.Q<Label>("Shelter1_Height");
+            Shelter1CapacityLabel = BaseUi.rootVisualElement.Q<Label>("Shelter1_Capacity");
+            Shelter2HeightLabel = BaseUi.rootVisualElement.Q<Label>("Shelter2_Height");
+            Shelter2CapacityLabel = BaseUi.rootVisualElement.Q<Label>("Shelter2_Capacity");
+            Shelter3HeightLabel = BaseUi.rootVisualElement.Q<Label>("Shelter3_Height");
+            Shelter3CapacityLabel = BaseUi.rootVisualElement.Q<Label>("Shelter3_Capacity");
+            MissionLabel = BaseUi.rootVisualElement.Q<Label>("Mission_Text");
+            
+
+            EditMissionText();
+            // // Map用のカメラを起動する
+            // PlayerPosCamera.enabled = true;
+            // ゴールの位置を設定する
+            GameManageScript.SelectGoals();
+
+
+            // StartCoroutine(WatiForInitialise());
             //変数の初期化
             filterStatus = "None";
             correctBuildingName = "";
@@ -108,73 +123,12 @@ namespace PLATEAU.Samples
         /// <summary>
         /// Plateauのデータを取得する関数
         /// </summary> 
-        private async Task InitializeAsync()
-        {
-            // 初期化UIを起動
-            initializingUi.gameObject.SetActive(true);
-
-            // Plateauのデータを取得
-            instancedCityModels = FindObjectsOfType<PLATEAUInstancedCityModel>();
-            if (instancedCityModels == null || instancedCityModels.Length == 0)
-            {
-                return;
-            }
-
-            foreach(var instancedCityModel in instancedCityModels)
-            {
-                var rootDirName = instancedCityModel.name;
-                for (int i = 0; i < instancedCityModel.transform.childCount; ++i)
-                {
-                    var go = instancedCityModel.transform.GetChild(i).gameObject;
-                    if (go.name.Contains("dem")) continue;
-                    var cityModel = await PLATEAUCityGmlProxy.LoadAsync(go, rootDirName);
-                    if (cityModel == null) continue;
-                    var gml = new SampleGml(cityModel, go);
-                    gmls.Add(go.name, gml);
-                }
-            }
-            
-            isInitialiseFinish = true;
-        }
         /// <summary>
         /// Plateauのデータの取得が終わるまで待機する関数
         /// </summary>
-        IEnumerator WatiForInitialise()
-        {
-            // yield return ->　ある関数が終わるまで待つ
-            yield return new WaitUntil(() => IsInitialiseFinished());
-        }
         /// <summary>
         /// Plateauのデータの取得が終わった後の処理を行う関数
         /// </summary> 
-        public bool IsInitialiseFinished()
-        {
-            if(isInitialiseFinish)
-            {
-                // UIの切り替え
-                initializingUi.gameObject.SetActive(false);
-                BaseUi.gameObject.SetActive(true);
-                // BaseUIのラベルを取得
-                timeLabel = BaseUi.rootVisualElement.Q<Label>("Time");
-                rescuedNumLabel = BaseUi.rootVisualElement.Q<Label>("Rescued_Count");
-                rescuingNumLabel = BaseUi.rootVisualElement.Q<Label>("Rescuing_Count");
-                Shelter1HeightLabel = BaseUi.rootVisualElement.Q<Label>("Shelter1_Height");
-                Shelter1CapacityLabel = BaseUi.rootVisualElement.Q<Label>("Shelter1_Capacity");
-                Shelter2HeightLabel = BaseUi.rootVisualElement.Q<Label>("Shelter2_Height");
-                Shelter2CapacityLabel = BaseUi.rootVisualElement.Q<Label>("Shelter2_Capacity");
-                Shelter3HeightLabel = BaseUi.rootVisualElement.Q<Label>("Shelter3_Height");
-                Shelter3CapacityLabel = BaseUi.rootVisualElement.Q<Label>("Shelter3_Capacity");
-                MissionLabel = BaseUi.rootVisualElement.Q<Label>("Mission_Text");
-                
-
-                EditMissionText();
-                // // Map用のカメラを起動する
-                // PlayerPosCamera.enabled = true;
-                // ゴールの位置を設定する
-                GameManageScript.SelectGoals();
-            }
-            return isInitialiseFinish;
-        }
 
         // ヒントに関する関数
         // -------------------------------------------------------------------------------------------------------------

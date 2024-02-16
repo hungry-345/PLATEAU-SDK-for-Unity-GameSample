@@ -13,6 +13,7 @@ public class ItemManage : MonoBehaviour
     private GameObject spawnTransformObjects;  //敵のスポーン位置の候補が入ったオブジェクト
     private Vector3 center; //スポーン範囲の中心
     private int itemCount;
+    private int itemNumber;
 
     private void Start()
     {
@@ -22,6 +23,7 @@ public class ItemManage : MonoBehaviour
     public void InitializeItem()
     {
         itemCount = 0;
+        itemNumber = 0;
     }
 
     //初期化
@@ -41,19 +43,19 @@ public class ItemManage : MonoBehaviour
             Vector3 spawnPos = new Vector3(circlePos.x, 50f, circlePos.y) + center;
             //アイテムを生成
             GameObject item = Instantiate(UsageItem, spawnPos, Quaternion.Euler(-90f, 0f, 0f), this.gameObject.transform);
-            item.name = itemCount + "hintItem";
+            item.name = itemNumber + "hintItem";
             GameObject itemMarker = Instantiate(marker,transform.root.gameObject.transform) as GameObject;
-            itemMarker.name = itemCount + "ItemMarker";
+            itemMarker.name = itemNumber + "ItemMarker";
             itemMarker.transform.localScale = new Vector3(20f, 1f, 20f);
             itemMarker.transform.position = new Vector3(spawnPos.x,-500,spawnPos.z);
             itemCount += 1;
+            itemNumber +=1;
         }
     }
     public void GetItem(GameObject hitItem)
     {
         itemCount -= 1;
         GameObject tmpMarker = GameObject.Find(hitItem.name[0]+"ItemMarker");
-        Debug.Log(tmpMarker.name);
         Destroy(tmpMarker);
         Destroy(hitItem);
     }
