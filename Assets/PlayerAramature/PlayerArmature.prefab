@@ -1418,7 +1418,7 @@ PrefabInstance:
     - target: {fileID: -6057140222963153312, guid: f2c836f3e5c029140a0cc913d7df766a, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 40db3173a05ae3242b1c182a09b0a183, type: 2}
+      objectReference: {fileID: 9100000, guid: bb8a2328d4ada1b499f97e200b258392, type: 2}
     - target: {fileID: -6057140222963153312, guid: f2c836f3e5c029140a0cc913d7df766a, type: 3}
       propertyPath: m_ApplyRootMotion
       value: 0
@@ -3799,7 +3799,6 @@ MonoBehaviour:
   BottomClamp: -90
   CameraAngleOverride: 0
   LockCameraPosition: 0
-  isDied: 0
 --- !u!114 &2496173762114345107
 MonoBehaviour:
   m_ObjectHideFlags: 0
