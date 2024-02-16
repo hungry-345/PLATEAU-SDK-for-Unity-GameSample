@@ -237,6 +237,7 @@ namespace PLATEAU.Samples
                         isSetAttributeData = CheckAttributeData(target.name,height.StringValue);
                         if(isSetAttributeData)
                         {
+                            // 正解の建物のGameOBject
                             goalBuilding = GameObject.Find(target.name);
                             goalBounds = goalBuilding.GetComponent<MeshCollider>().sharedMesh.bounds;
                             goalPos = new Vector3(goalBounds.center.x+320f,goalBounds.center.y+goalBounds.size.y,goalBounds.center.z+380f);

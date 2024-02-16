@@ -43,9 +43,9 @@ public class ItemManage : MonoBehaviour
             Vector3 spawnPos = new Vector3(circlePos.x, 50f, circlePos.y) + center;
             //アイテムを生成
             GameObject item = Instantiate(UsageItem, spawnPos, Quaternion.Euler(-90f, 0f, 0f), this.gameObject.transform);
-            item.name = itemNumber + "hintItem";
+            item.name = itemNumber + "Hint";
             GameObject itemMarker = Instantiate(marker,transform.root.gameObject.transform) as GameObject;
-            itemMarker.name = itemNumber + "ItemMarker";
+            itemMarker.name = item.name + "Marker";
             itemMarker.transform.localScale = new Vector3(20f, 1f, 20f);
             itemMarker.transform.position = new Vector3(spawnPos.x,-500,spawnPos.z);
             itemCount += 1;
@@ -55,7 +55,7 @@ public class ItemManage : MonoBehaviour
     public void GetItem(GameObject hitItem)
     {
         itemCount -= 1;
-        GameObject tmpMarker = GameObject.Find(hitItem.name[0]+"ItemMarker");
+        GameObject tmpMarker = GameObject.Find(hitItem.name +"Marker");
         Destroy(tmpMarker);
         Destroy(hitItem);
     }
