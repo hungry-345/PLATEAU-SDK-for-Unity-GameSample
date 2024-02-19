@@ -261,7 +261,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.springbone": {
-      "version": "file:../Assets/Plugins/unitychan/UnityChanSpringBone",
+      "version": "file:./unitychan/UnityChanSpringBone",
       "depth": 0,
       "source": "local",
       "dependencies": {}
@@ -328,7 +328,7 @@
       }
     },
     "com.unity.universaltoonshader.urp": {
-      "version": "file:../Assets/Plugins/unitychan/UnityChanToonShaderVer2_Project",
+      "version": "file:./unitychan/UnityChanToonShaderVer2_Project",
       "depth": 0,
       "source": "local",
       "dependencies": {
