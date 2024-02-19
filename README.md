@@ -8,36 +8,35 @@ PLATEAU公式サイトで[PLATEAU SDK for Unityのチュートリアル](https:/
 
 SDKの導入方法、機能の説明、サンプルプロジェクトの内容等について解説していますので、初めてSDKやサンプルプロジェクトを触る方はまずはこちらをご覧ください。
 
-
 ## 動作環境
-- Unity 2020.3.30f1~
+- Unity 2021.3.30f1~
 
 ## 導入
 - [Releaseページ](https://github.com/Project-PLATEAU/PLATEAU-SDK-for-Unity-Samples/releases)から最新版を選択します。
 - 掲載されているサンプルプロジェクトをダウンロードします。
 - zipファイルを展開してUnityからプロジェクトとして開きます。
 
-## GISSample
-![](/README_Images/GISSample.png)
-PLATEAU SDKでどのような属性情報にアクセスできるかについて知るためのチュートリアルとして、GISサンプルアプリを提供しています。GISサンプルアプリでは、PLATEAUの3D都市モデルのさまざまな属性情報の表示や、属性情報に応じたフィルタリング・色分けができます。GISサンプルアプリは、サンプルプロジェクトに含まれるAssets/GISSample/Scenes/GISSample.unityを開き、Playすることで実行できます（初期化処理に時間がかかることがあります）。
-
 ## GameSample
 ![](/README_Images/GameSample.png)
-3D都市モデルの見栄えの調整とインタラクションの作成方法、属性情報の取得方法について知るためのチュートリアルとして、ゲームサンプルアプリを提供しています。ゲームサンプルアプリでは、ゾンビに襲われている生存者を、unityちゃんを操作して、救出するゲームとなっています。ゲームサンプルアプリは、サンプルプロジェクトに含まれるAssets/GameSample/Scenes/GameSample.unityを開き、Playすることで実行できます。
+属性情報の取得方法、及び活用方法について知るためのチュートリアルとして、ゲームサンプルアプリを提供しています。ゲームサンプルアプリでは、制限時間内にロボットに襲われている生存者を救出するゲームとなっています。また、プレイヤーは走るだけでなく、フックショットを利用した移動とロボットの足止めをすることが出来ます。ゲームサンプルアプリは、サンプルプロジェクトに含まれるAssets/GameSample/Scenes/GameSample.unityを開き、Playすることで実行できます。
 
-## 属性情報の取得方法
+
+## ゲームサンプルアプリのみをインストール
+ゲームサンプルアプリのみを使用したい場合は、(URL)からダウンロードして、zipファイルを展開してください。
 
 ## gitからの導入
 git lfs の導入が必要であることに注意してください。
 ```
 git lfs install
-git clone https://github.com/Project-PLATEAU/PLATEAU-SDK-for-Unity-Samples.git
+git clone https://github.com/Synesthesias/PLATEAU-SDK-for-Unity-GameSample.git
 ```
-
 ## ライセンス
 - 本リポジトリはMITライセンスで提供されています。
+- 本リポジトリにおけるunityちゃんモデル等は、ユニティちゃんライセンス条項の元に提供されています。
+「© Unity Technologies Japan/UCL」
 - ソースコードおよび関連ドキュメントの著作権は国土交通省に帰属します。
 
 ## 注意事項
 - 本リポジトリの内容は予告なく変更・削除する可能性があります。
 - 本リポジトリの利用により生じた損失及び損害等について、国土交通省はいかなる責任も負わないものとします。
+
