@@ -1,0 +1,140 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+// using UnityEngine.UI;
+using UnityEngine.UIElements;
+public class TitleView : ViewBase
+{
+    [SerializeField, Tooltip("タイトルUI")] private UIDocument titleUI;
+    [SerializeField, Tooltip("タイトルUI")] private UIDocument explanationUI_Page1;
+    [SerializeField, Tooltip("タイトルUI")] private UIDocument explanationUI_Page2;
+    [SerializeField, Tooltip("タイトルUI")] private UIDocument explanationUI_Page3;
+    [SerializeField, Tooltip("タイトルUI")] private UIDocument explanationUI_Page4;
+    private UIDocument explanationUI;
+    private UIDocument nextExplanationUI;
+    private bool isStart;
+    private bool isExplatation;
+    private Button startButton;
+    private Button explanationButton;
+    private Button cancelButton;
+    private Button previousButton;
+    private Button nextButton;
+    private int pageState;
+    
+
+    private void Start()
+    {
+        isStart = false;
+        startButton = titleUI.rootVisualElement.Query<Button>("StartButton");
+        startButton.clicked += OnStart;
+        explanationButton = titleUI.rootVisualElement.Query<Button>("ExplanationButton");
+        explanationButton.clicked += OnExplanation;
+        explanationUI = explanationUI_Page1;
+        explanationUI_Page1.enabled = false;
+        explanationUI_Page2.enabled = false;
+        explanationUI_Page3.enabled = false;
+        explanationUI_Page4.enabled = false;
+    }
+
+    private void OnStart()
+    {
+        isStart = true;
+    }
+    private void OnExplanation()
+    {
+        explanationUI.enabled = !(explanationUI.enabled);
+        if(!explanationUI.enabled)
+        {
+            explanationUI = explanationUI_Page1;
+        }
+        //説明ウィンドウ表示時の処理
+        if (explanationUI.enabled)
+        {
+            pageState = 1;
+            cancelButton = explanationUI.rootVisualElement.Query<Button>("CancelButton");
+            nextButton = explanationUI.rootVisualElement.Query<Button>("NextButton");
+            nextButton.clicked += OnExplanationNext;
+            cancelButton.clicked += OnExplanation;
+        }
+    }
+    private void OnExplanationNext()
+    {
+        pageState += 1;
+        explanationUI.enabled = false;
+        if(pageState == 2)
+        {
+            explanationUI = explanationUI_Page2;
+            explanationUI.enabled = true;
+            cancelButton = explanationUI.rootVisualElement.Query<Button>("CancelButton");
+            nextButton = explanationUI.rootVisualElement.Query<Button>("NextButton");
+            previousButton = explanationUI.rootVisualElement.Query<Button>("PreviousButton");
+            previousButton.clicked += OnExplanationPrevious;
+        }
+        if(pageState == 3)
+        {
+            explanationUI = explanationUI_Page3;
+            explanationUI.enabled = true;
+            cancelButton = explanationUI.rootVisualElement.Query<Button>("CancelButton");
+            nextButton = explanationUI.rootVisualElement.Query<Button>("NextButton");
+            previousButton = explanationUI.rootVisualElement.Query<Button>("PreviousButton");
+            previousButton.clicked += OnExplanationPrevious;
+        }
+        if(pageState == 4)
+        {
+            explanationUI = explanationUI_Page4;
+            explanationUI.enabled = true;
+            cancelButton = explanationUI.rootVisualElement.Query<Button>("CancelButton");
+            previousButton = explanationUI.rootVisualElement.Query<Button>("PreviousButton");
+            previousButton.clicked += OnExplanationPrevious;
+        }
+        nextButton.clicked += OnExplanationNext;
+        cancelButton.clicked += OnExplanation;
+    }
+    private void OnExplanationPrevious()
+    {
+        pageState -= 1;
+        explanationUI.enabled = false;
+        if(pageState == 1)
+        {
+            explanationUI = explanationUI_Page1;
+            explanationUI.enabled = true;
+            cancelButton = explanationUI.rootVisualElement.Query<Button>("CancelButton");
+            nextButton = explanationUI.rootVisualElement.Query<Button>("NextButton");
+        }
+        if(pageState == 2)
+        {
+            explanationUI = explanationUI_Page2;
+            explanationUI.enabled = true;
+            cancelButton = explanationUI.rootVisualElement.Query<Button>("CancelButton");
+            nextButton = explanationUI.rootVisualElement.Query<Button>("NextButton");
+            previousButton = explanationUI.rootVisualElement.Query<Button>("PreviousButton");
+            previousButton.clicked += OnExplanationPrevious;
+        }
+        if(pageState == 3)
+        {
+            explanationUI = explanationUI_Page3;
+            explanationUI.enabled = true;
+            cancelButton = explanationUI.rootVisualElement.Query<Button>("CancelButton");
+            nextButton = explanationUI.rootVisualElement.Query<Button>("NextButton");
+            previousButton = explanationUI.rootVisualElement.Query<Button>("PreviousButton");
+            previousButton.clicked += OnExplanationPrevious;
+        }
+        nextButton.clicked += OnExplanationNext;
+        cancelButton.clicked += OnExplanation;
+    }
+
+    public override IEnumerator Wait()
+    {
+        while (true)
+        {
+            //ボタン入力待ち状態にする
+            if (isStart)
+            {
+                yield break;
+            }
+
+            yield return null;
+        }
+    }
+
+}
