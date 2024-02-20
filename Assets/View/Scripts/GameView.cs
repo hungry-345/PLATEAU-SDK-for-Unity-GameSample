@@ -23,7 +23,7 @@ public class GameView : ViewBase
 
     void Awake()
     {
-        Cursor.lockState = CursorLockMode.Confined;
+        //Cursor.lockState = CursorLockMode.Confined;
         cursor = GameObject.Find("Cursor");
         cursorManage = cursor.GetComponent<CursorManager>();
     }

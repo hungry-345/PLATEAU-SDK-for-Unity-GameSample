@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 
@@ -32,6 +32,7 @@ public class CursorManager : MonoBehaviour
     {
         Vector2 mousePosition = Mouse.current.position.ReadValue();
         cursorImage.rectTransform.position = mousePosition;
+        Cursor.lockState = CursorLockMode.Confined;
     }
 
     bool ShouldHighlightCursor()
