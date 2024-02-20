@@ -15,6 +15,7 @@ public class TitleView : ViewBase
     private bool isStart;
     private bool isExplatation;
     private Button startButton;
+    private Button endGameButton;
     private Button explanationButton;
     private Button cancelButton;
     private Button previousButton;
@@ -27,6 +28,8 @@ public class TitleView : ViewBase
         isStart = false;
         startButton = titleUI.rootVisualElement.Query<Button>("StartButton");
         startButton.clicked += OnStart;
+        endGameButton = titleUI.rootVisualElement.Query<Button>("EndGameButton");
+        endGameButton.clicked += OnEndGame;
         explanationButton = titleUI.rootVisualElement.Query<Button>("ExplanationButton");
         explanationButton.clicked += OnExplanation;
         explanationUI = explanationUI_Page1;
@@ -39,6 +42,15 @@ public class TitleView : ViewBase
     private void OnStart()
     {
         isStart = true;
+    }
+
+    private void OnEndGame()
+    {
+#if     UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;//ゲームプレイ終了
+#else
+        Application.Quit();//ゲームプレイ終了
+#endif
     }
     private void OnExplanation()
     {
