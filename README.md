@@ -13,7 +13,7 @@ SDKの導入方法、機能の説明、サンプルプロジェクトの内容�
 - Unity 2021.3.30f1~
 
 ## 導入
-- [Releaseページ]([https://github.com/Project-PLATEAU/PLATEAU-SDK-for-Unity-Samples/releases](https://github.com/Synesthesias/PLATEAU-SDK-for-Unity-GameSample/releases/tag/v1.0.0))から最新版を選択します。
+- [Releaseページ](https://github.com/Synesthesias/PLATEAU-SDK-for-Unity-GameSample/releases/tag/v1.0.0)から最新版を選択します。
 - 掲載されているサンプルプロジェクトをダウンロードします。
 - zipファイルを展開してUnityからプロジェクトとして開きます。
 
