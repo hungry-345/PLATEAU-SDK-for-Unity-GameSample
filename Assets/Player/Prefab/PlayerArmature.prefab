@@ -3624,6 +3624,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lr: {fileID: 0}
+  hookshotAttackable: 1
+  hookshotMoveable: 0
   Hookable:
     serializedVersion: 2
     m_Bits: 9

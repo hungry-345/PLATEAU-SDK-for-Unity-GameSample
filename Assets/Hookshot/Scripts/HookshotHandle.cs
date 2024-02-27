@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -23,6 +23,9 @@ namespace StarterAssets
 
         [Header("Hookshot")]
         //[SerializeField] private Transform debugHitPosition;
+        //攻撃用Hookshotの有効化
+        [SerializeField] private bool hookshotAttackable;
+        [SerializeField] private bool hookshotMoveable;
         //HookshotできるLayerを設定
         [SerializeField] private LayerMask Hookable;
         //敵の判別用Layerを設定
@@ -39,8 +42,7 @@ namespace StarterAssets
         private bool isFirstClosed;
         public bool hookshotAble;
         
-        
-
+       
         //攻撃する敵の情報取得設定
         private EnemyController enemyController;
 
@@ -131,8 +133,14 @@ elapsedTime = 0f;
 
             }
 
-            CheckClickRightMouseButton();
-            CheckClickLeftMouseButton();
+            if (hookshotMoveable)
+            {
+                CheckClickRightMouseButton();
+            }
+            if (hookshotAttackable)
+            {
+                CheckClickLeftMouseButton();
+            }
         }
 
         private void LateUpdate()
