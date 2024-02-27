@@ -195,6 +195,11 @@ elapsedTime = 0f;
                     HangHook();
                 }
             }
+            else if(Input.GetMouseButtonUp(1))
+           {
+
+                RemoveHook();
+           }
         }
 
         private void CheckClickLeftMouseButton()
