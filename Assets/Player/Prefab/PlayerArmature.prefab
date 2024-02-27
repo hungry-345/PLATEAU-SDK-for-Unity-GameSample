@@ -1301,19 +1301,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8738456125088784010, guid: f2c836f3e5c029140a0cc913d7df766a, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.691597
+      value: 0.69159776
       objectReference: {fileID: 0}
     - target: {fileID: -8738456125088784010, guid: f2c836f3e5c029140a0cc913d7df766a, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.24187823
+      value: 0.24187884
       objectReference: {fileID: 0}
     - target: {fileID: -8738456125088784010, guid: f2c836f3e5c029140a0cc913d7df766a, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.43920675
+      value: -0.4392054
       objectReference: {fileID: 0}
     - target: {fileID: -8738456125088784010, guid: f2c836f3e5c029140a0cc913d7df766a, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.5198904
+      value: 0.5198902
       objectReference: {fileID: 0}
     - target: {fileID: -8272060382165384815, guid: f2c836f3e5c029140a0cc913d7df766a, type: 3}
       propertyPath: m_Layer
@@ -1481,19 +1481,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -4789313133356550040, guid: f2c836f3e5c029140a0cc913d7df766a, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.241879
+      value: -0.24187945
       objectReference: {fileID: 0}
     - target: {fileID: -4789313133356550040, guid: f2c836f3e5c029140a0cc913d7df766a, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.69159585
+      value: 0.69159603
       objectReference: {fileID: 0}
     - target: {fileID: -4789313133356550040, guid: f2c836f3e5c029140a0cc913d7df766a, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.5198884
+      value: -0.5198885
       objectReference: {fileID: 0}
     - target: {fileID: -4789313133356550040, guid: f2c836f3e5c029140a0cc913d7df766a, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.43921053
+      value: -0.4392097
       objectReference: {fileID: 0}
     - target: {fileID: -4784948592588334523, guid: f2c836f3e5c029140a0cc913d7df766a, type: 3}
       propertyPath: m_Layer
@@ -1605,19 +1605,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -3115639130029029183, guid: f2c836f3e5c029140a0cc913d7df766a, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.16041203
+      value: -0.16041346
       objectReference: {fileID: 0}
     - target: {fileID: -3115639130029029183, guid: f2c836f3e5c029140a0cc913d7df766a, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.73177207
+      value: -0.7317718
       objectReference: {fileID: 0}
     - target: {fileID: -3115639130029029183, guid: f2c836f3e5c029140a0cc913d7df766a, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.53026444
+      value: -0.5302633
       objectReference: {fileID: 0}
     - target: {fileID: -3115639130029029183, guid: f2c836f3e5c029140a0cc913d7df766a, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.39698526
+      value: 0.39698666
       objectReference: {fileID: 0}
     - target: {fileID: -3004223306448643567, guid: f2c836f3e5c029140a0cc913d7df766a, type: 3}
       propertyPath: m_Layer
@@ -1729,19 +1729,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -765948426686200767, guid: f2c836f3e5c029140a0cc913d7df766a, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7317754
+      value: 0.7317748
       objectReference: {fileID: 0}
     - target: {fileID: -765948426686200767, guid: f2c836f3e5c029140a0cc913d7df766a, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.16041265
+      value: -0.16041373
       objectReference: {fileID: 0}
     - target: {fileID: -765948426686200767, guid: f2c836f3e5c029140a0cc913d7df766a, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.39698178
+      value: -0.3969835
       objectReference: {fileID: 0}
     - target: {fileID: -765948426686200767, guid: f2c836f3e5c029140a0cc913d7df766a, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.53026223
+      value: -0.53026146
       objectReference: {fileID: 0}
     - target: {fileID: -744727646518279148, guid: f2c836f3e5c029140a0cc913d7df766a, type: 3}
       propertyPath: m_Layer
@@ -3669,6 +3669,7 @@ MonoBehaviour:
   black: {fileID: 2100000, guid: d5e3892242bbbe645995b69570d7f7c3, type: 2}
   orange: {fileID: 2100000, guid: acb6a1207b7e58141b4b8589285518ed, type: 2}
   hookshotAble: 0
+  spark: {fileID: 8300000, guid: 4c0f09a9648264242922e2ea53457443, type: 3}
 --- !u!114 &1947612120170235258
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3961,8 +3962,8 @@ RotationConstraint:
   m_GameObject: {fileID: 5319095486983551774}
   m_Enabled: 1
   m_Weight: 0.9
-  m_RotationAtRest: {x: 52.30187, y: -35.604458, z: 55.94679}
-  m_RotationOffset: {x: 29.69128, y: 114.08311, z: -85.673386}
+  m_RotationAtRest: {x: 52.30183, y: -35.60423, z: 55.94683}
+  m_RotationOffset: {x: 29.691376, y: 114.083015, z: -85.67356}
   m_AffectRotationX: 1
   m_AffectRotationY: 1
   m_AffectRotationZ: 1
@@ -4400,8 +4401,8 @@ RotationConstraint:
   m_GameObject: {fileID: 7072597128651807623}
   m_Enabled: 1
   m_Weight: 0.2
-  m_RotationAtRest: {x: -40.97893, y: -32.97339, z: -59.23424}
-  m_RotationOffset: {x: 42.03239, y: -118.80114, z: -101.56101}
+  m_RotationAtRest: {x: -40.979126, y: -32.973602, z: -59.23405}
+  m_RotationOffset: {x: 42.032146, y: -118.8011, z: -101.56094}
   m_AffectRotationX: 1
   m_AffectRotationY: 1
   m_AffectRotationZ: 1
@@ -4789,8 +4790,8 @@ RotationConstraint:
   m_GameObject: {fileID: 8003072070821364677}
   m_Enabled: 1
   m_Weight: 0.9
-  m_RotationAtRest: {x: -52.302116, y: -144.39482, z: -124.05383}
-  m_RotationOffset: {x: -29.69078, y: 65.91666, z: 94.32676}
+  m_RotationAtRest: {x: -52.3021, y: -144.39499, z: -124.053734}
+  m_RotationOffset: {x: -29.690844, y: 65.91674, z: 94.32667}
   m_AffectRotationX: 1
   m_AffectRotationY: 1
   m_AffectRotationZ: 1
@@ -5195,8 +5196,8 @@ RotationConstraint:
   m_GameObject: {fileID: 9220930257843067726}
   m_Enabled: 1
   m_Weight: 0.2
-  m_RotationAtRest: {x: 40.979195, y: -147.02626, z: 120.76553}
-  m_RotationOffset: {x: -42.031967, y: -61.198822, z: 78.43847}
+  m_RotationAtRest: {x: 40.979397, y: -147.02608, z: 120.76576}
+  m_RotationOffset: {x: -42.031742, y: -61.198864, z: 78.438614}
   m_AffectRotationX: 1
   m_AffectRotationY: 1
   m_AffectRotationZ: 1

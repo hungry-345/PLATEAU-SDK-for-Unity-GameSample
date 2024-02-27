@@ -71,7 +71,8 @@ namespace StarterAssets
         //麻痺させた場合のロープ解除
         private float lorpRelease = 2f;
 
-
+        //sound effect
+        [SerializeField] private AudioClip spark;
 
 
         private void Awake()
@@ -244,6 +245,7 @@ elapsedTime = 0f;
                 //    // 子オブジェクトの名前を出力
                 //    Debug.Log("Child " + i + ": " + childTransform.name);
                 //}
+
                 //enemyのstate変更
                 enemyController = hitAttack.collider.GetComponent<EnemyController>();
                 if(enemyController != null )
@@ -259,6 +261,8 @@ elapsedTime = 0f;
                     enemyController.EnemyColorYellow(hitAttack);
                 }
 
+                //se再生
+                AudioSource.PlayClipAtPoint(spark,hookshotTransform.position);
                 //色変更
 
                 // 孫オブジェクトを再帰的に検索
