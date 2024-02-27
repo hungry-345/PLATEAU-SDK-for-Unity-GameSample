@@ -73,6 +73,7 @@ namespace StarterAssets
 
         //sound effect
         [SerializeField] private AudioClip spark;
+        private AudioSource sparkSound;
 
 
         private void Awake()
@@ -89,6 +90,9 @@ namespace StarterAssets
             isFirstClosed = false;
             hookshotDir = Vector3.zero;
             distance = 1000f;
+            sparkSound = gameObject.AddComponent<AudioSource>();
+            sparkSound.clip = spark;
+            sparkSound.loop = false;
         }
 
         private void Start()
@@ -262,7 +266,8 @@ elapsedTime = 0f;
                 }
 
                 //se再生
-                AudioSource.PlayClipAtPoint(spark,hookshotTransform.position);
+                //AudioSource.PlayClipAtPoint(spark,hookshotTransform.position);
+                sparkSound.Play();
                 //色変更
 
                 // 孫オブジェクトを再帰的に検索
