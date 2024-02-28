@@ -69,7 +69,7 @@ namespace StarterAssets
 //経過時間
         private float elapsedTime = 0f;
         //麻痺させた場合のロープ解除
-        private float lorpRelease = 2f;
+        private float lorpRelease = 0.1f;
 
         //sound effect
         [SerializeField] private AudioClip spark;
@@ -127,14 +127,24 @@ namespace StarterAssets
                 {
 
                     //isHookshot = false;
-elapsedTime += Time.deltaTime;
+                    elapsedTime += Time.deltaTime;
                     if (elapsedTime > lorpRelease)
                     {
-                        RemoveHook();
+                    RemoveHook();
                     isHookshotAttack = false;
-elapsedTime = 0f;
+                    elapsedTime = 0f;
                     }
                 }
+                //else
+                //{
+                //    elapsedTime += Time.deltaTime;
+                //    if (elapsedTime > lorpRelease)
+                //    {
+                //        RemoveHook();
+                //        //isHookshotAttack = false;
+                //        elapsedTime = 0f;
+                //    }
+                //}
 
             }
 
@@ -150,7 +160,8 @@ elapsedTime = 0f;
 
         private void LateUpdate()
         {
-            DrawRope();
+            //DrawRope();
+            DrawBeam();
         }
 
         private void PlayerMove()
@@ -175,17 +186,21 @@ elapsedTime = 0f;
         }
 
         //Hookshotしたか確認
+
+        //右クリック
         private void CheckClickRightMouseButton()
         {
             if (Input.GetMouseButtonDown(1))
             {
+                
                 if (isHookshot)
                 {
                     isHookshotMove = false;
                     isHookshotAttack = false;
                     isHookshot = false;
 
-                    RemoveHook();
+                    DrawBeam();
+                    //RemoveHook();
                 }
                 else
                 {
@@ -202,26 +217,37 @@ elapsedTime = 0f;
            }
         }
 
+        //左クリック
         private void CheckClickLeftMouseButton()
         {
+            //if (Input.GetMouseButtonDown(0))
+            //{
+            //    isHookshot = true;
+            //    //lr.enabled = true;
+            //    if (isHookshot)
+            //    {
+            //        isHookshotMove = false;
+            //        isHookshotAttack = false;
+            //        isHookshot = false;
+            //        AttackHook();
+            //        //RemoveHook();
+            //    }
+            //    else
+            //    {
+            //        isFirstClosed = false;
+            //        isHookshotMove = false;
+            //        distance = 1000f;
+            //        AttackHook();
+            //    }
+
+            //}
             if (Input.GetMouseButtonDown(0))
             {
-                if (isHookshot)
-                {
-                    isHookshotMove = false;
-                    isHookshotAttack = false;
-                    isHookshot = false;
-
-                    RemoveHook();
-                }
-                else
-                {
-                    isFirstClosed = false;
-                    isHookshotMove = false;
-                    distance = 1000f;
-                    AttackHook();
-                }
+                isHookshot = true;
+                //isHookshotAttack = true;
+                AttackHook();
             }
+
         }
 
         private void RemoveHook()
@@ -294,6 +320,22 @@ elapsedTime = 0f;
                 //UnityEditor.EditorApplication.isPaused = true;
 
             }
+            else
+            {
+                lr.enabled = true;
+                if (isHookshot)
+                {
+                    if (!isHookshotAttack) 
+                    {
+                        isHookshotAttack = true;
+                        Vector3 forwardDirection = Camera.main.transform.forward;
+                        Vector3 targetPosition = Camera.main.transform.position + forwardDirection * 1000f;
+                        hookshotPosition = targetPosition;
+                        Debug.Log(hookshotPosition);
+                        sparkSound.Play();
+                    }
+                }
+            }
         }
         //フックショットで移動する場合
         private void HangHook()
@@ -310,6 +352,8 @@ elapsedTime = 0f;
                 hookshotAngleY = Camera.main.transform.forward.y;
             }
         }
+
+        //旧フックショットの線描画
         public void DrawRope()
         {
             if (isHookshotMove) 
@@ -326,6 +370,16 @@ elapsedTime = 0f;
 
 
         }
+
+        //攻撃用の線描画
+        public void DrawBeam()
+        {
+            lr.material = orange;
+            lr.SetPosition(0, hookshotTransform.position);       
+            lr.SetPosition(1, hookshotPosition);          
+
+        }
+
         private void HookDelete()
         {
             if (lr != null)
