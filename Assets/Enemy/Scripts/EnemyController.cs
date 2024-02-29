@@ -64,6 +64,8 @@ public class EnemyController : MonoBehaviour
     //private GameObject kaminariInstance;
     private ParticleSystem ps;
     //private float emission;
+    //ビリビリ音
+    [SerializeField] private AudioClip biribiri;
 
 
     //現在いる道路オブジェクト
@@ -170,15 +172,24 @@ public class EnemyController : MonoBehaviour
 
                 velocity = Vector3.zero;
 
-                //雷の量を少なく
-                if (ps)
-                {
-                    var emission = ps.emission;
-                    if(elapsedTime > 5f)
-                    {
-                        emission.rateOverTime = new ParticleSystem.MinMaxCurve(10f,20f);
-                    }
-                }
+                ////雷の量を少なく
+                //if (ps)
+                //{
+                //    AudioSource biribiriSound = gameObject.AddComponent<AudioSource>();
+                //    biribiriSound.clip = biribiri;
+                //    var emission = ps.emission;
+                //    if(elapsedTime > 5f)
+                //    {
+                //        biribiriSound.loop = true;
+                //        emission.rateOverTime = new ParticleSystem.MinMaxCurve(10f,20f);
+
+                //    }
+                //    else
+                //    {
+                //        biribiriSound.loop = false;
+                //    }
+                  
+                //}
             }
         }
         //重力の適用
@@ -225,9 +236,12 @@ public class EnemyController : MonoBehaviour
             animator.SetFloat("MoveSpeed", 0f);
             velocity = Vector3.zero;
             GameObject kaminariInstance = Instantiate(kaminari, new Vector3(this.transform.position.x, this.transform.position.y + 1.5f, this.transform.position.z), Quaternion.Euler(0, 0, 0),this.transform);
-
             ps = kaminariInstance.GetComponent<ParticleSystem>();
-            
+            //ビリビリサウンド再生
+            AudioSource biribiriSound = kaminariInstance.AddComponent<AudioSource>();
+            biribiriSound.clip = biribiri;
+            biribiriSound.loop = true;
+            biribiriSound.Play();
             Destroy(kaminariInstance,paralysisTime);
             
             

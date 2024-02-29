@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -23,6 +23,9 @@ namespace StarterAssets
 
         [Header("Hookshot")]
         //[SerializeField] private Transform debugHitPosition;
+        //攻撃用Hookshotの有効化
+        [SerializeField] private bool hookshotAttackable;
+        [SerializeField] private bool hookshotMoveable;
         //HookshotできるLayerを設定
         [SerializeField] private LayerMask Hookable;
         //敵の判別用Layerを設定
@@ -39,8 +42,7 @@ namespace StarterAssets
         private bool isFirstClosed;
         public bool hookshotAble;
         
-        
-
+       
         //攻撃する敵の情報取得設定
         private EnemyController enemyController;
 
@@ -67,9 +69,11 @@ namespace StarterAssets
 //経過時間
         private float elapsedTime = 0f;
         //麻痺させた場合のロープ解除
-        private float lorpRelease = 2f;
+        private float lorpRelease = 0.1f;
 
-
+        //sound effect
+        [SerializeField] private AudioClip spark;
+        private AudioSource sparkSound;
 
 
         private void Awake()
@@ -86,6 +90,9 @@ namespace StarterAssets
             isFirstClosed = false;
             hookshotDir = Vector3.zero;
             distance = 1000f;
+            sparkSound = gameObject.AddComponent<AudioSource>();
+            sparkSound.clip = spark;
+            sparkSound.loop = false;
         }
 
         private void Start()
@@ -120,24 +127,41 @@ namespace StarterAssets
                 {
 
                     //isHookshot = false;
-elapsedTime += Time.deltaTime;
+                    elapsedTime += Time.deltaTime;
                     if (elapsedTime > lorpRelease)
                     {
-                        RemoveHook();
+                    RemoveHook();
                     isHookshotAttack = false;
-elapsedTime = 0f;
+                    elapsedTime = 0f;
                     }
                 }
+                //else
+                //{
+                //    elapsedTime += Time.deltaTime;
+                //    if (elapsedTime > lorpRelease)
+                //    {
+                //        RemoveHook();
+                //        //isHookshotAttack = false;
+                //        elapsedTime = 0f;
+                //    }
+                //}
 
             }
 
-            CheckClickRightMouseButton();
-            CheckClickLeftMouseButton();
+            if (hookshotMoveable)
+            {
+                CheckClickRightMouseButton();
+            }
+            if (hookshotAttackable)
+            {
+                CheckClickLeftMouseButton();
+            }
         }
 
         private void LateUpdate()
         {
-            DrawRope();
+            //DrawRope();
+            DrawBeam();
         }
 
         private void PlayerMove()
@@ -162,17 +186,21 @@ elapsedTime = 0f;
         }
 
         //Hookshotしたか確認
+
+        //右クリック
         private void CheckClickRightMouseButton()
         {
             if (Input.GetMouseButtonDown(1))
             {
+                
                 if (isHookshot)
                 {
                     isHookshotMove = false;
                     isHookshotAttack = false;
                     isHookshot = false;
 
-                    RemoveHook();
+                    DrawBeam();
+                    //RemoveHook();
                 }
                 else
                 {
@@ -182,28 +210,44 @@ elapsedTime = 0f;
                     HangHook();
                 }
             }
+            else if(Input.GetMouseButtonUp(1))
+           {
+
+                RemoveHook();
+           }
         }
 
+        //左クリック
         private void CheckClickLeftMouseButton()
         {
+            //if (Input.GetMouseButtonDown(0))
+            //{
+            //    isHookshot = true;
+            //    //lr.enabled = true;
+            //    if (isHookshot)
+            //    {
+            //        isHookshotMove = false;
+            //        isHookshotAttack = false;
+            //        isHookshot = false;
+            //        AttackHook();
+            //        //RemoveHook();
+            //    }
+            //    else
+            //    {
+            //        isFirstClosed = false;
+            //        isHookshotMove = false;
+            //        distance = 1000f;
+            //        AttackHook();
+            //    }
+
+            //}
             if (Input.GetMouseButtonDown(0))
             {
-                if (isHookshot)
-                {
-                    isHookshotMove = false;
-                    isHookshotAttack = false;
-                    isHookshot = false;
-
-                    RemoveHook();
-                }
-                else
-                {
-                    isFirstClosed = false;
-                    isHookshotMove = false;
-                    distance = 1000f;
-                    AttackHook();
-                }
+                isHookshot = true;
+                //isHookshotAttack = true;
+                AttackHook();
             }
+
         }
 
         private void RemoveHook()
@@ -236,6 +280,7 @@ elapsedTime = 0f;
                 //    // 子オブジェクトの名前を出力
                 //    Debug.Log("Child " + i + ": " + childTransform.name);
                 //}
+
                 //enemyのstate変更
                 enemyController = hitAttack.collider.GetComponent<EnemyController>();
                 if(enemyController != null )
@@ -251,6 +296,9 @@ elapsedTime = 0f;
                     enemyController.EnemyColorYellow(hitAttack);
                 }
 
+                //se再生
+                //AudioSource.PlayClipAtPoint(spark,hookshotTransform.position);
+                sparkSound.Play();
                 //色変更
 
                 // 孫オブジェクトを再帰的に検索
@@ -272,6 +320,22 @@ elapsedTime = 0f;
                 //UnityEditor.EditorApplication.isPaused = true;
 
             }
+            else
+            {
+                lr.enabled = true;
+                if (isHookshot)
+                {
+                    if (!isHookshotAttack) 
+                    {
+                        isHookshotAttack = true;
+                        Vector3 forwardDirection = Camera.main.transform.forward;
+                        Vector3 targetPosition = Camera.main.transform.position + forwardDirection * 1000f;
+                        hookshotPosition = targetPosition;
+                        Debug.Log(hookshotPosition);
+                        sparkSound.Play();
+                    }
+                }
+            }
         }
         //フックショットで移動する場合
         private void HangHook()
@@ -288,6 +352,8 @@ elapsedTime = 0f;
                 hookshotAngleY = Camera.main.transform.forward.y;
             }
         }
+
+        //旧フックショットの線描画
         public void DrawRope()
         {
             if (isHookshotMove) 
@@ -304,6 +370,16 @@ elapsedTime = 0f;
 
 
         }
+
+        //攻撃用の線描画
+        public void DrawBeam()
+        {
+            lr.material = orange;
+            lr.SetPosition(0, hookshotTransform.position);       
+            lr.SetPosition(1, hookshotPosition);          
+
+        }
+
         private void HookDelete()
         {
             if (lr != null)
