@@ -2015,6 +2015,7 @@ MonoBehaviour:
   walkSpeed: 1
   sightAngle: 90
   kaminari: {fileID: 5158467063072505424, guid: 9bfd6711cee781843a03aed5083f2795, type: 3}
+  biribiri: {fileID: 8300000, guid: 1aae68b4b631b864ca8e35429d512028, type: 3}
 --- !u!135 &4626294525704307018
 SphereCollider:
   m_ObjectHideFlags: 0
