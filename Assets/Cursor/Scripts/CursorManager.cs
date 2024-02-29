@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 public class CursorManager : MonoBehaviour
 {
-    public Image cursorImage;              // UI Image
+    // public Image cursorImage;              // UI Image
     //public Sprite defaultCursorSprite;
     //public Sprite highlightCursorSprite; 
     private AudioSource clickSound;
@@ -13,7 +13,6 @@ public class CursorManager : MonoBehaviour
     public void OnEnable()
     {
         InputSystem.EnableDevice(Mouse.current);
-        Cursor.visible = false;
     }
 
     public void OnDisable()
@@ -23,11 +22,11 @@ public class CursorManager : MonoBehaviour
 
     public void OnVisible()
     {
-        cursorImage.enabled = true;
+        Cursor.visible = true;
     }
     public void OnInvisible()
     {
-        cursorImage.enabled = false;
+        Cursor.visible = false;
     }
 
     private void Awake()
@@ -38,7 +37,7 @@ public class CursorManager : MonoBehaviour
     {
         //mousePosition = Mouse.current.position.ReadValue();
         Vector2 mousePosition = Mouse.current.position.ReadValue();
-        cursorImage.rectTransform.position = mousePosition;
+        // cursorImage.rectTransform.position = mousePosition;
         Cursor.lockState = CursorLockMode.Confined;
         //if(Input.GetMouseButtonDown(0))
         //{
