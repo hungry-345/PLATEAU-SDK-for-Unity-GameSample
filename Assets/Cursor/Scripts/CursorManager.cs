@@ -7,7 +7,6 @@ public class CursorManager : MonoBehaviour
     public Image cursorImage;              // UI Image
     //public Sprite defaultCursorSprite;
     //public Sprite highlightCursorSprite; 
-
     public void OnEnable()
     {
         InputSystem.EnableDevice(Mouse.current);

@@ -11,6 +11,7 @@ public class ViewManager : MonoBehaviour
     public int score;
     private void Awake()
     {
+        Cursor.visible = false;
         if (instance == null)
         {
             instance = this;

@@ -52,6 +52,7 @@ namespace PLATEAU.Samples
         private Label Shelter3HeightLabel;
         private Label Shelter3CapacityLabel;
         private Label MissionLabel;
+        private Label StartText;
         private string correctBuildingName;
         private string filterStatus;
         private string nearestBuildingName;
@@ -86,29 +87,19 @@ namespace PLATEAU.Samples
 
             //InputSystemの入力を登録
             inputActions.SelectScene.AddCallbacks(this);
-            //コルーチン開始(Plateauのデータの取得が終わった後の処理を実行)
-            BaseUi.gameObject.SetActive(true);
+            
             // BaseUIのラベルを取得
-            timeLabel = BaseUi.rootVisualElement.Q<Label>("Time");
-            rescuedNumLabel = BaseUi.rootVisualElement.Q<Label>("Rescued_Count");
-            rescuingNumLabel = BaseUi.rootVisualElement.Q<Label>("Rescuing_Count");
-            Shelter1HeightLabel = BaseUi.rootVisualElement.Q<Label>("Shelter1_Height");
-            Shelter1CapacityLabel = BaseUi.rootVisualElement.Q<Label>("Shelter1_Capacity");
-            Shelter2HeightLabel = BaseUi.rootVisualElement.Q<Label>("Shelter2_Height");
-            Shelter2CapacityLabel = BaseUi.rootVisualElement.Q<Label>("Shelter2_Capacity");
-            Shelter3HeightLabel = BaseUi.rootVisualElement.Q<Label>("Shelter3_Height");
-            Shelter3CapacityLabel = BaseUi.rootVisualElement.Q<Label>("Shelter3_Capacity");
-            MissionLabel = BaseUi.rootVisualElement.Q<Label>("Mission_Text");
             
 
-            EditMissionText();
+            
             // // Map用のカメラを起動する
             // PlayerPosCamera.enabled = true;
             // ゴールの位置を設定する
             GameManageScript.SelectGoals();
 
 
-            // StartCoroutine(WatiForInitialise());
+            StartCoroutine(WatiForInitialise());
+
             //変数の初期化
             filterStatus = "None";
             correctBuildingName = "";
@@ -124,6 +115,31 @@ namespace PLATEAU.Samples
         /// Plateauのデータを取得する関数
         /// </summary> 
         /// <summary>
+        IEnumerator WatiForInitialise()
+        {
+            // yield return ->　ある関数が終わるまで待つ
+            initializingUi.gameObject.SetActive(true);
+            yield return new WaitForSeconds(3.0f);
+            initializingUi.gameObject.SetActive(false);
+            BaseUi.gameObject.SetActive(true);
+
+            timeLabel = BaseUi.rootVisualElement.Q<Label>("Time");
+            rescuedNumLabel = BaseUi.rootVisualElement.Q<Label>("Rescued_Count");
+            rescuingNumLabel = BaseUi.rootVisualElement.Q<Label>("Rescuing_Count");
+            Shelter1HeightLabel = BaseUi.rootVisualElement.Q<Label>("Shelter1_Height");
+            Shelter1CapacityLabel = BaseUi.rootVisualElement.Q<Label>("Shelter1_Capacity");
+            Shelter2HeightLabel = BaseUi.rootVisualElement.Q<Label>("Shelter2_Height");
+            Shelter2CapacityLabel = BaseUi.rootVisualElement.Q<Label>("Shelter2_Capacity");
+            Shelter3HeightLabel = BaseUi.rootVisualElement.Q<Label>("Shelter3_Height");
+            Shelter3CapacityLabel = BaseUi.rootVisualElement.Q<Label>("Shelter3_Capacity");
+            MissionLabel = BaseUi.rootVisualElement.Q<Label>("Mission_Text");
+
+            EditMissionText();
+            yield return new WaitForSeconds(2.0f);
+            StartText = BaseUi.rootVisualElement.Q<Label>("StartText");
+            StartText.text = "";
+            // yield return new WaitUntil(() => IsInitialiseFinished());
+        }
         /// Plateauのデータの取得が終わるまで待機する関数
         /// </summary>
         /// <summary>
