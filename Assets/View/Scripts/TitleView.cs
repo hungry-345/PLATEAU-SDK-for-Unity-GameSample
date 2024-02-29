@@ -63,6 +63,7 @@ public class TitleView : ViewBase
     }
     private void OnExplanation()
     {
+        cursorManager.OnVisible();
         explanationUI.enabled = !(explanationUI.enabled);
         if(!explanationUI.enabled)
         {
@@ -80,6 +81,7 @@ public class TitleView : ViewBase
     }
     private void OnExplanationNext()
     {
+        cursorManager.OnVisible();
         pageState += 1;
         explanationUI.enabled = false;
         if(pageState == 2)
@@ -113,6 +115,7 @@ public class TitleView : ViewBase
     }
     private void OnExplanationPrevious()
     {
+        cursorManager.OnVisible();
         pageState -= 1;
         explanationUI.enabled = false;
         if(pageState == 1)
