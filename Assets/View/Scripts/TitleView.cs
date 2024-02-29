@@ -21,6 +21,8 @@ public class TitleView : ViewBase
     private Button previousButton;
     private Button nextButton;
     private int pageState;
+    //ボタンサウンド
+    private CursorManager cursorManager;
     
 
     private void Start()
@@ -37,10 +39,12 @@ public class TitleView : ViewBase
         explanationUI_Page2.enabled = false;
         explanationUI_Page3.enabled = false;
         explanationUI_Page4.enabled = false;
+        cursorManager = GameObject.Find("Cursor").GetComponent<CursorManager>();
     }
 
     private void OnStart()
     {
+        cursorManager.CursorSoundPlay();
         isStart = true;
     }
 
@@ -48,9 +52,14 @@ public class TitleView : ViewBase
     {
 #if     UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;//ゲームプレイ終了
+        
+        cursorManager.CursorSoundPlay();
 #else
+        
         Application.Quit();//ゲームプレイ終了
+        
 #endif
+        
     }
     private void OnExplanation()
     {
@@ -148,5 +157,6 @@ public class TitleView : ViewBase
             yield return null;
         }
     }
+
 
 }

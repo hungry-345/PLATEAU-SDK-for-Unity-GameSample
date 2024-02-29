@@ -8,6 +8,7 @@ public class CursorManager : MonoBehaviour
     //public Sprite defaultCursorSprite;
     //public Sprite highlightCursorSprite; 
     private AudioSource clickSound;
+    private Vector2 mousePosition;
 
     public void OnEnable()
     {
@@ -35,17 +36,27 @@ public class CursorManager : MonoBehaviour
     }
     public void Update()
     {
+        //mousePosition = Mouse.current.position.ReadValue();
         Vector2 mousePosition = Mouse.current.position.ReadValue();
         cursorImage.rectTransform.position = mousePosition;
         Cursor.lockState = CursorLockMode.Confined;
-        if(Input.GetMouseButtonDown(0))
-        {
-            clickSound.Play();
-        }
+        //if(Input.GetMouseButtonDown(0))
+        //{
+        //    clickSound.Play();
+        //}
     }
 
     bool ShouldHighlightCursor()
     {
         return false;
+    }
+
+    public void CursorSoundPlay()
+    {
+        clickSound.Play();
+    }
+    public bool CheckClickSound()
+    {
+        return clickSound.isPlaying;
     }
 }
