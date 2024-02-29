@@ -6858,13 +6858,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7600826448313368511}
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: 208.27, y: 64.25, z: 1553.6036}
+  m_LocalPosition: {x: 208.27, y: 64.25, z: 1557.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 234354615730148977}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0.03, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &7600826448313368509
 Camera:
   m_ObjectHideFlags: 0
@@ -8540,15 +8540,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8486726551857001085}
-  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: 208.27, y: 64.25, z: 1553.6036}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 208.27, y: 64.25, z: 1557.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8486726552320950854}
   m_Father: {fileID: 234354615730148977}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0.03, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8486726551857001347
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9459,6 +9459,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 708900534318162021, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
+      propertyPath: m_Loop
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 708900534318162021, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: m_Parameters.textureMode
       value: 1
       objectReference: {fileID: 0}
@@ -9513,6 +9517,10 @@ PrefabInstance:
     - target: {fileID: 1735468584205554085, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: attackable.m_Bits
       value: 256
+      objectReference: {fileID: 0}
+    - target: {fileID: 1735468584205554085, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
+      propertyPath: CityMaterials.m_Bits
+      value: 512
       objectReference: {fileID: 0}
     - target: {fileID: 2234691791301303317, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: shouldDrawGizmosThisFrame

@@ -11,7 +11,6 @@ namespace StarterAssets
     public class HookshotHandle : MonoBehaviour
     {
         private Vector3 hookshotPosition;
-        //private float hookshotSize;
         private Vector3 characterVelocityMomentum;
         public LineRenderer lr;
         private GameObject player;
@@ -25,17 +24,15 @@ namespace StarterAssets
         //[SerializeField] private Transform debugHitPosition;
         //攻撃用Hookshotの有効化
         [SerializeField] private bool hookshotAttackable;
-        [SerializeField] private bool hookshotMoveable;
         //HookshotできるLayerを設定
         [SerializeField] private LayerMask Hookable;
         //敵の判別用Layerを設定
         [SerializeField] private LayerMask attackable;
+        [SerializeField] private LayerMask CityMaterials;
         [SerializeField] private Transform hookshotTransform;
         [SerializeField] private AnimationCurve AnimationCurve;
         [SerializeField] private Material black;
         [SerializeField] private Material orange;
-        //移動するときの判別
-        private bool isHookshotMove;
         //攻撃するときの判別
         private bool isHookshotAttack;
         private bool isHookshot;
@@ -59,19 +56,18 @@ namespace StarterAssets
         private Vector3 moveDirection;
         private Vector3 currentHookshot;
 
-        //ロープアニメーション
-        private float lerpTime = 0f;
-        //public int quality = 500;
-        //public float waveHeight = 1f; // 波の高さ
-        //public float waveFrequency = 3f; // 波の頻度
-        //public int wavePoints = 10; // ウェーブを形成するための中間ポイント数
+        // アタック関連
+        [SerializeField] private Texture[] ElectricTextures;
+        private int ElectricAnimationStep;
+        [SerializeField] private float fps = 30f;
+        private float fpsCounter;
 
-//経過時間
+        //経過時間
         private float elapsedTime = 0f;
         //麻痺させた場合のロープ解除
         private float lorpRelease = 0.1f;
 
-        //sound effect
+        //サウンドエフェクト
         [SerializeField] private AudioClip spark;
         private AudioSource sparkSound;
 
@@ -85,7 +81,6 @@ namespace StarterAssets
             lr = GetComponent<LineRenderer>();
             lr.enabled = false;
             isHookshotAttack = false;
-            isHookshotMove = false;
             isHookshot = false;
             isFirstClosed = false;
             hookshotDir = Vector3.zero;
@@ -104,53 +99,25 @@ namespace StarterAssets
         {
             if(isHookshot)
             {
-                if (isHookshotMove)
-                {
-                    PlayerMove();
-                    if (distance < Vector3.Distance(transform.position, hookshotPosition))
-                    {
-                        isFirstClosed = true;
-                        reachedPosY = player.transform.position.y;
-                    }
-                    if (Vector3.Distance(transform.position, hookshotPosition) < reachedHookshotPositionDistance)
-                    {
-                        HookDelete();
-                        if (hookshotAngleY > 0)
-                        {
-                            _controller.Move(new Vector3(0f, 4f, 0f));
-                        }
-                        isHookshot = false;
-                    }
-                    distance = Mathf.Abs(Vector3.Distance(transform.position, hookshotPosition));
-                }
-                else if (isHookshotAttack)
+                if (isHookshotAttack)
                 {
 
                     //isHookshot = false;
                     elapsedTime += Time.deltaTime;
+                    fpsCounter += Time.deltaTime;
+
+                    if(fpsCounter >= 1 / fps)
+                    {
+                        ElectricAnimationStep++;
+
+                    }
                     if (elapsedTime > lorpRelease)
                     {
-                    RemoveHook();
-                    isHookshotAttack = false;
-                    elapsedTime = 0f;
+                        RemoveHook();
+                        isHookshotAttack = false;
+                        elapsedTime = 0f;
                     }
                 }
-                //else
-                //{
-                //    elapsedTime += Time.deltaTime;
-                //    if (elapsedTime > lorpRelease)
-                //    {
-                //        RemoveHook();
-                //        //isHookshotAttack = false;
-                //        elapsedTime = 0f;
-                //    }
-                //}
-
-            }
-
-            if (hookshotMoveable)
-            {
-                CheckClickRightMouseButton();
             }
             if (hookshotAttackable)
             {
@@ -164,90 +131,15 @@ namespace StarterAssets
             DrawBeam();
         }
 
-        private void PlayerMove()
-        {
-            // フックショット(プレイヤー)の向き(y軸0 -> プレイヤーの姿勢が崩れるから)
-            hookshotDir = (hookshotPosition - transform.position).normalized;
-
-                player.transform.rotation = Quaternion.LookRotation(new Vector3(hookshotDir.x,0,hookshotDir.z));
-            
-            // フックショット時の移動
-            if(isFirstClosed)
-            {
-                hookshotSpeed = Mathf.Clamp(Vector3.Distance(new Vector3(transform.position.x,0,transform.position.z),new Vector3(hookshotPosition.x,0,hookshotPosition.z)),hookshotSpeedMin, hookshotSpeedMax);
-                moveDirection = new Vector3(hookshotDir.x,0,hookshotDir.z);
-            }
-            else
-            {
-                hookshotSpeed = Mathf.Clamp(Vector3.Distance(transform.position, hookshotPosition), hookshotSpeedMin, hookshotSpeedMax);
-                moveDirection = hookshotDir;
-            }
-            _controller.Move(moveDirection * hookshotSpeed * hookshotSpeedMultipulier * Time.deltaTime);
-        }
-
-        //Hookshotしたか確認
-
-        //右クリック
-        private void CheckClickRightMouseButton()
-        {
-            if (Input.GetMouseButtonDown(1))
-            {
-                
-                if (isHookshot)
-                {
-                    isHookshotMove = false;
-                    isHookshotAttack = false;
-                    isHookshot = false;
-
-                    DrawBeam();
-                    //RemoveHook();
-                }
-                else
-                {
-                    isFirstClosed = false;
-                    isHookshotAttack = false;
-                    distance = 1000f;
-                    HangHook();
-                }
-            }
-            else if(Input.GetMouseButtonUp(1))
-           {
-
-                RemoveHook();
-           }
-        }
-
         //左クリック
         private void CheckClickLeftMouseButton()
         {
-            //if (Input.GetMouseButtonDown(0))
-            //{
-            //    isHookshot = true;
-            //    //lr.enabled = true;
-            //    if (isHookshot)
-            //    {
-            //        isHookshotMove = false;
-            //        isHookshotAttack = false;
-            //        isHookshot = false;
-            //        AttackHook();
-            //        //RemoveHook();
-            //    }
-            //    else
-            //    {
-            //        isFirstClosed = false;
-            //        isHookshotMove = false;
-            //        distance = 1000f;
-            //        AttackHook();
-            //    }
-
-            //}
             if (Input.GetMouseButtonDown(0))
             {
                 isHookshot = true;
                 //isHookshotAttack = true;
                 AttackHook();
             }
-
         }
 
         private void RemoveHook()
@@ -265,21 +157,11 @@ namespace StarterAssets
                 isHookshotAttack = true;
                 isHookshot = true;
                 lr.enabled = true;
+                
                 //hookをArmature_Meshにくっつける
                 Transform geometry = hitAttack.transform.Find("Geometry");
                 Transform mesh = geometry.Find("Armature_Mesh");
                 hookshotPosition = new Vector3(mesh.position.x,mesh.position.y + 1f,mesh.position.z);
-
-                //hookshotPosition = hitAttack.point;
-                //Transform parentTrans = hitAttack.transform;
-                //for (int i = 0; i < parentTrans.childCount; i++)
-                //{
-                //    // 子オブジェクトのTransformを取得
-                //    Transform childTransform = parentTrans.GetChild(i);
-
-                //    // 子オブジェクトの名前を出力
-                //    Debug.Log("Child " + i + ": " + childTransform.name);
-                //}
 
                 //enemyのstate変更
                 enemyController = hitAttack.collider.GetComponent<EnemyController>();
@@ -295,30 +177,16 @@ namespace StarterAssets
                     enemyController.SetState(EnemyController.EnemyState.hit);
                     enemyController.EnemyColorYellow(hitAttack);
                 }
-
                 //se再生
-                //AudioSource.PlayClipAtPoint(spark,hookshotTransform.position);
                 sparkSound.Play();
-                //色変更
+            }
+            else if(Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit, 50f,CityMaterials))
+            {
+                lr.enabled = true;
 
-                // 孫オブジェクトを再帰的に検索
-                //Renderer[] renderers = hitAttack.transform.GetComponentsInChildren<Renderer>();
-                //foreach (Renderer rend in renderers)
-                //{
-                //    if (rend.gameObject.name == "Armature_Mesh") // 名前で比較
-                //    {
-                //        Debug.Log(rend.materials.Length); ; // 色を変更
-                //        foreach (Material mat in rend.materials)
-                //        {
-                //            mat.color = Color.yellow;
-                //        }
-                //        break; // 見つかったらループを抜ける
-                //    }
-                //}
-
-                //RemoveHook();
-                //UnityEditor.EditorApplication.isPaused = true;
-
+                isHookshotAttack = true;
+                hookshotPosition = hit.point;
+                sparkSound.Play();  
             }
             else
             {
@@ -329,46 +197,22 @@ namespace StarterAssets
                     {
                         isHookshotAttack = true;
                         Vector3 forwardDirection = Camera.main.transform.forward;
-                        Vector3 targetPosition = Camera.main.transform.position + forwardDirection * 1000f;
+                        Vector3 targetPosition = Camera.main.transform.position + forwardDirection * 100f;
                         hookshotPosition = targetPosition;
-                        Debug.Log(hookshotPosition);
                         sparkSound.Play();
                     }
                 }
             }
         }
-        //フックショットで移動する場合
-        private void HangHook()
-        {              
-
-           if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit, 50f, Hookable))
-            //Hookshotで移動する場合
-            {
-
-                isHookshotMove = true;
-                isHookshot = true;
-                lr.enabled = true;
-                hookshotPosition = hit.point;
-                hookshotAngleY = Camera.main.transform.forward.y;
-            }
-        }
-
         //旧フックショットの線描画
         public void DrawRope()
         {
-            if (isHookshotMove) 
-            {
-                lr.material = black;
-            }
-            else if (isHookshotAttack)
+            if (isHookshotAttack)
             {
                 lr.material = orange;
             }
-
             lr.SetPosition(0, hookshotTransform.position);
             lr.SetPosition(1, hookshotPosition);
-
-
         }
 
         //攻撃用の線描画
@@ -377,7 +221,6 @@ namespace StarterAssets
             lr.material = orange;
             lr.SetPosition(0, hookshotTransform.position);       
             lr.SetPosition(1, hookshotPosition);          
-
         }
 
         private void HookDelete()
@@ -385,7 +228,6 @@ namespace StarterAssets
             if (lr != null)
             {
                 lr.enabled = false;
-                lerpTime = 0f;
             }
         }
     }
