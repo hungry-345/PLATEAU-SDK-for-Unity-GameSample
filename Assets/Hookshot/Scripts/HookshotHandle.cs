@@ -71,6 +71,11 @@ namespace StarterAssets
         [SerializeField] private AudioClip spark;
         private AudioSource sparkSound;
 
+        //アニメーション
+        private Animator _animator;
+        private bool _hasAnimator;
+        private int _animIDRailgun;
+
 
         private void Awake()
         {
@@ -88,6 +93,8 @@ namespace StarterAssets
             sparkSound = gameObject.AddComponent<AudioSource>();
             sparkSound.clip = spark;
             sparkSound.loop = false;
+            _hasAnimator = TryGetComponent(out  _animator);
+            _animIDRailgun = Animator.StringToHash("Railgun");
         }
 
         private void Start()
@@ -116,6 +123,7 @@ namespace StarterAssets
                         RemoveHook();
                         isHookshotAttack = false;
                         elapsedTime = 0f;
+                        _animator.SetBool(_animIDRailgun, false);
                     }
                 }
             }
@@ -123,6 +131,9 @@ namespace StarterAssets
             {
                 CheckClickLeftMouseButton();
             }
+
+            _hasAnimator = TryGetComponent(out _animator);
+            _animIDRailgun = Animator.StringToHash("Railgun");
         }
 
         private void LateUpdate()
@@ -203,6 +214,7 @@ namespace StarterAssets
                     }
                 }
             }
+            _animator.SetBool(_animIDRailgun, true);
         }
         //旧フックショットの線描画
         public void DrawRope()
