@@ -50,10 +50,11 @@ public class TitleView : ViewBase
 
     private void OnEndGame()
     {
+        cursorManager.CursorSoundPlay();
 #if     UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;//ゲームプレイ終了
         
-        cursorManager.CursorSoundPlay();
+        
 #else
         
         Application.Quit();//ゲームプレイ終了
@@ -63,6 +64,7 @@ public class TitleView : ViewBase
     }
     private void OnExplanation()
     {
+        cursorManager.CursorSoundPlay();
         cursorManager.OnVisible();
         explanationUI.enabled = !(explanationUI.enabled);
         if(!explanationUI.enabled)
@@ -81,6 +83,7 @@ public class TitleView : ViewBase
     }
     private void OnExplanationNext()
     {
+        cursorManager.CursorSoundPlay();
         cursorManager.OnVisible();
         pageState += 1;
         explanationUI.enabled = false;
@@ -115,6 +118,7 @@ public class TitleView : ViewBase
     }
     private void OnExplanationPrevious()
     {
+        cursorManager.CursorSoundPlay();
         cursorManager.OnVisible();
         pageState -= 1;
         explanationUI.enabled = false;
