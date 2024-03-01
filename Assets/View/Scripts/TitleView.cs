@@ -48,20 +48,41 @@ public class TitleView : ViewBase
         isStart = true;
     }
 
+//    private IEnumerator OnEndGame()
+//    {
+//        cursorManager.CursorSoundPlay();
+//        yield return new WaitForSeconds(cursorManager.GetSoundLength());
+
+//#if     UNITY_EDITOR
+//        UnityEditor.EditorApplication.isPlaying = false;//ゲームプレイ終了
+        
+        
+//#else
+        
+//        Application.Quit();//ゲームプレイ終了
+        
+//#endif
+        
+//    }
+
     private void OnEndGame()
     {
-        cursorManager.CursorSoundPlay();
-#if     UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;//ゲームプレイ終了
-        
-        
-#else
-        
-        Application.Quit();//ゲームプレイ終了
-        
-#endif
-        
+        StartCoroutine(EndGameCoroutine()); // コルーチンを開始
     }
+
+    private IEnumerator EndGameCoroutine()
+    {
+        cursorManager.CursorSoundPlay(); // 音声再生を開始
+        yield return new WaitForSeconds(cursorManager.GetSoundLength()); // 音声が終了するまで待機
+
+        // ゲーム終了処理
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false; // Unity エディタでのゲームプレイを終了
+#else
+    Application.Quit(); // アプリケーションを終了
+#endif
+    }
+
     private void OnExplanation()
     {
         cursorManager.CursorSoundPlay();

@@ -58,4 +58,9 @@ public class CursorManager : MonoBehaviour
     {
         return clickSound.isPlaying;
     }
+
+    public float GetSoundLength()
+    {
+        return clickSound.clip.length;
+    }
 }
