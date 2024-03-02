@@ -188,8 +188,8 @@ namespace StarterAssets
                     enemyController.SetState(EnemyController.EnemyState.hit);
                     enemyController.EnemyColorYellow(hitAttack);
                 }
-                //se再生
-                sparkSound.Play();
+                    //se再生
+                    sparkSound.Play();
             }
             else if(Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit, 50f,CityMaterials))
             {
