@@ -7,7 +7,8 @@ public class ActionManager : MonoBehaviour
     public enum State
     {
         Normal,
-        HookshotFlyingPlayer,
+        //HookshotFlyingPlayer,
+        Attack,
         Died
 
     }
@@ -24,20 +25,27 @@ public class ActionManager : MonoBehaviour
 
     private bool hookshotAble;
 
+    private bool attackAble;
+
+    private attackHandler attackHandler;
+
     private void Awake()
     {
         thirdPersonController = GetComponent<StarterAssets.ThirdPersonController>();
 
-        hookshotHandle = GetComponent<StarterAssets.HookshotHandle>();
+        //hookshotHandle = GetComponent<StarterAssets.HookshotHandle>();
+
+        attackHandler = GetComponent<attackHandler>();
 
         state = State.Normal;
-        hookshotAble = hookshotHandle.hookshotAble;
+
+        //hookshotAble = hookshotHandle.hookshotAble;
+
+        attackAble = attackHandler.checkAttack();
 
         _hasAnimator = TryGetComponent(out _animator);
 
         _animIDDying = Animator.StringToHash("Dying");
-
-        
 
 
     }
@@ -47,18 +55,26 @@ public class ActionManager : MonoBehaviour
 
         _hasAnimator = TryGetComponent(out _animator);
         _animIDDying = Animator.StringToHash("Dying");
-        if (hookshotAble == true)
+        //if (hookshotAble == true)
+        //{
+        //    thirdPersonController.enabled = false;
+        //    attackHandler.enabled = false;
+        //    state = State.HookshotFlyingPlayer;
+        //}
+        if(attackAble == true)
         {
             thirdPersonController.enabled = false;
-            state = State.HookshotFlyingPlayer;
+            attackHandler.enabled = false;  
         }
         else if(state == State.Died)
         {
             state = State.Died;
+            attackHandler.enabled = false;
         }
         else
         {
             thirdPersonController.enabled = true;
+            attackHandler.enabled = true;
             state = State.Normal;
         }
 
@@ -68,7 +84,10 @@ public class ActionManager : MonoBehaviour
             case State.Normal:
                 thirdPersonController.enabled = true;
                 break;
-            case State.HookshotFlyingPlayer:
+            //case State.HookshotFlyingPlayer:
+            //    thirdPersonController.enabled = false;
+            //    break;
+            case State.Attack:
                 thirdPersonController.enabled = false;
                 break;
             case State.Died:

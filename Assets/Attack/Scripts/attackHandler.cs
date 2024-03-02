@@ -121,6 +121,11 @@ public class attackHandler : MonoBehaviour
         }
     }
 
+    public bool checkAttack()
+    {
+        return isAttack;
+    }
+
     public void DrawElectro()
     {
         lr.SetPosition(0, tipPosition.position);
