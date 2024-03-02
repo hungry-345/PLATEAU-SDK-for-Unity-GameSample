@@ -99,6 +99,7 @@ public class attackHandler : MonoBehaviour
                     enemyController.EnemyColorYellow(hitAttack);
                 }
 
+                //enemyController.ChangeBIribiri();
             }
             else if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward,out RaycastHit hitCity,distance))
             {
