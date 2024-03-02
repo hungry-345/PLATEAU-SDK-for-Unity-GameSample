@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class attckHandler : MonoBehaviour
+public class attackHandler : MonoBehaviour
 {
     [Header("attackParameter")]
     [SerializeField] private LayerMask attackable;
+    [SerializeField] private LayerMask CityMaterials;
     [SerializeField] private Material lineColor;
-    [SerializeField] private Vector3 tipPosition;
+    [SerializeField] private Transform tipPosition;
     [SerializeField] private float distance = 50f;
     private bool isAttack;
     private Vector3 attackPosition;
@@ -59,6 +60,7 @@ public class attckHandler : MonoBehaviour
         }
 
         CheckClickLeftMouseButton();
+        DrawElectro();
     }
 
     public void CheckClickLeftMouseButton()
@@ -98,6 +100,12 @@ public class attckHandler : MonoBehaviour
                 }
 
             }
+            else if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward,out RaycastHit hitCity,distance))
+            {
+
+                attackPosition = hitCity.point;
+
+            }
             else
             {
 
@@ -114,7 +122,7 @@ public class attckHandler : MonoBehaviour
 
     public void DrawElectro()
     {
-        lr.SetPosition(0, tipPosition);
+        lr.SetPosition(0, tipPosition.position);
         lr.SetPosition(1, attackPosition);
     }
 
