@@ -9694,6 +9694,14 @@ PrefabInstance:
       propertyPath: m_RotationOffset.z
       value: 94.32669
       objectReference: {fileID: 0}
+    - target: {fileID: 6533984514649378790, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
+      propertyPath: lineColor
+      value: 
+      objectReference: {fileID: 2100000, guid: e6c32fe286e802641add44aa443be61f, type: 2}
+    - target: {fileID: 6533984514649378790, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
+      propertyPath: ElectricTexture.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6971061176605259108, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: shouldDrawGizmosThisFrame
       value: 1

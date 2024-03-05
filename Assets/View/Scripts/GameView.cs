@@ -94,6 +94,7 @@ public class GameView : ViewBase
     }
     private void OnButtonClicked()
     {
+        cursorManage.CursorSoundPlay();
         IsClicked = true;
     }
 

@@ -64,6 +64,7 @@ public class EnemyController : MonoBehaviour
     //private GameObject kaminariInstance;
     private ParticleSystem ps;
     //private float emission;
+    private bool isBiribiri = false;
     //ビリビリ音
     [SerializeField] private AudioClip biribiri;
 
@@ -164,7 +165,7 @@ public class EnemyController : MonoBehaviour
             {
                 SetState(EnemyState.Stroll);
                 EnemyColorRed();
-                
+                isBiribiri = false;
             }
             else
             {
@@ -235,16 +236,28 @@ public class EnemyController : MonoBehaviour
             //animator.SetBool(Animator.StringToHash("Dying"), true);
             animator.SetFloat("MoveSpeed", 0f);
             velocity = Vector3.zero;
-            GameObject kaminariInstance = Instantiate(kaminari, new Vector3(this.transform.position.x, this.transform.position.y + 1.5f, this.transform.position.z), Quaternion.Euler(0, 0, 0),this.transform);
-            ps = kaminariInstance.GetComponent<ParticleSystem>();
-            //ビリビリサウンド再生
-            AudioSource biribiriSound = kaminariInstance.AddComponent<AudioSource>();
-            biribiriSound.clip = biribiri;
-            biribiriSound.loop = true;
-            biribiriSound.Play();
-            Destroy(kaminariInstance,paralysisTime);
-            
-            
+
+            if (!isBiribiri)
+            {
+                isBiribiri = true;
+                GameObject kaminariInstance = Instantiate(kaminari, new Vector3(this.transform.position.x, this.transform.position.y + 1.5f, this.transform.position.z), Quaternion.Euler(0, 0, 0), this.transform);
+                ps = kaminariInstance.GetComponent<ParticleSystem>();
+                //ビリビリサウンド再生
+                AudioSource biribiriSound = kaminariInstance.AddComponent<AudioSource>();
+                biribiriSound.clip = biribiri;
+                biribiriSound.loop = true;
+                biribiriSound.Play();
+                Destroy(kaminariInstance, paralysisTime);
+            }
+
+            //GameObject kaminariInstance = Instantiate(kaminari, new Vector3(this.transform.position.x, this.transform.position.y + 1.5f, this.transform.position.z), Quaternion.Euler(0, 0, 0), this.transform);
+            //    ps = kaminariInstance.GetComponent<ParticleSystem>();
+            //    //ビリビリサウンド再生
+            //    AudioSource biribiriSound = kaminariInstance.AddComponent<AudioSource>();
+            //    biribiriSound.clip = biribiri;
+            //    biribiriSound.loop = true;
+            //    biribiriSound.Play();
+            //    Destroy(kaminariInstance, paralysisTime);
 
         }
     }
@@ -356,6 +369,11 @@ public class EnemyController : MonoBehaviour
     //    {
     //        Destroy(kaminariInstance);
     //    }
-        
+
+    //}
+
+    //public void ChangeBIribiri()
+    //{
+    //    isBiribiri = true;
     //}
 }
