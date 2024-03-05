@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class ActionManager : MonoBehaviour
 {
     public enum State
     {
+        Wait,
         Normal,
         //HookshotFlyingPlayer,
         Attack,
@@ -13,6 +15,10 @@ public class ActionManager : MonoBehaviour
 
     }
     public State state;
+
+    //inputsystem
+    private PlayerInput playerInput;
+    
 
     //アニメーション管理
     private Animator _animator;
@@ -37,7 +43,7 @@ public class ActionManager : MonoBehaviour
 
         attackHandler = GetComponent<attackHandler>();
 
-        state = State.Normal;
+        state = State.Wait;
 
         //hookshotAble = hookshotHandle.hookshotAble;
 
@@ -47,7 +53,8 @@ public class ActionManager : MonoBehaviour
 
         _animIDDying = Animator.StringToHash("Dying");
 
-
+        playerInput = GetComponent<PlayerInput>();
+        playerInput.enabled = false;
     }
 
     private void Update()
@@ -71,6 +78,10 @@ public class ActionManager : MonoBehaviour
             state = State.Died;
             attackHandler.enabled = false;
         }
+        else if(state == State.Wait)
+        {
+            state = State.Wait;
+        }
         else
         {
             thirdPersonController.enabled = true;
@@ -81,22 +92,32 @@ public class ActionManager : MonoBehaviour
         switch (state)
         {
             default:
+            case State.Wait:
+                playerInput.enabled = false; 
+                break;
             case State.Normal:
-                thirdPersonController.enabled = true;
+                playerInput.enabled = true;
+                //thirdPersonController.enabled = true;
                 break;
             //case State.HookshotFlyingPlayer:
             //    thirdPersonController.enabled = false;
             //    break;
-            case State.Attack:
-                thirdPersonController.enabled = false;
-                break;
+            //case State.Attack:
+            //    thirdPersonController.enabled = false;
+            //    break;
             case State.Died:
                 _animator.SetBool(_animIDDying, true);
+                playerInput.enabled = false;
                 break;
 
         }
 
         //Debug.Log(state);
+    }
+
+    public void changeNormal ()
+    {
+        state = State.Normal ;
     }
 
 }     
