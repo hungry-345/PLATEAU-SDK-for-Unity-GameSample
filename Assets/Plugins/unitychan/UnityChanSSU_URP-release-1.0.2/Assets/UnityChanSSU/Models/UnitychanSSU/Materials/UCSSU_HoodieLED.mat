@@ -11,6 +11,9 @@ Material:
   m_Shader: {fileID: 4800000, guid: be891319084e9d147b09d89e80ce60e0, type: 3}
   m_ValidKeywords:
   - _EMISSIVE_SIMPLE
+  - _IS_ANGELRING_OFF
+  - _IS_CLIPPING_OFF
+  - _IS_OUTLINE_CLIPPING_NO
   - _OUTLINE_NML
   m_InvalidKeywords:
   - _EMISSION
@@ -18,7 +21,9 @@ Material:
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
-  stringTagMap: {}
+  stringTagMap:
+    IgnoreProjection: False
+    RenderType: Opaque
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
@@ -373,12 +378,12 @@ Material:
     - _Is_LightColor_1st_Shade: 1
     - _Is_LightColor_2nd_Shade: 1
     - _Is_LightColor_AR: 1
-    - _Is_LightColor_Ap_RimLight: 1
+    - _Is_LightColor_Ap_RimLight: 0
     - _Is_LightColor_Base: 1
-    - _Is_LightColor_HighColor: 1
-    - _Is_LightColor_MatCap: 1
-    - _Is_LightColor_Outline: 1
-    - _Is_LightColor_RimLight: 1
+    - _Is_LightColor_HighColor: 0
+    - _Is_LightColor_MatCap: 0
+    - _Is_LightColor_Outline: 0
+    - _Is_LightColor_RimLight: 0
     - _Is_NormalMapForMatCap: 0
     - _Is_NormalMapToBase: 0
     - _Is_NormalMapToHighColor: 0
@@ -451,7 +456,7 @@ Material:
     - _SpecularHighlights: 1
     - _SpecularOcclusionMode: 1
     - _SrcBlend: 1
-    - _StencilComp: 8
+    - _StencilComp: 0
     - _StencilMode: 0
     - _StencilNo: 1
     - _StencilOpFail: 0
@@ -514,9 +519,9 @@ Material:
     - _isUnityToonshader: 1
     - _simpleUI: 0
     - _utsTechnique: 0
-    - _utsVersionX: 8
-    - _utsVersionY: 0
-    - _utsVersionZ: 0
+    - _utsVersionX: 0
+    - _utsVersionY: 9
+    - _utsVersionZ: 5
     m_Colors:
     - _1st_ShadeColor: {r: 1, g: 1, b: 1, a: 1}
     - _2nd_ShadeColor: {r: 1, g: 1, b: 1, a: 1}
@@ -528,7 +533,7 @@ Material:
     - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}
     - _BaseColorMaskColor: {r: 1, g: 1, b: 1, a: 1}
     - _CameraFadeParams: {r: 0, g: Infinity, b: 0, a: 0}
-    - _Color: {r: 0, g: 0.8, b: 0.7216, a: 1}
+    - _Color: {r: 0, g: 0.8661628, b: 1, a: 1}
     - _ColorAddSubDiff: {r: 0, g: 0, b: 0, a: 0}
     - _ColorShift: {r: 0, g: 0, b: 0, a: 1}
     - _DiffusionProfileAsset: {r: 0, g: 0, b: 0, a: 0}
