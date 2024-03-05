@@ -2,9 +2,14 @@
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class attackHandler : MonoBehaviour
 {
+    //InputAction
+    private InputAction attack;   
+
+
     [Header("attackParameter")]
     [SerializeField] private LayerMask attackable;
     [SerializeField] private LayerMask CityMaterials;
@@ -34,6 +39,8 @@ public class attackHandler : MonoBehaviour
 
     private void Awake()
     {
+        var playerInput = GetComponent<PlayerInput>();
+        attack = playerInput.actions["attack"];
         lr = this.GetComponent<LineRenderer>();
         lr.enabled = false;
         sparkSound = this.AddComponent<AudioSource>();
@@ -59,7 +66,8 @@ public class attackHandler : MonoBehaviour
             }
         }
 
-        CheckClickLeftMouseButton();
+        //CheckClickLeftMouseButton();
+        attack.performed += OnAttackAction;
         DrawElectro();
     }
 
@@ -69,6 +77,12 @@ public class attackHandler : MonoBehaviour
         {
             isAttack = true;
         }
+        Attack();
+    }
+
+    private void OnAttackAction(InputAction.CallbackContext context)
+    {
+        isAttack = true;
         Attack();
     }
 
