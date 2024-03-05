@@ -71,14 +71,14 @@ public class attackHandler : MonoBehaviour
         DrawElectro();
     }
 
-    public void CheckClickLeftMouseButton()
-    {
-        if(Input.GetMouseButtonDown(0))
-        {
-            isAttack = true;
-        }
-        Attack();
-    }
+    //public void CheckClickLeftMouseButton()
+    //{
+    //    if(Input.GetMouseButtonDown(0))
+    //    {
+    //        isAttack = true;
+    //    }
+    //    Attack();
+    //}
 
     private void OnAttackAction(InputAction.CallbackContext context)
     {
