@@ -102,18 +102,23 @@ public class attackHandler : MonoBehaviour
                 enemyController = hitAttack.collider.GetComponent<EnemyController>();
                 if (enemyController != null)
                 {
-                    enemyController.SetState(EnemyController.EnemyState.hit);
-                    enemyController.EnemyColorYellow(hitAttack);
+                    //enemyController.SetState(EnemyController.EnemyState.hit);
+                    //enemyController.EnemyColorYellow(hitAttack);
                 }
                 else
                 {
                     Transform parent = hitAttack.transform.parent;
                     enemyController = parent.GetComponent<EnemyController>();
-                    enemyController.SetState(EnemyController.EnemyState.hit);
-                    enemyController.EnemyColorYellow(hitAttack);
+                    //enemyController.SetState(EnemyController.EnemyState.hit);
+                    //enemyController.EnemyColorYellow(hitAttack);
                 }
 
-                //enemyController.ChangeBIribiri();
+                if (!enemyController.getIsBiribiri())
+                {
+                    enemyController.SetState(EnemyController.EnemyState.hit);
+                    enemyController.EnemyColorYellow(hitAttack);
+                    enemyController.ChangeBIribiri();
+                }
             }
             else if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward,out RaycastHit hitCity,distance))
             {
