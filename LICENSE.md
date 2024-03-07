@@ -1,7 +1,8 @@
+キャラクターである unity chan に関するアセットは[ユニティちゃんライセンス条項](https://unity-chan.com/contents/license_jp/)に従います。フォントである（フォント名）は（ライセンス名）に従います。SoundEffect として使っている音源は、[OtoLogic](https://otologic.jp/)のサイバー 03 と電撃 02 と電撃 05 を使用しており、OtoLogic の利用規約に同意します。
+上記以外の部分は MIT ライセンスとします。
+
 MIT License
-
 © Unity Technologies Japan/UCL
-
 Copyright (c) 2023 MLIT Japan.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
