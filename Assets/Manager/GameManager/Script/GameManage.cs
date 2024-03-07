@@ -23,6 +23,7 @@ namespace PLATEAU.Samples
         }
         
         [SerializeField, Tooltip("ターゲットフラッグ")] private GameObject targetFlag;
+        [SerializeField, Tooltip("ゴールマーカー")] private GameObject GoalMarker;
 
         //ゲーム終了時にプレイヤーを操作不能にするために取得
         [SerializeField] private PlayerInput playerInput;
@@ -380,7 +381,8 @@ namespace PLATEAU.Samples
             flag = GameObject.Find(hintBuildingName+"flag");
             flag.GetComponent<MeshRenderer>().enabled = true;
             Marker = GameObject.Find(hintBuildingName+"Marker");
-            Marker.GetComponent<MeshRenderer>().enabled = true;
+            var MarkerTexture = Marker.transform.GetChild(0).gameObject.transform;
+            MarkerTexture.GetComponent<MeshRenderer>().enabled = true;
 
             
 
@@ -419,11 +421,12 @@ namespace PLATEAU.Samples
             flag.transform.position = flagPosition;
             flag.GetComponent<MeshRenderer>().enabled = false;
 
-            GameObject Marker = Instantiate(targetFlag,transform.root.gameObject.transform) as GameObject;
+            GameObject Marker = Instantiate(GoalMarker,transform.root.gameObject.transform) as GameObject;
             Marker.name = flagName + "Marker";
-            Marker.transform.localScale = new Vector3(30f, 1f, 30f);
+            Marker.transform.localScale = new Vector3(13f, 1f, 13f);
             Marker.transform.position = new Vector3(flagPosition.x,-500,flagPosition.z);
-            Marker.GetComponent<MeshRenderer>().enabled = false;
+            var MarkerTexture = Marker.transform.GetChild(0).gameObject.transform;
+            MarkerTexture.GetComponent<MeshRenderer>().enabled = false;
         }
 
         // --------------------------------------------------------------------------------------------------------------

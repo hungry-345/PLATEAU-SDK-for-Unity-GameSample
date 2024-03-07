@@ -30,7 +30,7 @@ public class NPCController : MonoBehaviour
     //待機時間
     private float waitTime = 3f;
     //目的地に到着した判定距離
-    private float arrivedDistance=3f;
+    private float arrivedDistance=1.2f;
     //他のNPCとこの距離まで接近したらワープする
     private float NPCWarpDistance=10f;
     //目的地に到着したかフラグ
@@ -80,7 +80,21 @@ public class NPCController : MonoBehaviour
 
         if (state == NPCState.Follow)//ついていく
         {
-            SetNPCDestination(player.transform.position);
+            if(Mathf.Abs(Camera.main.transform.forward.x - player.transform.forward.x) < 1.2f && Mathf.Abs(Camera.main.transform.forward.z - player.transform.forward.z) < 1.2f)
+            {
+                if(gameManage.rescuingNum < 11)
+                {
+                    SetNPCDestination(player.transform.position + player.transform.right*(1.1f + gameManage.rescuingNum*0.075f));
+                }
+                else
+                {
+                    SetNPCDestination(player.transform.position + player.transform.right*(1.85f));
+                }
+            }
+            else
+            {
+                SetNPCDestination(player.transform.position + player.transform.right* (-1.1f));
+            }
             animator.SetFloat("MoveSpeed", runSpeed);
 
             velocity = Vector3.zero;
@@ -217,7 +231,7 @@ public class NPCController : MonoBehaviour
         return state;
     }
     //検知範囲にオブジェクトが入った場合
-    public void OnObjectEnter(Collider collider)
+    public void OnObjectStay(Collider collider)
     {
         //プレイヤーを発見
         if (collider.CompareTag("Player"))

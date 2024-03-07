@@ -17,14 +17,14 @@ public class Reflection : MonoBehaviour
     void Update()
     {
         //y軸は-1をかけて逆側に配置する
-        if(Player.position.y < 64f)
-        {
+        // if(Player.position.y < 64f)
+        // {
             this.probe.cullingMask = 1 << 9;
-        }
-        else
-        {
-            this.probe.cullingMask = 0;
-        }
+        // }
+        // else
+        // {
+        //     this.probe.cullingMask = 0;
+        // }
         this.probe.transform.position = new Vector3(Camera.main.transform.position.x,
                                                 60f,
                                                 Camera.main.transform.position.z);

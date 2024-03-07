@@ -14,6 +14,8 @@ public class attackHandler : MonoBehaviour
     private bool isAttack;
     private Vector3 attackPosition;
 
+    private GameObject player;
+
     //敵のコントローラー取得
     private EnemyController enemyController;
 
@@ -39,6 +41,8 @@ public class attackHandler : MonoBehaviour
         sparkSound = this.AddComponent<AudioSource>();
         sparkSound.clip = spark;
         sparkSound.loop = false;
+
+        player = GameObject.Find("PlayerArmature");
 
     }
 
@@ -77,7 +81,7 @@ public class attackHandler : MonoBehaviour
         if (isAttack)
         {
             lr.enabled = true;
-
+            // if (Physics.Raycast(player.transform.position, player.transform.forward, out RaycastHit hitAttack, 50f, attackable))
             if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hitAttack, distance, attackable))
             {
 
@@ -98,18 +102,20 @@ public class attackHandler : MonoBehaviour
                     enemyController.SetState(EnemyController.EnemyState.hit);
                     enemyController.EnemyColorYellow(hitAttack);
                 }
-
                 //enemyController.ChangeBIribiri();
             }
-            else if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward,out RaycastHit hitCity,distance))
+            // else if (Physics.Raycast(player.transform.position, player.transform.forward + new Vector3(0f,0.1f,0f), out RaycastHit hit, 50f, CityMaterials))
+            else if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit, 50f,CityMaterials))
             {
 
-                attackPosition = hitCity.point;
+                attackPosition = hit.point;
 
             }
             else
             {
 
+                // Vector3 forwardDirectiion = player.transform.forward + new Vector3(0f,0.1f,0f);
+                // Vector3 targetPosition = player.transform.position + forwardDirectiion * distance;
                 Vector3 forwardDirectiion = Camera.main.transform.forward;
                 Vector3 targetPosition = Camera.main.transform.position + forwardDirectiion * distance;
                 attackPosition = targetPosition;
