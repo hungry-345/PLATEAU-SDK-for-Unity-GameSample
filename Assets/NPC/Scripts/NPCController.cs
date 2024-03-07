@@ -30,7 +30,7 @@ public class NPCController : MonoBehaviour
     //待機時間
     private float waitTime = 3f;
     //目的地に到着した判定距離
-    private float arrivedDistance=1.2f;
+    private float arrivedDistance=1.7f;
     //他のNPCとこの距離まで接近したらワープする
     private float NPCWarpDistance=10f;
     //目的地に到着したかフラグ
