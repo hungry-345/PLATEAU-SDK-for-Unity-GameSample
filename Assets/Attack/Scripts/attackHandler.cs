@@ -86,6 +86,7 @@ public class attackHandler : MonoBehaviour
             {
 
                 //敵の情報取得
+                hitAttack.collider.gameObject.layer = 0;
                 Transform geometry = hitAttack.transform.Find("Geometry");
                 Transform mesh = geometry.Find("Armature_Mesh");
                 attackPosition = new Vector3(mesh.position.x, mesh.position.y, mesh.position.z);
