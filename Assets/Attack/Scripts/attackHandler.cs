@@ -2,9 +2,14 @@
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class attackHandler : MonoBehaviour
 {
+    //InputAction
+    private InputAction attack;   
+
+
     [Header("attackParameter")]
     [SerializeField] private LayerMask attackable;
     [SerializeField] private LayerMask CityMaterials;
@@ -36,6 +41,8 @@ public class attackHandler : MonoBehaviour
 
     private void Awake()
     {
+        var playerInput = GetComponent<PlayerInput>();
+        attack = playerInput.actions["attack"];
         lr = this.GetComponent<LineRenderer>();
         lr.enabled = false;
         sparkSound = this.AddComponent<AudioSource>();
@@ -63,16 +70,23 @@ public class attackHandler : MonoBehaviour
             }
         }
 
-        CheckClickLeftMouseButton();
+        //CheckClickLeftMouseButton();
+        attack.performed += OnAttackAction;
         DrawElectro();
     }
 
-    public void CheckClickLeftMouseButton()
+    //public void CheckClickLeftMouseButton()
+    //{
+    //    if(Input.GetMouseButtonDown(0))
+    //    {
+    //        isAttack = true;
+    //    }
+    //    Attack();
+    //}
+
+    private void OnAttackAction(InputAction.CallbackContext context)
     {
-        if(Input.GetMouseButtonDown(0))
-        {
-            isAttack = true;
-        }
+        isAttack = true;
         Attack();
     }
 
@@ -93,17 +107,25 @@ public class attackHandler : MonoBehaviour
                 enemyController = hitAttack.collider.GetComponent<EnemyController>();
                 if (enemyController != null)
                 {
-                    enemyController.SetState(EnemyController.EnemyState.hit);
-                    enemyController.EnemyColorYellow(hitAttack);
+                    //enemyController.SetState(EnemyController.EnemyState.hit);
+                    //enemyController.EnemyColorYellow(hitAttack);
                 }
                 else
                 {
                     Transform parent = hitAttack.transform.parent;
                     enemyController = parent.GetComponent<EnemyController>();
+                    //enemyController.SetState(EnemyController.EnemyState.hit);
+                    //enemyController.EnemyColorYellow(hitAttack);
+                }
+
+                if (!enemyController.getIsBiribiri())
+                {
                     enemyController.SetState(EnemyController.EnemyState.hit);
                     enemyController.EnemyColorYellow(hitAttack);
+                    enemyController.ChangeBIribiri();
                 }
                 //enemyController.ChangeBIribiri();
+
             }
             // else if (Physics.Raycast(player.transform.position, player.transform.forward + new Vector3(0f,0.1f,0f), out RaycastHit hit, 50f, CityMaterials))
             else if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit, 50f,CityMaterials))

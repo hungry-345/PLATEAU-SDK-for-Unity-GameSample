@@ -166,7 +166,14 @@ public class EnemyController : MonoBehaviour
                 this.transform.Find("HitRange").gameObject.layer = 8;
                 SetState(EnemyState.Stroll);
                 EnemyColorRed();
+
                 isBiribiri = false;
+                if(elapsedTime > paralysisTime-1f)
+                {
+                  SetState(EnemyState.Stroll);
+                  EnemyColorRed();
+                }
+                
             }
             else
             {
@@ -373,8 +380,14 @@ public class EnemyController : MonoBehaviour
 
     //}
 
-    //public void ChangeBIribiri()
-    //{
-    //    isBiribiri = true;
-    //}
+    public void ChangeBIribiri()
+    {
+        isBiribiri = true;
+    }
+
+    public bool getIsBiribiri()
+    {
+        return isBiribiri;
+        
+    }
 }

@@ -1,4 +1,4 @@
-using PLATEAU.CityInfo;
+﻿using PLATEAU.CityInfo;
 using PLATEAU.Util.Async;
 using System.Collections;
 using System.Collections.Generic;
@@ -56,11 +56,14 @@ namespace PLATEAU.Samples
         private string correctBuildingName;
         private string filterStatus;
         private string nearestBuildingName;
+
+        private ActionManager actionManager;
         // -------------------------------------------------------------------------------------------------------------
         private void Awake()
         {
             // InputSystemのインスタンス(初期値)
-            inputActions = new InputScene();
+            //inputActions = new InputScene();
+            actionManager = GameObject.Find("PlayerArmature").GetComponent<ActionManager>();
             //Plateauのデータを取得
             // InitializeAsync().ContinueWithErrorCatch();
         }
@@ -69,15 +72,15 @@ namespace PLATEAU.Samples
         // -------------------------------------------------------------------------------------------------------------
         private void OnEnable()
         {
-            inputActions.Enable();
+            //inputActions.Enable();
         }
         private void OnDisable()
         {
-            inputActions.Disable();
+            //inputActions.Disable();
         }
         private void OnDestroy()
         {
-            inputActions.Dispose();
+            //inputActions.Dispose();
         }
         // -------------------------------------------------------------------------------------------------------------
         public void InitializeUI()
@@ -86,7 +89,7 @@ namespace PLATEAU.Samples
             TimeManageScript = GameObject.Find("TimeManager").GetComponent<TimeManage>();
 
             //InputSystemの入力を登録
-            inputActions.SelectScene.AddCallbacks(this);
+            //inputActions.SelectScene.AddCallbacks(this);
             
             // BaseUIのラベルを取得
             
@@ -135,9 +138,12 @@ namespace PLATEAU.Samples
             MissionLabel = BaseUi.rootVisualElement.Q<Label>("Mission_Text");
 
             EditMissionText();
+            actionManager.changeNormal();
             yield return new WaitForSeconds(2.0f);
+            
             StartText = BaseUi.rootVisualElement.Q<Label>("StartText");
             StartText.text = "";
+            
             // yield return new WaitUntil(() => IsInitialiseFinished());
         }
         /// Plateauのデータの取得が終わるまで待機する関数
