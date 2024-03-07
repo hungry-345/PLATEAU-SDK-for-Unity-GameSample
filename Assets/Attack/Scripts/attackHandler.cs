@@ -69,10 +69,9 @@ public class attackHandler : MonoBehaviour
                 elapsedTime = 0f;
             }
         }
-
-        //CheckClickLeftMouseButton();
         attack.performed += OnAttackAction;
         DrawElectro();
+        //CheckClickLeftMouseButton();
     }
 
     //public void CheckClickLeftMouseButton()
@@ -168,5 +167,10 @@ public class attackHandler : MonoBehaviour
         {
             lr.enabled = false;
         }
+    }
+
+    private void OnDestroy()
+    {
+        attack.performed -= OnAttackAction;
     }
 }
