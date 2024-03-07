@@ -163,9 +163,13 @@ public class EnemyController : MonoBehaviour
             elapsedTime += Time.deltaTime;
             if(elapsedTime > paralysisTime)
             {
-                SetState(EnemyState.Stroll);
-                EnemyColorRed();
                 isBiribiri = false;
+                if(elapsedTime > paralysisTime-1f)
+                {
+                  SetState(EnemyState.Stroll);
+                  EnemyColorRed();
+                }
+                
             }
             else
             {
@@ -372,8 +376,14 @@ public class EnemyController : MonoBehaviour
 
     //}
 
-    //public void ChangeBIribiri()
-    //{
-    //    isBiribiri = true;
-    //}
+    public void ChangeBIribiri()
+    {
+        isBiribiri = true;
+    }
+
+    public bool getIsBiribiri()
+    {
+        return isBiribiri;
+        
+    }
 }

@@ -72,15 +72,15 @@ namespace PLATEAU.Samples
         // -------------------------------------------------------------------------------------------------------------
         private void OnEnable()
         {
-            inputActions.Enable();
+            //inputActions.Enable();
         }
         private void OnDisable()
         {
-            inputActions.Disable();
+            //inputActions.Disable();
         }
         private void OnDestroy()
         {
-            inputActions.Dispose();
+            //inputActions.Dispose();
         }
         // -------------------------------------------------------------------------------------------------------------
         public void InitializeUI()
