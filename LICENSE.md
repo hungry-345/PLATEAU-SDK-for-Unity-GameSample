@@ -1,9 +1,9 @@
-キャラクターである unity chan に関するアセットは[ユニティちゃんライセンス条項](https://unity-chan.com/contents/license_jp/)に従います。フォントである（フォント名）は（ライセンス名）に従います。SoundEffect として使っている音源は、[OtoLogic](https://otologic.jp/)のサイバー 03 と電撃 02 と電撃 05 を使用しており、OtoLogic の利用規約に同意します。
-上記以外の部分は MIT ライセンスとします。
+キャラクターであるunity chanに関するアセットは[ユニティちゃんライセンス条項](https://unity-chan.com/contents/license_jp/)に従います。フォントであるDotGothic16は[the Open Font License](https://openfontlicense.org/)に従います。SoundEffectとして使っている音源は、[OtoLogic](https://otologic.jp/)のサイバー03と電撃02と電撃05を使用しており、[CCライセンス（CC BY 4.0）](https://creativecommons.org/licenses/by/4.0/legalcode.ja)に従います。
+上記以外の部分はMITライセンスとします。
 
 MIT License
-© Unity Technologies Japan/UCL
-Copyright (c) 2023 MLIT Japan.
+
+Copyright (c) 2024 MLIT Japan.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,3 +22,4 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
