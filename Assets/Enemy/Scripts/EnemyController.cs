@@ -163,6 +163,10 @@ public class EnemyController : MonoBehaviour
             elapsedTime += Time.deltaTime;
             if(elapsedTime > paralysisTime)
             {
+                this.transform.Find("HitRange").gameObject.layer = 8;
+                SetState(EnemyState.Stroll);
+                EnemyColorRed();
+
                 isBiribiri = false;
                 if(elapsedTime > paralysisTime-1f)
                 {

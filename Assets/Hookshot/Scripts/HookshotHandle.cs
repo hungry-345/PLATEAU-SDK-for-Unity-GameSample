@@ -162,7 +162,8 @@ namespace StarterAssets
         //攻撃する場合
         private void AttackHook()
         {
-            if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hitAttack, 50f, attackable))
+            // if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hitAttack, 50f, attackable))
+            if (Physics.Raycast(player.transform.position, player.transform.forward, out RaycastHit hitAttack, 50f, attackable))
             //Hookshotで攻撃する場合
             {
                 isHookshotAttack = true;
@@ -189,7 +190,7 @@ namespace StarterAssets
                     enemyController.EnemyColorYellow(hitAttack);
                 }
                     //se再生
-                    sparkSound.Play();
+                // sparkSound.Play();
             }
             else if(Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit, 50f,CityMaterials))
             {
@@ -197,7 +198,7 @@ namespace StarterAssets
 
                 isHookshotAttack = true;
                 hookshotPosition = hit.point;
-                sparkSound.Play();  
+                sparkSound.Play(); 
             }
             else
             {

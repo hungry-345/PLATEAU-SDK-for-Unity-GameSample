@@ -46,7 +46,7 @@ public class ItemManage : MonoBehaviour
             item.name = itemNumber + "Hint";
             GameObject itemMarker = Instantiate(marker,transform.root.gameObject.transform) as GameObject;
             itemMarker.name = item.name + "Marker";
-            itemMarker.transform.localScale = new Vector3(20f, 1f, 20f);
+            itemMarker.transform.localScale = new Vector3(10f, 1f, 10f);
             itemMarker.transform.position = new Vector3(spawnPos.x,-500,spawnPos.z);
             itemCount += 1;
             itemNumber +=1;
