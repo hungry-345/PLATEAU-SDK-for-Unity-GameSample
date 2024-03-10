@@ -198,6 +198,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ShelterParticle
       objectReference: {fileID: 0}
+    - target: {fileID: 8744029980695208104, guid: 9679327f439e4b64099f5a135daed4b9, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9679327f439e4b64099f5a135daed4b9, type: 3}
 --- !u!4 &327977089361647035 stripped
