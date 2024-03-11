@@ -2013,6 +2013,8 @@ MonoBehaviour:
   runSpeed: 9
   walkSpeed: 1
   sightAngle: 90
+  FootstepAudioClips:
+  - {fileID: 8300000, guid: e71bfcc0be2618c4a95b393d1dfcf51b, type: 3}
   kaminari: {fileID: 5158467063072505424, guid: 9bfd6711cee781843a03aed5083f2795, type: 3}
   biribiri: {fileID: 8300000, guid: 1aae68b4b631b864ca8e35429d512028, type: 3}
 --- !u!135 &4626294525704307018
