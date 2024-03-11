@@ -72,6 +72,8 @@ public class GameView : ViewBase
                 {
                     //ゲームオーバーUIを表示
                     gameOverUI.enabled = true;
+                    Label ResultLabel = gameOverUI.rootVisualElement.Q<Label>("Result");
+                    ResultLabel.text = "救出した人数 : " + gameManage.rescuedNum;
                     toTitleButton = gameOverUI.rootVisualElement.Query<Button>();
                 }
                 toTitleButton.clicked += OnButtonClicked;

@@ -410,6 +410,7 @@ namespace PLATEAU.Samples
         /// <summary>
         /// アイテムを生成する
         /// </summary>
+
         public void SpawnHintItem()
         {
             ItemManageScript.GenerateItem();
