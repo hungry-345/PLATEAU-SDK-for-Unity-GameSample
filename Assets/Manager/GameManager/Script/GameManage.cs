@@ -380,6 +380,7 @@ namespace PLATEAU.Samples
             }
             flag = GameObject.Find(hintBuildingName+"flag");
             flag.GetComponent<MeshRenderer>().enabled = true;
+            flag.GetComponentInChildren<ParticleSystem>().Play();
             Marker = GameObject.Find(hintBuildingName+"Marker");
             var MarkerTexture = Marker.transform.GetChild(0).gameObject.transform;
             MarkerTexture.GetComponent<MeshRenderer>().enabled = true;
@@ -421,6 +422,7 @@ namespace PLATEAU.Samples
             flag.name = flagName+"flag";
             flag.transform.position = flagPosition;
             flag.GetComponent<MeshRenderer>().enabled = false;
+            flag.GetComponentInChildren<ParticleSystem>().Pause();
 
             GameObject Marker = Instantiate(GoalMarker,transform.root.gameObject.transform) as GameObject;
             Marker.name = flagName + "Marker";

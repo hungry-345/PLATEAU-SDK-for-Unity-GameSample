@@ -187,6 +187,11 @@ namespace PLATEAU.Samples
             for (int i = 0; i < renderer.materials.Length; ++i)
             {
                 renderer.materials[i].color = selectedColor;
+
+                renderer.materials[i].EnableKeyword("_EMISSION");
+
+                renderer.materials[i].SetColor("_EmissionColor", selectedColor);
+               
             }
             // GoalCityObject.GetComponent<Renderer>().material.color = selectedColor;
             // selectCityObject = gmls[GoalCityObject.transform.parent.parent.name].CityObjects[GoalCityObject.transform.name];
@@ -201,6 +206,7 @@ namespace PLATEAU.Samples
             for (int i = 0; i < renderer.materials.Length; ++i)
             {
                 renderer.materials[i].color = Color.white;
+                renderer.materials[i].DisableKeyword("_EMISSION");
             }
 
             if(Shelter1HeightLabel.text == BuildingInfoDict[deleteBuildingName].heightLabel.text)
