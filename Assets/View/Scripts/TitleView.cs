@@ -42,6 +42,14 @@ public class TitleView : ViewBase
         cursorManager = GameObject.Find("Cursor").GetComponent<CursorManager>();
     }
 
+    private void Update()
+    {
+        if(!cursorManager.cursorState)
+        {
+            cursorManager.OnVisible();
+        }
+    }
+
     private void OnStart()
     {
         cursorManager.CursorSoundPlay();

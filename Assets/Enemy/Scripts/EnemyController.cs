@@ -26,11 +26,12 @@ public class EnemyController : MonoBehaviour
 
     //巡回地点の親オブジェクト
     private GameObject strollPosObjects;
+
     private CharacterController characterController;
     private PathManager pathManager;
     private Animator animator;
     private GameObject player;
-    //private NavMeshAgent navMeshAgent;
+    public AudioClip[] FootstepAudioClips;
 
     // 状態
     private EnemyState state;
@@ -369,16 +370,18 @@ public class EnemyController : MonoBehaviour
             }
         }
     }
-
-    //ゲーム終了時の処理
-    //private void OnDestroy()
-    //{
-    //    if (kaminariInstance) 
-    //    {
-    //        Destroy(kaminariInstance);
-    //    }
-
-    //}
+    //敵の足音
+    private void OnFootstep(AnimationEvent animationEvent)
+    {
+        if (animationEvent.animatorClipInfo.weight > 0.5f)
+        {
+            if (FootstepAudioClips.Length > 0)
+            {
+                var index = Random.Range(0, FootstepAudioClips.Length);
+                AudioSource.PlayClipAtPoint(FootstepAudioClips[index], transform.TransformPoint(characterController.center), 1f);
+            }
+        }
+    }
 
     public void ChangeBIribiri()
     {

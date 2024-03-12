@@ -9,6 +9,7 @@ public class CursorManager : MonoBehaviour
     //public Sprite highlightCursorSprite; 
     private AudioSource clickSound;
     private Vector2 mousePosition;
+    public bool cursorState;
 
     public void OnEnable()
     {
@@ -23,15 +24,18 @@ public class CursorManager : MonoBehaviour
     public void OnVisible()
     {
         Cursor.visible = true;
+        cursorState = true;
     }
     public void OnInvisible()
     {
         Cursor.visible = false;
+        cursorState = false;
     }
 
     private void Awake()
     {
         clickSound = GetComponent<AudioSource>();
+        cursorState = false;
     }
     public void Update()
     {
