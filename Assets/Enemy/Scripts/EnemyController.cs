@@ -255,18 +255,10 @@ public class EnemyController : MonoBehaviour
                 AudioSource biribiriSound = kaminariInstance.AddComponent<AudioSource>();
                 biribiriSound.clip = biribiri;
                 biribiriSound.loop = true;
+                biribiriSound.spatialBlend = 1.0f;
                 biribiriSound.Play();
                 Destroy(kaminariInstance, paralysisTime);
             }
-
-            //GameObject kaminariInstance = Instantiate(kaminari, new Vector3(this.transform.position.x, this.transform.position.y + 1.5f, this.transform.position.z), Quaternion.Euler(0, 0, 0), this.transform);
-            //    ps = kaminariInstance.GetComponent<ParticleSystem>();
-            //    //ビリビリサウンド再生
-            //    AudioSource biribiriSound = kaminariInstance.AddComponent<AudioSource>();
-            //    biribiriSound.clip = biribiri;
-            //    biribiriSound.loop = true;
-            //    biribiriSound.Play();
-            //    Destroy(kaminariInstance, paralysisTime);
 
         }
     }
