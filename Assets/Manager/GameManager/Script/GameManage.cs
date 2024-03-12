@@ -47,7 +47,6 @@ namespace PLATEAU.Samples
         private GameObject[] HintLst;
         private GameObject goalBuilding;
         private List<string> buildingDirName;
-        private KeyValuePair<string, PLATEAU.Samples.SampleCityObject> rndBuilding;
         private Bounds goalBounds;
         private Vector3 goalPos;
         private int goalNum;
@@ -542,6 +541,7 @@ namespace PLATEAU.Samples
                 for (int i = 0; i < renderer.materials.Length; ++i)
                 {
                     renderer.materials[i].color = Color.white;
+                    renderer.materials[i].DisableKeyword("_EMISSION");
                 }
                 goalAttribute.Value.buildingObj.tag = "Untagged";
             }
