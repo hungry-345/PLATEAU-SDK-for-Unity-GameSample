@@ -73,7 +73,7 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
-/[Aa]ssets/[Ss]tarterAssets/
-/[Aa]ssets/[Ss]tarterAssets.meta/
+/[Aa]ssets/[Ss]tarterAssets
+/[Aa]ssets/[Ss]tarterAssets.meta
 Assets/Player/Animations/Railgun.blend
 Assets/Player/Animations/Railgun.blend.meta
