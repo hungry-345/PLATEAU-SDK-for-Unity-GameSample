@@ -12,18 +12,13 @@ SDKの導入方法、機能の説明、サンプルプロジェクトの内容�
 ## 動作環境
 - Unity 2021.3.30f1~
 
-## 導入
-- [Releaseページ](https://github.com/Synesthesias/PLATEAU-SDK-for-Unity-GameSample/releases/tag/v1.0.0)から最新版を選択します。
-- 掲載されているサンプルプロジェクトをダウンロードします。
-- zipファイルを展開してUnityからプロジェクトとして開きます。
-
 ## GameSample
 ![](/README_Images/GameSample.png)
 属性情報の取得方法、及び活用方法について知るためのチュートリアルとして、ゲームサンプルアプリを提供しています。ゲームサンプルアプリでは、制限時間内にロボットに襲われている生存者を救出するゲームとなっています。また、プレイヤーは走るだけでなく、フックショットを利用した移動とロボットの足止めをすることが出来ます。ゲームサンプルアプリは、サンプルプロジェクトに含まれるAssets/GameSample/Scenes/GameSample.unityを開き、Playすることで実行できます。
 
 
 ## ゲームサンプルアプリのみをインストール
-ゲームサンプルアプリのみを使用したい場合は、(URL)からダウンロードして、zipファイルを展開してください。
+ゲームサンプルアプリのみを使用したい場合は、[Rereaseページ](https://github.com/Synesthesias/PLATEAU-SDK-for-Unity-GameSample/releases/tag/v1.0.0)からダウンロードして、zipファイルを展開してください。
 
 ## gitからの導入
 git lfs の導入が必要であることに注意してください。
