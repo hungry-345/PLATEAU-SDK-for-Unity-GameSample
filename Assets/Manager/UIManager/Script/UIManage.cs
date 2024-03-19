@@ -418,7 +418,7 @@ namespace PLATEAU.Samples
         {
             if(GameManageScript.rescuingNum == 0)
             {
-                MissionLabel.text = "生存者を見つけよう!";
+                MissionLabel.text = "要救助者を見つけよう!";
             }
             else if(BuildingInfoDict.Count == 0)
             {
