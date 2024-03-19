@@ -47,7 +47,6 @@ namespace PLATEAU.Samples
         private GameObject[] HintLst;
         private GameObject goalBuilding;
         private List<string> buildingDirName;
-        private KeyValuePair<string, PLATEAU.Samples.SampleCityObject> rndBuilding;
         private Bounds goalBounds;
         private Vector3 goalPos;
         private int goalNum;
@@ -380,6 +379,7 @@ namespace PLATEAU.Samples
             }
             flag = GameObject.Find(hintBuildingName+"flag");
             flag.GetComponent<MeshRenderer>().enabled = true;
+            flag.GetComponentInChildren<ParticleSystem>().Play();
             Marker = GameObject.Find(hintBuildingName+"Marker");
             var MarkerTexture = Marker.transform.GetChild(0).gameObject.transform;
             MarkerTexture.GetComponent<MeshRenderer>().enabled = true;
@@ -421,6 +421,7 @@ namespace PLATEAU.Samples
             flag.name = flagName+"flag";
             flag.transform.position = flagPosition;
             flag.GetComponent<MeshRenderer>().enabled = false;
+            flag.GetComponentInChildren<ParticleSystem>().Pause();
 
             GameObject Marker = Instantiate(GoalMarker,transform.root.gameObject.transform) as GameObject;
             Marker.name = flagName + "Marker";
@@ -540,6 +541,7 @@ namespace PLATEAU.Samples
                 for (int i = 0; i < renderer.materials.Length; ++i)
                 {
                     renderer.materials[i].color = Color.white;
+                    renderer.materials[i].DisableKeyword("_EMISSION");
                 }
                 goalAttribute.Value.buildingObj.tag = "Untagged";
             }

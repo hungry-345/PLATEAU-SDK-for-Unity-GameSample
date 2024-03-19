@@ -187,10 +187,12 @@ namespace PLATEAU.Samples
             for (int i = 0; i < renderer.materials.Length; ++i)
             {
                 renderer.materials[i].color = selectedColor;
+
+                renderer.materials[i].EnableKeyword("_EMISSION");
+
+                renderer.materials[i].SetColor("_EmissionColor", selectedColor);
+               
             }
-            // GoalCityObject.GetComponent<Renderer>().material.color = selectedColor;
-            // selectCityObject = gmls[GoalCityObject.transform.parent.parent.name].CityObjects[GoalCityObject.transform.name];
-            // selectCityObject.SetMaterialColor(selectedColor);
             // ミッションのメッセージの変更
             EditMissionText();
         }
@@ -201,6 +203,7 @@ namespace PLATEAU.Samples
             for (int i = 0; i < renderer.materials.Length; ++i)
             {
                 renderer.materials[i].color = Color.white;
+                renderer.materials[i].DisableKeyword("_EMISSION");
             }
 
             if(Shelter1HeightLabel.text == BuildingInfoDict[deleteBuildingName].heightLabel.text)
@@ -280,14 +283,10 @@ namespace PLATEAU.Samples
             filterStatus = itemName;
 
             // 全ての建物の色を元に戻す
-            // colorCodeType = (ColorCodeType)Enum.Parse(typeof(ColorCodeType), "None");
             ColorCode("None");
             //フィルターに引っかかった建物の色を変える
-            // colorCodeType = (ColorCodeType)Enum.Parse(typeof(ColorCodeType), itemName);
             ColorCode(itemName);
 
-
-            string filterText = SetFilterText(itemName,attributeValue); 
         }
 
 

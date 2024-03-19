@@ -40,7 +40,7 @@ public class ItemManage : MonoBehaviour
             // 指定された半径の円内のランダム位置を取得
             Vector3 circlePos = radius * Random.insideUnitCircle;
             //円内のランダム位置を計算
-            Vector3 spawnPos = new Vector3(circlePos.x, 50f, circlePos.y) + center;
+            Vector3 spawnPos = new Vector3(circlePos.x, 20f, circlePos.y) + center;
             //アイテムを生成
             GameObject item = Instantiate(UsageItem, spawnPos, Quaternion.Euler(-90f, 0f, 0f), this.gameObject.transform);
             item.name = itemNumber + "Hint";
