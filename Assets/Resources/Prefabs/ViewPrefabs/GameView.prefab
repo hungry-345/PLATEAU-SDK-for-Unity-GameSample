@@ -9528,15 +9528,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 223299533143435475, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: shouldDrawGizmosThisFrame
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 366373826172268951, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: shouldDrawGizmosThisFrame
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 453475415134212815, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: shouldDrawGizmosThisFrame
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 708900534318162021, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: m_Loop
@@ -9588,7 +9588,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1250305632464551987, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: shouldDrawGizmosThisFrame
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1735468584205554085, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: orange
@@ -9604,11 +9604,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2234691791301303317, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: shouldDrawGizmosThisFrame
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2447523344003358257, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: shouldDrawGizmosThisFrame
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2458947846477602596, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: JumpHeight
@@ -9628,15 +9628,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3094240198075814475, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: shouldDrawGizmosThisFrame
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3161586905212567818, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: shouldDrawGizmosThisFrame
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3263361533675315269, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
+      propertyPath: saveParticle
+      value: 
+      objectReference: {fileID: 1837947354677370815, guid: 789b77970a5135140b92a679131ceff2, type: 3}
+    - target: {fileID: 3263361533675315269, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
+      propertyPath: getItemParticle
+      value: 
+      objectReference: {fileID: 1837947354677370815, guid: de14f3e2796e7e64b83f797d4935b41e, type: 3}
+    - target: {fileID: 3263361533675315269, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
+      propertyPath: getItemAudioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: e0930064b0e62b94fbc6b4121dca6000, type: 3}
     - target: {fileID: 3357914852849026180, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: shouldDrawGizmosThisFrame
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3582740024923462377, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: m_LocalRotation.w
@@ -9656,7 +9668,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3650700361799944651, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: shouldDrawGizmosThisFrame
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4781831693747470302, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: m_LocalRotation.w
@@ -9680,7 +9692,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4959300074362813149, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: shouldDrawGizmosThisFrame
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5075837296544899788, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: m_IsActive
@@ -9688,7 +9700,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5240207564265363198, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: shouldDrawGizmosThisFrame
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6418349746158107088, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: m_RotationOffset.x
@@ -9876,7 +9888,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6971061176605259108, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: shouldDrawGizmosThisFrame
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7188222013491393374, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: m_LocalRotation.w
@@ -9896,15 +9908,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7275351577013779432, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: shouldDrawGizmosThisFrame
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7443263602598109629, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: shouldDrawGizmosThisFrame
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7814395723143629261, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: shouldDrawGizmosThisFrame
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8248346769143206021, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: m_RootOrder
@@ -9964,7 +9976,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8572393949017195769, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: shouldDrawGizmosThisFrame
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
