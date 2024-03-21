@@ -16,6 +16,8 @@ namespace PLATEAU.Samples
         //サウンドエフェクト
         [SerializeField] private AudioClip getItemAudioClip;
         private AudioSource getItemSound;
+        [SerializeField] private AudioClip saveAudioClip;
+        private AudioSource saveSound;
 
         private GameManage GameManageScript;
         private GameView GameViewScript;
@@ -34,9 +36,14 @@ namespace PLATEAU.Samples
             ActionManager = GameObject.Find("PlayerArmature").GetComponent<ActionManager>();
 
             //サウンドエフェクト
+            // アイテム取得時
             getItemSound = gameObject.AddComponent<AudioSource>();
             getItemSound.clip = getItemAudioClip;
             getItemSound.loop = false;
+            // 救出時
+            saveSound = gameObject.AddComponent<AudioSource>();
+            saveSound.clip = saveAudioClip;
+            saveSound.loop = false;
         }
         public void GameOverFunc()
         {
@@ -63,8 +70,11 @@ namespace PLATEAU.Samples
             {
                 //救助する
                 GameManageScript.SelectBuildingAction(hit.transform);
+                // パーティクルエフェクト
                 saveParticleInstance = Instantiate(saveParticle,this.gameObject.transform.position,Quaternion.Euler(-90,0,0),this.gameObject.transform);
                 Destroy(saveParticleInstance,particleDuration);
+                // サウンドエフェクト
+                saveSound.Play();
             }
         }
     }

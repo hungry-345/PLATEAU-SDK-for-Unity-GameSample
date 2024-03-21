@@ -1896,6 +1896,8 @@ MonoBehaviour:
   gameFinishUI: {fileID: 8459464101318395907}
   isGameFinish: 0
   isGameOver: 0
+  gameFinishAudioClip: {fileID: 8300000, guid: a426a0f564788eb4c858d2b8c847590c, type: 3}
+  gameOverAudioClip: {fileID: 8300000, guid: 64ba73aeb837afb4ba87e8adc844739a, type: 3}
 --- !u!1 &2494549289659542046
 GameObject:
   m_ObjectHideFlags: 0
@@ -6217,6 +6219,7 @@ MonoBehaviour:
   usageColorTable:
   - {r: 0.7582872, g: 1, b: 0, a: 0}
   selectedColor: {r: 0, g: 0.83239555, b: 1, a: 0}
+  startAudioClip: {fileID: 8300000, guid: e42eb6100c8e8ee4386abe71f6a44fe6, type: 3}
   PlayerPosCamera: {fileID: 7600826447983077792}
   isInitialiseFinish: 0
 --- !u!1 &7600826448028043677
@@ -9528,15 +9531,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 223299533143435475, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: shouldDrawGizmosThisFrame
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 366373826172268951, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: shouldDrawGizmosThisFrame
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 453475415134212815, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: shouldDrawGizmosThisFrame
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 708900534318162021, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: m_Loop
@@ -9588,7 +9591,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1250305632464551987, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: shouldDrawGizmosThisFrame
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1735468584205554085, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: orange
@@ -9604,11 +9607,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2234691791301303317, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: shouldDrawGizmosThisFrame
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2447523344003358257, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: shouldDrawGizmosThisFrame
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2458947846477602596, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: JumpHeight
@@ -9626,18 +9629,26 @@ PrefabInstance:
       propertyPath: RotationSmoothTime
       value: 0.119
       objectReference: {fileID: 0}
+    - target: {fileID: 2458947846477602596, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
+      propertyPath: GroundLayers.m_Bits
+      value: 1545
+      objectReference: {fileID: 0}
     - target: {fileID: 3094240198075814475, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: shouldDrawGizmosThisFrame
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3161586905212567818, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: shouldDrawGizmosThisFrame
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3263361533675315269, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: saveParticle
       value: 
       objectReference: {fileID: 1837947354677370815, guid: 789b77970a5135140b92a679131ceff2, type: 3}
+    - target: {fileID: 3263361533675315269, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
+      propertyPath: saveAudioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 52785ce05b92af64a9ec36e40ef3d94c, type: 3}
     - target: {fileID: 3263361533675315269, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: getItemParticle
       value: 
@@ -9648,7 +9659,7 @@ PrefabInstance:
       objectReference: {fileID: 8300000, guid: e0930064b0e62b94fbc6b4121dca6000, type: 3}
     - target: {fileID: 3357914852849026180, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: shouldDrawGizmosThisFrame
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3582740024923462377, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: m_LocalRotation.w
@@ -9668,7 +9679,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3650700361799944651, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: shouldDrawGizmosThisFrame
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4781831693747470302, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: m_LocalRotation.w
@@ -9692,7 +9703,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4959300074362813149, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: shouldDrawGizmosThisFrame
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5075837296544899788, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: m_IsActive
@@ -9700,7 +9711,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5240207564265363198, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: shouldDrawGizmosThisFrame
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6418349746158107088, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: m_RotationOffset.x
@@ -9883,12 +9894,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2100000, guid: e6c32fe286e802641add44aa443be61f, type: 2}
     - target: {fileID: 6533984514649378790, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
+      propertyPath: CityMaterials.m_Bits
+      value: 1536
+      objectReference: {fileID: 0}
+    - target: {fileID: 6533984514649378790, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: ElectricTexture.Array.size
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6971061176605259108, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: shouldDrawGizmosThisFrame
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7188222013491393374, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: m_LocalRotation.w
@@ -9908,15 +9923,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7275351577013779432, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: shouldDrawGizmosThisFrame
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7443263602598109629, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: shouldDrawGizmosThisFrame
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7814395723143629261, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: shouldDrawGizmosThisFrame
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8248346769143206021, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: m_RootOrder
@@ -9976,7 +9991,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8572393949017195769, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}
       propertyPath: shouldDrawGizmosThisFrame
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 75d6233364cf7384c9a3f0f25372a878, type: 3}

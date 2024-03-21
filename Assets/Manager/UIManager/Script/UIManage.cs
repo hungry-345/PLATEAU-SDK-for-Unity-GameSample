@@ -25,6 +25,8 @@ namespace PLATEAU.Samples
         [SerializeField, Tooltip("色分け（高さ）の色テーブル")] private Color[] heightColorTable;
         [SerializeField, Tooltip("色分け（使用用途）の色テーブル")] private Color[] usageColorTable;
         [SerializeField, Tooltip("選択中のオブジェクトの色")] private Color selectedColor;
+        [SerializeField] private AudioClip startAudioClip;
+        private AudioSource startSound;
         [SerializeField] public Camera PlayerPosCamera;
 
         public readonly Dictionary<string, SampleGml> gmls = new Dictionary<string, SampleGml>();
@@ -66,6 +68,9 @@ namespace PLATEAU.Samples
             actionManager = GameObject.Find("PlayerArmature").GetComponent<ActionManager>();
             //Plateauのデータを取得
             // InitializeAsync().ContinueWithErrorCatch();
+            startSound = gameObject.AddComponent<AudioSource>();
+            startSound.clip = startAudioClip;
+            startSound.loop = false;
         }
 
         // InputSystemを有効化させる
@@ -125,6 +130,7 @@ namespace PLATEAU.Samples
             yield return new WaitForSeconds(3.0f);
             initializingUi.gameObject.SetActive(false);
             BaseUi.gameObject.SetActive(true);
+            // startSound.Play();
 
             timeLabel = BaseUi.rootVisualElement.Q<Label>("Time");
             rescuedNumLabel = BaseUi.rootVisualElement.Q<Label>("Rescued_Count");
