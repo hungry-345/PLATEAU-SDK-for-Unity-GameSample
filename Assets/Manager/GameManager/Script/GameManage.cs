@@ -75,7 +75,6 @@ namespace PLATEAU.Samples
             saveSound.clip = saveAudioClip;
             saveSound.loop = false;
         }
-
         void Start()
         {
 
@@ -84,7 +83,7 @@ namespace PLATEAU.Samples
         public void StartGame()
         {
             rnd = new System.Random();
-            
+
             
             //thirdpersonController = GameObject.Find("PlayerArmature").GetComponent<ThirdPersonController>();
 
@@ -221,7 +220,7 @@ namespace PLATEAU.Samples
         /// <summary>
         /// ランダムな位置に1個ゴールを設置する
         /// </summary>
-        private void SelectGoal()
+        public void SelectGoal()
         {
             var cityObjGroups = targetParent.GetComponentsInChildren<PLATEAUCityObjectGroup>();
             int capacityNum = 0;
@@ -284,35 +283,6 @@ namespace PLATEAU.Samples
             // GoalAttributeDict.Add(rndBuilding.Key,gmlData);
             // goalPos += new Vector3(-467.28f,0f,-1869.266f);
             // GenerateTargetFlag(goalPos,rndBuilding.Key);
-        }
-
-        /// <summary>
-        /// ランダムな位置に複数個ゴールを設置する
-        /// </summary>
-        public void SelectGoals()
-        {
-            //citygmlからbldgに関するフォルダ情報を得る
-            foreach(KeyValuePair<string, SampleGml> dir in UIManageScript.gmls)
-            {
-                if(dir.Key.Contains("bldg"))
-                {
-                    buildingDirName.Add(dir.Key);
-                }
-            }
-            
-            // for(int i=0;i<goalNum;i++)
-            // {
-                SelectGoal();
-            // }
-
-            //正解の建物の情報を取得
-            // goalBuilding = GameObject.Find(rndBuilding.Key);
-            // goalBounds = goalBuilding.GetComponent<MeshCollider>().sharedMesh.bounds;
-            //選ばれた建物の位置情報を取得
-            // goalPos = new Vector3(goalBounds.center.x+320f,goalBounds.center.y+goalBounds.size.y,goalBounds.center.z+380f);
-            
-            //Helperの位置を変更
-             GameObject.Find("Helper").transform.position = goalPos;
         }
 
 //  -------------------------------------------------------------------------------
@@ -386,27 +356,6 @@ namespace PLATEAU.Samples
             Marker = GameObject.Find(hintBuildingName+"Marker");
             var MarkerTexture = Marker.transform.GetChild(0).gameObject.transform;
             MarkerTexture.GetComponent<MeshRenderer>().enabled = true;
-
-            
-
-            // nearestBuildingName = FindNearestGoal();
-
-            // if(itemName == "measuredheight")
-            // {
-            //     hint = GoalAttributeDict[nearestBuildingName].measuredheight;
-            // }
-            // else if(itemName == "Usage")
-            // {
-            //     hint = GoalAttributeDict[nearestBuildingName].Usage;
-            // }
-            // else
-            // {
-            //     hint = GoalAttributeDict[nearestBuildingName].saboveground;
-            // }
-            // UIManageScript.DisplayAnswerGML(itemName,hint,nearestBuildingName);
-
-            // //フィルター関連の表示
-            // TimeManageScript.ColorBuilding(itemName,nearestBuildingName,hint);
         }
 
         // -----------------------------------------------------------------------------------------------------------
@@ -515,7 +464,6 @@ namespace PLATEAU.Samples
             rescuingNum += 1;
             UIManageScript.DisplayRescuingNum();
         }
-  
         private void ResetGoals()
         {
             // 建物の色を初期化

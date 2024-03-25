@@ -62,9 +62,9 @@ public class NPCController : MonoBehaviour
     {
         characterController = GetComponent<CharacterController>();
         gameManage = GameObject.Find("GameManager").GetComponent<GameManage>();
-
         pathManage = GameObject.Find("RoadObjects").GetComponent<PathManage>();
         NPCManage = GameObject.Find("NPCManager").GetComponent<NPCManage>();
+
 
         player = GameObject.FindGameObjectWithTag("Player");
         animator = GetComponent<Animator>();

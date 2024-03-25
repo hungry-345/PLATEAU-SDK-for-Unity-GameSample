@@ -53,24 +53,5 @@ namespace PLATEAU.Samples
             }
 
         }
-
-        private IEnumerator Coloring(string gmlName,string nearestBuildingName,string hint)
-        {
-            isCoroutine = true;
-            UIManageScript.ChangeColoring(gmlName,nearestBuildingName,hint);
-            yield return new WaitForSeconds(20);
-            UIManageScript.ChangeColoring("None",nearestBuildingName,hint);
-            isCoroutine = false;
-        }
-        public void ColorBuilding(string gmlName,string nearestBuildingName,string hint)
-        {
-            if(isCoroutine)
-            {
-                StopCoroutine(coloringCoroutine);
-                UIManageScript.ColorCode("None");
-                isCoroutine = false;
-            }
-            coloringCoroutine = StartCoroutine(Coloring(gmlName,nearestBuildingName,hint));
-        }
     }
 }
