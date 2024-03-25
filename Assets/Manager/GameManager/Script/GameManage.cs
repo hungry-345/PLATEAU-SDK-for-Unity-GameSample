@@ -21,10 +21,8 @@ namespace PLATEAU.Samples
             public int capacity;
             public GameObject buildingObj;
         }
-        
         [SerializeField, Tooltip("ターゲットフラッグ")] private GameObject targetFlag;
         [SerializeField, Tooltip("ゴールマーカー")] private GameObject GoalMarker;
-
         //ゲーム終了時にプレイヤーを操作不能にするために取得
         [SerializeField] private PlayerInput playerInput;
         private Transform targetParent;
@@ -75,11 +73,6 @@ namespace PLATEAU.Samples
             saveSound.clip = saveAudioClip;
             saveSound.loop = false;
         }
-        void Start()
-        {
-
-        }
-
         public void StartGame()
         {
             rnd = new System.Random();
@@ -117,28 +110,6 @@ namespace PLATEAU.Samples
             playerInput.enabled = true;
 
         }
-        // IEnumerator WatiForInitialise()
-        // {
-        //     // yield return ->　ある関数が終わるまで待つ
-            
-        //     // yield return new WaitUntil(() => UIManageScript.IsInitialiseFinished());
-            
-        // }
-        private string GetAttribute(string attributeName,SampleAttribute attribeteData)
-        {
-            string value = "";
-            foreach(var attribute in attribeteData.GetKeyValues())
-            {
-                if(attribute.Key.Path.Contains(attributeName))
-                {
-                    value = attribute.Value;
-                }
-            }
-            return value;
-        }
-        /// <summary>
-        /// 正解の建物として必要な要件は満たしているか
-        /// </summary>
         private bool CheckAttributeData(string buildingName,string buildingHeight)
         {
             bool isOverbaseHeight = false;
@@ -161,62 +132,6 @@ namespace PLATEAU.Samples
             return isOverbaseHeight && !isSameBuilding;
 
         }
-        private bool CheckGMLdata(SampleAttribute buildingData,string buildingName)
-        {
-            bool isSetData = false;
-            bool isOverbaseHeight = false;
-            // bool isOversaboveground = false;
-            bool isSameBuilding = false;
-            string hintValue;
-            string buildingHeight;
-            string buildingsaboveground;
-            // 必要なGMLデータがそろっているか判定  Usageは沼津にはない
-            foreach(GameObject hint in HintLst)
-            {
-                isSetData = false;
-                hintValue = GetAttribute(hint.name,buildingData);
-                if(!(hintValue == ""))
-                {
-                    isSetData = true;
-                }
-                if(!isSetData)
-                {
-                    break;
-                }
-            }
-
-            // 建物の高さは10m以上か
-            buildingHeight = GetAttribute("measuredheight",buildingData);
-            if(buildingHeight == "")
-            {
-                buildingHeight = "-1";
-            }
-            if(float.Parse(buildingHeight) > 10)
-            {
-                isOverbaseHeight = true;
-            }
-
-            // 建物の階層は1以上か ぬまずにはない
-            // buildingsaboveground = GetAttribute("saboveground",buildingData);
-            // if(buildingsaboveground == "")
-            // {
-            //     buildingsaboveground = "-1";
-            // }
-            // if(float.Parse(buildingsaboveground) > 0)
-            // {
-            //     isOversaboveground = true;
-            // }
-
-            // 同じ名前の建物でないか
-            if(GoalAttributeDict.ContainsKey(buildingName))
-            {
-                isSameBuilding = true;
-            }
-
-            return isSetData && isOverbaseHeight && !isSameBuilding;
-        }
-
-
         /// <summary>
         /// ランダムな位置に1個ゴールを設置する
         /// </summary>
@@ -258,66 +173,7 @@ namespace PLATEAU.Samples
                     }
                 }
             }
-
-            // while(!isSetGMLdata)
-            // {
-            //     var tmpdirName = buildingDirName[Random.Range(0,buildingDirName.Count)];
-            //     //ランダムに建物を指定ript.gmls[tmpdirName]
-            //     rndBuilding = UIManageScript.gmls[tmpdirName].CityObjects.ElementAt(rnd.Next(0, UIManageSc.CityObjects.Count));
-            //     //ゴールの属性情報
-            //     correctGMLdata = rndBuilding.Value.Attribute;
-            //     isSetGMLdata = CheckGMLdata(correctGMLdata,rndBuilding.Key);
-            // }
-            // // goalPos
-            // goalBuilding = GameObject.Find(rndBuilding.Key);
-            // goalBounds = goalBuilding.GetComponent<MeshCollider>().sharedMesh.bounds;
-            // goalPos = new Vector3(goalBounds.center.x+320f,goalBounds.center.y+goalBounds.size.y,goalBounds.center.z+380f);
-
-            // //正解の建物用のタグを付ける
-            // goalBuilding.tag = "Goal";
-
-            // //Capacity
-            // capacityNum =  (int)float.Parse(GetAttribute("measuredheight",correctGMLdata))/5;
-
-            // GoalInfo gmlData = new GoalInfo { goalPosition = goalPos, measuredheight = GetAttribute("measuredheight",correctGMLdata), isHintActive=false, capacity=capacityNum,evacueeNum=0};
-            // GoalAttributeDict.Add(rndBuilding.Key,gmlData);
-            // goalPos += new Vector3(-467.28f,0f,-1869.266f);
-            // GenerateTargetFlag(goalPos,rndBuilding.Key);
         }
-
-//  -------------------------------------------------------------------------------
-
-        private float Cal2DDistance(Vector3 point1,Vector3 point2)
-        {
-            Vector2 point1_2D = new Vector2(point1.x,point1.z);
-            Vector2 point2_2D = new Vector2(point2.x,point2.z);
-            float distance = Vector2.Distance(point1_2D,point2_2D);
-            return distance;
-        }
-
-        /// <summary>
-        /// ゴールとプレイヤーの距離を計測する
-        /// </summary>
-
-        private string FindNearestGoal()
-        {
-            string nearestBuildingName = "";
-            float nearestDistance = float.MaxValue;
-            float distance = 0;
-            Vector3 playerPos = GameObject.Find("PlayerArmature").transform.position;
-           
-            foreach(var goalAttribute in GoalAttributeDict)
-            {
-                distance = Cal2DDistance(goalAttribute.Value.goalPosition,playerPos);
-                if(distance < nearestDistance)
-                {
-                    nearestDistance = distance;
-                    nearestBuildingName = goalAttribute.Key;
-                }
-            }
-            return nearestBuildingName;
-        }
-
         /// <summary>
         /// アイテムを拾った時の処理
         /// </summary>
@@ -362,7 +218,6 @@ namespace PLATEAU.Samples
         /// <summary>
         /// アイテムを生成する
         /// </summary>
-
         public void SpawnHintItem()
         {
             ItemManageScript.GenerateItem();
