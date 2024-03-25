@@ -144,7 +144,7 @@ namespace PLATEAU.Samples
             MissionLabel = BaseUi.rootVisualElement.Q<Label>("Mission_Text");
 
             EditMissionText();
-            actionManager.changeNormal();
+            actionManager.ChangeNormal();
             yield return new WaitForSeconds(2.0f);
             
             StartText = BaseUi.rootVisualElement.Q<Label>("StartText");

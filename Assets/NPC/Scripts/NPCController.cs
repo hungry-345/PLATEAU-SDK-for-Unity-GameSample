@@ -18,7 +18,7 @@ public class NPCController : MonoBehaviour
     [SerializeField]private Renderer renderer;
     private CharacterController characterController;
     private GameManage gameManage;
-    private NPCManager npcManager;
+    private NPCManage npcManage;
     private PathManager pathManager;
     private Animator animator;
     private GameObject player;
@@ -65,7 +65,7 @@ public class NPCController : MonoBehaviour
         characterController = GetComponent<CharacterController>();
         gameManage = GameObject.Find("GameManager").GetComponent<GameManage>();
         pathManager = GameObject.Find("RoadObjects").GetComponent<PathManager>();
-        npcManager = GameObject.Find("NPCManager").GetComponent<NPCManager>();
+        npcManage = GameObject.Find("NPCManage").GetComponent<NPCManage>();
 
         player = GameObject.FindGameObjectWithTag("Player");
         animator = GetComponent<Animator>();
@@ -220,7 +220,7 @@ public class NPCController : MonoBehaviour
     private void EnterGoal()
     {
         gameManage.AddRescueNum();
-        npcManager.RemoveFollowList(this.gameObject);
+        npcManage.RemoveFollowList(this.gameObject);
         particleInstance =  Instantiate(particle,this.gameObject.transform.position,Quaternion.Euler(-90,0,0),this.gameObject.transform);
         Destroy(this.gameObject);
         Destroy(particleInstance,duration);
@@ -245,7 +245,7 @@ public class NPCController : MonoBehaviour
                 if(isArrived==false)
                 {
                     gameManage.ContactHumanAction();
-                    npcManager.AddFollowList(this.gameObject);
+                    npcManage.AddFollowList(this.gameObject);
                 }
                 isArrived = true;
                 //Debug.Log("プレイヤー発見");

@@ -43,7 +43,7 @@ namespace PLATEAU.Samples
         private TimeManage TimeManageScript;
         private EnemyManage EnemyManageScript;
         private ItemManage ItemManageScript;
-        private NPCManager NPCManageScript;
+        private NPCManage NPCManageScript;
         private GameObject[] HintLst;
         private GameObject goalBuilding;
         private List<string> buildingDirName;
@@ -90,7 +90,7 @@ namespace PLATEAU.Samples
             TimeManageScript = GameObject.Find("TimeManager").GetComponent<TimeManage>();
             EnemyManageScript = GameObject.Find("EnemyManager").GetComponent<EnemyManage>();
             ItemManageScript = GameObject.Find("ItemManager").GetComponent<ItemManage>();
-            NPCManageScript= GameObject.Find("NPCManager").GetComponent<NPCManager>();
+            NPCManageScript= GameObject.Find("NPCManager").GetComponent<NPCManage>();
 
             //Hintのリストを作る
             HintLst = GameObject.FindGameObjectsWithTag("HintText");

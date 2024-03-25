@@ -12,11 +12,6 @@ public class EnemyManage : MonoBehaviour
     private int enemyNum = 40; //敵の数
     private Vector3 center; //スポーン範囲の中心
     private int enemyCount;
-
-    void Update()
-    {
-        
-    }
     //初期化処理
     public void InitializeEnemy()
     {
@@ -43,10 +38,7 @@ public class EnemyManage : MonoBehaviour
         Vector3 spawnPos = new Vector3(circlePos.x,1f, circlePos.y) + center;
         //EnamyManagerの配下に敵を生成
         GameObject enemy = Instantiate(enemyPrefab, spawnPos, Quaternion.identity,this.gameObject.transform) as GameObject;
-        //Enemy.transform.position = spawnPos;
         enemy.name = enemyCount + "Enemy";
-
-
     }
     //敵の削除
     public void DestroyEnemy()
