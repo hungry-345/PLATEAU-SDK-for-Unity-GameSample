@@ -436,9 +436,9 @@ namespace PLATEAU.Samples
 
         // --------------------------------------------------------------------------------------------------------------
         //プレイヤーがゴールの建物にたどり着いた時の処理
-        public void SelectBuildingAction(Transform clickedBuilding)
+        public void SelectBuildingAction(Transform touchedBuilding)
         {
-            GoalInfo tmpGoalAttribute = GoalAttributeDict[clickedBuilding.name];
+            GoalInfo tmpGoalAttribute = GoalAttributeDict[touchedBuilding.name];
 
             if(rescuingNum > 0)
             {
@@ -467,7 +467,7 @@ namespace PLATEAU.Samples
                 //tmpGoalAttribute.evacueeNum += 1;
 
                 //NPCが向かうTransformの値をセット
-                Transform goalTransform = GameObject.Find(clickedBuilding.name + "flag").transform;
+                Transform goalTransform = GameObject.Find(touchedBuilding.name + "flag").transform;
                 //NPCを救助する
                 NPCManageScript.SendBuilding(sendNum);
 
@@ -477,12 +477,12 @@ namespace PLATEAU.Samples
                 if(tmpGoalAttribute.capacity == tmpGoalAttribute.evacueeNum)
                 {
                     //ゴールの建物のタグを元に戻す
-                    clickedBuilding.gameObject.tag = "Untagged";
-                    UIManageScript.DeleteAnswer(clickedBuilding.name);
-                    GoalAttributeDict.Remove(clickedBuilding.name);
+                    touchedBuilding.gameObject.tag = "Untagged";
+                    UIManageScript.DeleteAnswer(touchedBuilding.name);
+                    GoalAttributeDict.Remove(touchedBuilding.name);
                     
-                    GameObject flag = GameObject.Find(clickedBuilding.name + "flag");
-                    GameObject Marker = GameObject.Find(clickedBuilding.name + "Marker");
+                    GameObject flag = GameObject.Find(touchedBuilding.name + "flag");
+                    GameObject Marker = GameObject.Find(touchedBuilding.name + "Marker");
                     Destroy(flag);
                     Destroy(Marker);
                     // 新しいゴールの生成
@@ -490,10 +490,10 @@ namespace PLATEAU.Samples
                 }
                 else
                 {
-                    GoalAttributeDict[clickedBuilding.name] = tmpGoalAttribute;
+                    GoalAttributeDict[touchedBuilding.name] = tmpGoalAttribute;
                 }
 
-                UIManageScript.SelectCityObject(clickedBuilding);
+                UIManageScript.SelectCityObject(touchedBuilding);
                 UIManageScript.EditMissionText();
             }
         }
