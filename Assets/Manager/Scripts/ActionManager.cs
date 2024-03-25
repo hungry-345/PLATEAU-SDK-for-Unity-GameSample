@@ -24,6 +24,7 @@ public class ActionManager : MonoBehaviour
 
     private void Awake()
     {
+        animator = GetComponent<Animator>();
         thirdPersonController = GetComponent<StarterAssets.ThirdPersonController>();
         attackHandler = GetComponent<attackHandler>();
         state = State.Wait;

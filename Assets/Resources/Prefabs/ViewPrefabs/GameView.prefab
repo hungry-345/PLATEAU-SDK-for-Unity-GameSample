@@ -6213,7 +6213,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initializingUi: {fileID: 7600826448228269312}
-  BaseUi: {fileID: 8615188611050498614}
+  baseUi: {fileID: 8615188611050498614}
   heightColorTable:
   - {r: 1, g: 0.9190924, b: 0, a: 0}
   usageColorTable:
