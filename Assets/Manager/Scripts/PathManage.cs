@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PathManager : MonoBehaviour
+public class PathManage : MonoBehaviour
 {
     [SerializeField] private Dictionary<GameObject, List<Transform>> neighborDic = new Dictionary<GameObject, List<Transform>>();
     private void Awake()
@@ -24,7 +24,6 @@ public class PathManager : MonoBehaviour
             neighborDic.Add(roadObj, neighborTransforms);
         }
     }
-
     // 指定された道路オブジェクトに隣接する道路オブジェクトのPositionを取得するメソッド
     //一つ前に通った道路オブジェクトは候補から除外する
     public GameObject GetRandomNeighbor(GameObject roadObj, GameObject lastVisitedRoad)
@@ -54,7 +53,6 @@ public class PathManager : MonoBehaviour
                     if (neighborDic[roadObj][randomIndex].gameObject == lastVisitedRoad) continue;
                     return neighborDic[roadObj][randomIndex].gameObject;
                 }
-
             }
         }
         return null;
@@ -72,7 +70,6 @@ public class PathManager : MonoBehaviour
             minTargetDistance = targetDistance;
             result = target;
         }
-
         // 最後に記録されたオブジェクトを返す
         return result;
     }

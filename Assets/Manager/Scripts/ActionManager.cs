@@ -20,15 +20,15 @@ public class ActionManager : MonoBehaviour
     private int animIDDying;
     private StarterAssets.ThirdPersonController thirdPersonController;
     private bool attackAble;
-    private attackHandler attackHandler;
+    private AttackHandler attackHandler;
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
         thirdPersonController = GetComponent<StarterAssets.ThirdPersonController>();
-        attackHandler = GetComponent<attackHandler>();
+        attackHandler = GetComponent<AttackHandler>();
         state = State.Wait;
-        attackAble = attackHandler.checkAttack();
+        attackAble = attackHandler.CheckAttack();
         animIDDying = Animator.StringToHash("Dying");
         playerInput = GetComponent<PlayerInput>();
         playerInput.enabled = false;
