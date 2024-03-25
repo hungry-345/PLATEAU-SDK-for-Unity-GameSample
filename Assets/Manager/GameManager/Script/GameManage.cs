@@ -10,7 +10,7 @@ using StarterAssets;
 
 namespace PLATEAU.Samples
 {
-    public class GameManage : MonoBehaviour, InputGameManage.IInputGameActions
+    public class GameManage : MonoBehaviour
     {
         public struct GoalInfo
         {
@@ -52,27 +52,30 @@ namespace PLATEAU.Samples
         private int goalNum;
         private int getHintNum;
         private bool isSetGMLdata;
+
+        //player
+        private GameObject player;
+        //サウンドエフェクト
+        [SerializeField] private AudioClip saveAudioClip;
+        private AudioSource saveSound;
+
+        // パーティクルエフェクト
+        [SerializeField] private GameObject saveParticle;
+        private GameObject saveParticleInstance;
+        private float particleDuration = 2f;
         // -------------------------------------------------------------------------------------------------------------
         private void Awake()
         {
+            player = GameObject.Find("PlayerArmature");
             inputActions = new InputGameManage();
             targetParent = GameObject.Find("52385628_bldg_6697_op.gml").transform;
+
+            // 救出時
+            saveSound = gameObject.AddComponent<AudioSource>();
+            saveSound.clip = saveAudioClip;
+            saveSound.loop = false;
         }
-        // InputSystemを有効化させる
-        // -------------------------------------------------------------------------------------------------------------
-        private void OnEnable()
-        {
-            inputActions.Enable();
-        }
-        private void OnDisable()
-        {
-            inputActions.Disable();
-        }
-        private void OnDestroy()
-        {
-            inputActions.Dispose();
-        }
-        // -------------------------------------------------------------------------------------------------------------
+
         void Start()
         {
 
@@ -81,7 +84,7 @@ namespace PLATEAU.Samples
         public void StartGame()
         {
             rnd = new System.Random();
-            inputActions.InputGame.AddCallbacks(this);
+            
             
             //thirdpersonController = GameObject.Find("PlayerArmature").GetComponent<ThirdPersonController>();
 
@@ -499,6 +502,12 @@ namespace PLATEAU.Samples
         {
             rescuedNum++;
             UIManageScript.DisplayRescuedNum();
+
+            // パーティクルエフェクト
+            saveParticleInstance = Instantiate(saveParticle, player.gameObject.transform.position, Quaternion.Euler(-90, 0, 0), player.gameObject.transform);
+            Destroy(saveParticleInstance, particleDuration);
+            // サウンドエフェクト
+            saveSound.Play();
         }
         //現在助けている人数を追加する関数
         public void ContactHumanAction()
@@ -506,31 +515,7 @@ namespace PLATEAU.Samples
             rescuingNum += 1;
             UIManageScript.DisplayRescuingNum();
         }
-        // InputSystemの入力に対する処理(OnSonar : F)
-        // -------------------------------------------------------------------------------------------------------------
-        /// <summary>
-        /// Sonarを使う時の処理
-        /// </summary> 
-        public void OnSonar(InputAction.CallbackContext context)
-        {
-            if (context.performed)
-            {
-                string nearestBuildingName = "";
-                float distance = -1f;
-                if(sonarCount > 0)
-                {
-                    nearestBuildingName = FindNearestGoal();
-                    
-                    Vector3 playerPos = GameObject.Find("PlayerArmature").transform.position;
-                    Vector3 buildingPos = GoalAttributeDict[nearestBuildingName].goalPosition;
-                    distance = Cal2DDistance(playerPos,buildingPos);
-                    
-                    sonarCount -= 1;
-
-                }
-                UIManageScript.DisplayDistance(distance,sonarCount);
-            }
-        }
+  
         private void ResetGoals()
         {
             // 建物の色を初期化

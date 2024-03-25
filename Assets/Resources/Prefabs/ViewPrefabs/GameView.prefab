@@ -6382,6 +6382,8 @@ MonoBehaviour:
   sonarCount: 0
   rescuedNum: 0
   rescuingNum: 0
+  saveAudioClip: {fileID: 8300000, guid: 52785ce05b92af64a9ec36e40ef3d94c, type: 3}
+  saveParticle: {fileID: 1837947354677370815, guid: 789b77970a5135140b92a679131ceff2, type: 3}
 --- !u!1 &7600826448228269314
 GameObject:
   m_ObjectHideFlags: 0
