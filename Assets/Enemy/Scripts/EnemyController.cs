@@ -14,7 +14,7 @@ public class EnemyController : MonoBehaviour
         Stroll,//巡回する
         Wait,//待機する（キャラクターを見失った/倒した）
         Chase,//追いかける
-        hit//攻撃を受けた
+        Hit//攻撃を受けた
     };
     //走るスピード
     [SerializeField] private float runSpeed = 5f;
@@ -23,20 +23,16 @@ public class EnemyController : MonoBehaviour
     //視界の範囲
     [SerializeField] private float sightAngle = 90f;
 
-
     //巡回地点の親オブジェクト
     private GameObject strollPosObjects;
-
     private CharacterController characterController;
-    private PathManager pathManager;
+    private PathManage pathManager;
     private Animator animator;
     private GameObject player;
     public AudioClip[] FootstepAudioClips;
 
     // 状態
     private EnemyState state;
-    //麻痺フラグ
-    private bool paralysis = false;
     //目的地との距離
     private float currentDistance;
     //待機時間
@@ -69,26 +65,21 @@ public class EnemyController : MonoBehaviour
     //ビリビリ音
     [SerializeField] private AudioClip biribiri;
 
-
     //現在いる道路オブジェクト
     private GameObject pastRoadObj;
     private GameObject currentRoadObj;
     private GameObject nextRoadObj;
 
-
     void Start()
     {
         characterController = GetComponent<CharacterController>();
-        //navMeshAgent = GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("Player");
         strollPosObjects = GameObject.Find("RoadObjects");
-        pathManager = strollPosObjects.GetComponent<PathManager>();
+        pathManager = strollPosObjects.GetComponent<PathManage>();
         animator = GetComponent<Animator>();
         contact = GameObject.Find("PlayerArmature").GetComponent<Contact>();
         //初期状態
         SetState(EnemyState.Wait);
-
-        //gameView = GameObject.Find("GameView").GetComponent<GameView>();
     }
 
     void FixedUpdate()
@@ -97,7 +88,6 @@ public class EnemyController : MonoBehaviour
         this.transform.LookAt(new Vector3(enemyDestination.x, this.transform.position.y, enemyDestination.z));
         if (state == EnemyState.Chase)//追いかける
         {
-
             if(target!=null)
             {
                 SetEnemyDestination(target.position);   
@@ -123,8 +113,7 @@ public class EnemyController : MonoBehaviour
             }
 
             //キャラクターを倒す
-            float distance = Vector3.Distance(this.transform.position, player.transform.position);
-         
+            float distance = Vector3.Distance(this.transform.position, player.transform.position);   
 
            if (distance < arrivedDistance)
           {                 
@@ -132,7 +121,6 @@ public class EnemyController : MonoBehaviour
              SetState(EnemyState.Stroll);
                    
           }
-
         }
         else if (state == EnemyState.Stroll)//巡回する
         {
@@ -159,7 +147,7 @@ public class EnemyController : MonoBehaviour
                 SetState(EnemyState.Stroll);
             }
         }
-        else if(state == EnemyState.hit)
+        else if(state == EnemyState.Hit)
         {
             elapsedTime += Time.deltaTime;
             if(elapsedTime > paralysisTime)
@@ -173,44 +161,18 @@ public class EnemyController : MonoBehaviour
                 {
                   SetState(EnemyState.Stroll);
                   EnemyColorRed();
-                }
-                
+                }              
             }
             else
             {
                 animator.SetFloat("MoveSpeed", 0f);
-
                 velocity = Vector3.zero;
-
-                ////雷の量を少なく
-                //if (ps)
-                //{
-                //    AudioSource biribiriSound = gameObject.AddComponent<AudioSource>();
-                //    biribiriSound.clip = biribiri;
-                //    var emission = ps.emission;
-                //    if(elapsedTime > 5f)
-                //    {
-                //        biribiriSound.loop = true;
-                //        emission.rateOverTime = new ParticleSystem.MinMaxCurve(10f,20f);
-
-                //    }
-                //    else
-                //    {
-                //        biribiriSound.loop = false;
-                //    }
-                  
-                //}
             }
         }
         //重力の適用
         velocity.y += (Physics.gravity.y) * Time.deltaTime;
         //移動
         characterController.Move(velocity * Time.deltaTime);
-
-        //if (gameView.GetGameEnd() && kaminari)
-        //{
-        //    Destroy(kaminari);
-        //}
     }
 
     //　敵キャラクターの状態変更メソッド
@@ -236,13 +198,10 @@ public class EnemyController : MonoBehaviour
             target = null;
             animator.SetFloat("MoveSpeed", 0f);
             velocity = Vector3.zero;
-            //Debug.Log("待機状態になった");
         }
-        else if(tempState == EnemyState.hit)
+        else if(tempState == EnemyState.Hit)
         {
             isLost = true;
-            
-            //animator.SetBool(Animator.StringToHash("Dying"), true);
             animator.SetFloat("MoveSpeed", 0f);
             velocity = Vector3.zero;
 
@@ -251,7 +210,7 @@ public class EnemyController : MonoBehaviour
                 isBiribiri = true;
                 GameObject kaminariInstance = Instantiate(kaminari, new Vector3(this.transform.position.x, this.transform.position.y + 1.5f, this.transform.position.z), Quaternion.Euler(0, 0, 0), this.transform);
                 ps = kaminariInstance.GetComponent<ParticleSystem>();
-                //ビリビリサウンド再生
+                //ビリビリSE再生
                 AudioSource biribiriSound = kaminariInstance.AddComponent<AudioSource>();
                 biribiriSound.clip = biribiri;
                 biribiriSound.loop = true;
@@ -259,7 +218,6 @@ public class EnemyController : MonoBehaviour
                 biribiriSound.Play();
                 Destroy(kaminariInstance, paralysisTime);
             }
-
         }
     }
     //　敵キャラクターの状態取得メソッド
@@ -292,7 +250,7 @@ public class EnemyController : MonoBehaviour
             //既に追いかける状態でない
             if(state!= EnemyState.Chase)
             {
-                if (state == EnemyState.hit)
+                if (state == EnemyState.Hit)
                 {
                     isLost = true;
                 }
@@ -309,17 +267,10 @@ public class EnemyController : MonoBehaviour
     {
         if (collider.transform==target)
         {
-            //Debug.Log("見失う");
             isLost = true;
             //経過時間をリセット
             elapsedTime = 0;
         }
-    }
-
-    // 衝突があった場合
-    void OnControllerColliderHit(ControllerColliderHit hit)
-    {
-
     }
     //NPCの目的地を設定
     public void SetEnemyDestination(Vector3 destination)
@@ -375,12 +326,12 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    public void ChangeBIribiri()
+    public void ChangeBiribiri()
     {
         isBiribiri = true;
     }
 
-    public bool getIsBiribiri()
+    public bool GetIsBiribiri()
     {
         return isBiribiri;
         
