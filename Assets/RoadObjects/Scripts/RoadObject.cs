@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Scene上の隣接するRoadObjectを管理する
 public class RoadObject : MonoBehaviour
 {
-    // Start is called before the first frame update
-    //隣接するRoadObjectを管理するクラス
     public List<Transform> neighborObjects = new List<Transform>();
 }

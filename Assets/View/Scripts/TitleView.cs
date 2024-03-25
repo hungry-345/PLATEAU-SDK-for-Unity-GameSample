@@ -44,7 +44,7 @@ public class TitleView : ViewBase
 
     private void Update()
     {
-        if(!cursorManager.cursorState)
+        if(!cursorManager.isVisible)
         {
             cursorManager.OnVisible();
         }
