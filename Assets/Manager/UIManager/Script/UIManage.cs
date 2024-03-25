@@ -130,7 +130,7 @@ namespace PLATEAU.Samples
             yield return new WaitForSeconds(3.0f);
             initializingUi.gameObject.SetActive(false);
             BaseUi.gameObject.SetActive(true);
-            // startSound.Play();
+            startSound.Play();
 
             timeLabel = BaseUi.rootVisualElement.Q<Label>("Time");
             rescuedNumLabel = BaseUi.rootVisualElement.Q<Label>("Rescued_Count");
