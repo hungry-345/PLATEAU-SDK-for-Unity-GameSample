@@ -7,6 +7,18 @@ namespace PLATEAU.Samples
 {
     public class Contact : MonoBehaviour
     {
+        // パーティクルエフェクト
+        [SerializeField] private GameObject saveParticle;
+        [SerializeField] private GameObject getItemParticle;
+        private GameObject saveParticleInstance;
+        private GameObject getItemParticleInstance;
+        private float particleDuration = 2f;
+        //サウンドエフェクト
+        [SerializeField] private AudioClip getItemAudioClip;
+        private AudioSource getItemSound;
+        [SerializeField] private AudioClip saveAudioClip;
+        private AudioSource saveSound;
+
         private GameManage GameManageScript;
         private GameView GameViewScript;
         private UIManage UIManageScript;
@@ -22,6 +34,16 @@ namespace PLATEAU.Samples
             ItemManageScript = GameObject.Find("ItemManager").GetComponent<ItemManage>();
             GameViewScript = GameObject.Find("GameView").GetComponent<GameView>();
             ActionManager = GameObject.Find("PlayerArmature").GetComponent<ActionManager>();
+
+            //サウンドエフェクト
+            // アイテム取得時
+            getItemSound = gameObject.AddComponent<AudioSource>();
+            getItemSound.clip = getItemAudioClip;
+            getItemSound.loop = false;
+            // 救出時
+            saveSound = gameObject.AddComponent<AudioSource>();
+            saveSound.clip = saveAudioClip;
+            saveSound.loop = false;
         }
         public void GameOverFunc()
         {
@@ -36,6 +58,11 @@ namespace PLATEAU.Samples
             {
                 //UIManageスクリプトのヒント関数を発動
                 GameManageScript.GetHintItem();
+                // パーティクルエフェクト
+                getItemParticleInstance = Instantiate(getItemParticle,this.gameObject.transform.position,Quaternion.Euler(-90,0,0),this.gameObject.transform);
+                Destroy(getItemParticleInstance,particleDuration);
+                // サウンドエフェクト
+                getItemSound.Play();
                 //アイテムを削除
                 ItemManageScript.GetItem(hit.gameObject);
             }
@@ -43,6 +70,11 @@ namespace PLATEAU.Samples
             {
                 //救助する
                 GameManageScript.SelectBuildingAction(hit.transform);
+                // パーティクルエフェクト
+                saveParticleInstance = Instantiate(saveParticle,this.gameObject.transform.position,Quaternion.Euler(-90,0,0),this.gameObject.transform);
+                Destroy(saveParticleInstance,particleDuration);
+                // サウンドエフェクト
+                saveSound.Play();
             }
         }
     }

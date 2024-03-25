@@ -221,7 +221,7 @@ public class NPCController : MonoBehaviour
     {
         gameManage.AddRescueNum();
         npcManager.RemoveFollowList(this.gameObject);
-        particleInstance =  Instantiate(particle, this.gameObject.transform.position,Quaternion.Euler(-90,0,0));
+        particleInstance =  Instantiate(particle,this.gameObject.transform.position,Quaternion.Euler(-90,0,0),this.gameObject.transform);
         Destroy(this.gameObject);
         Destroy(particleInstance,duration);
     }

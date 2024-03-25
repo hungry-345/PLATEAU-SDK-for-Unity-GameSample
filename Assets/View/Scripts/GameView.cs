@@ -20,6 +20,11 @@ public class GameView : ViewBase
     private GameObject cursor;
 
     private CursorManager cursorManage;
+    // サウンドエフェクト
+    [SerializeField] private AudioClip gameFinishAudioClip;
+    private AudioSource gameFinishSound;
+    [SerializeField] private AudioClip gameOverAudioClip;
+    private AudioSource gameOverSound;
 
     void Awake()
     {
@@ -39,6 +44,16 @@ public class GameView : ViewBase
         cursorManage.OnInvisible();
 
         IsClicked = false;
+
+        //サウンドエフェクト
+        // アイテム取得時
+        gameFinishSound = gameObject.AddComponent<AudioSource>();
+        gameFinishSound.clip = gameFinishAudioClip;
+        gameFinishSound.loop = false;
+        // 救出時
+        gameOverSound = gameObject.AddComponent<AudioSource>();
+        gameOverSound.clip = gameOverAudioClip;
+        gameOverSound.loop = false;
     }
 
     public override IEnumerator Wait()
@@ -59,6 +74,7 @@ public class GameView : ViewBase
                 {
 
                     gameFinishUI.enabled = true;
+                    gameFinishSound.Play();
                     Label ResultLabel = gameFinishUI.rootVisualElement.Q<Label>("Result");
                     ResultLabel.text = "救出した人数 : " + gameManage.rescuedNum;
                     toTitleButton = gameFinishUI.rootVisualElement.Query<Button>();
@@ -72,6 +88,7 @@ public class GameView : ViewBase
                 {
                     //ゲームオーバーUIを表示
                     gameOverUI.enabled = true;
+                    gameOverSound.Play();
                     Label ResultLabel = gameOverUI.rootVisualElement.Q<Label>("Result");
                     ResultLabel.text = "救出した人数 : " + gameManage.rescuedNum;
                     toTitleButton = gameOverUI.rootVisualElement.Query<Button>();
