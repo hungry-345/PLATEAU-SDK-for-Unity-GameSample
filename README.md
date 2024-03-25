@@ -28,7 +28,7 @@ git lfs install
 git clone https://github.com/Synesthesias/PLATEAU-SDK-for-Unity-GameSample.git
 ```
 ## ライセンス
-ライセンスは[License.md](/License.md)を参照してください。
+ライセンスは[LICENSE.md](/LICENSE.md)を参照してください。
 
 ## 注意事項
 - 本リポジトリの内容は予告なく変更・削除する可能性があります。
