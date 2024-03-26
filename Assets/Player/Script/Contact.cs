@@ -58,8 +58,6 @@ namespace PLATEAU.Samples
             {
                 //救助する
                 GameManageScript.SelectBuildingAction(hit.transform);
- 
-           
             }
         }
     }
