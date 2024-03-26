@@ -8,7 +8,6 @@ public class MapPosition : MonoBehaviour
     Transform PlayerPositionMarker;
     Transform mapCamera;
     Transform OverLook;
-    int HintNum;
     void Start()
     {
         Player = GameObject.Find("PlayerArmature").transform;

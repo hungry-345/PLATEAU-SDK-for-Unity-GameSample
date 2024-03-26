@@ -82,7 +82,6 @@ namespace PLATEAU.Samples
             playerInput.enabled = true;
 
         }
-        // -----------------------------------------------------------------------------------------------------------------------------------------------------
         /// <summary>
         /// ランダムな位置に1個ゴールを設置する
         /// </summary>
@@ -109,8 +108,6 @@ namespace PLATEAU.Samples
                             goalBuilding = GameObject.Find(target.name);
                             goalBounds = goalBuilding.GetComponent<MeshCollider>().sharedMesh.bounds;
                             goalPos = new Vector3(goalBounds.center.x+320f,goalBounds.center.y+goalBounds.size.y,goalBounds.center.z+380f);
-
-                            //goalBuilding.tag = "Goal";
 
                             capacityNum =  (int)float.Parse(height.StringValue)/5;
 

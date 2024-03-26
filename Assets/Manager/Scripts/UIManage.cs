@@ -178,9 +178,8 @@ namespace PLATEAU.Samples
             {
                 BuildingInfoDict[buildingTrans.name].capacityLabel.text = GameManageScript.GoalAttributeDict[buildingTrans.name].evacueeNum + "/" + GameManageScript.GoalAttributeDict[buildingTrans.name].capacity;
             }
-            rescuedNumLabel.text = GameManageScript.rescuedNum.ToString();
-            rescuingNumLabel.text = GameManageScript.rescuingNum.ToString();
-            EditMissionText();
+            DisplayRescuingNum();
+            DisplayRescuedNum();
         }
         public void DisplayRescuedNum()
         {
