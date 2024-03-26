@@ -38,6 +38,7 @@ namespace PLATEAU.Samples
         private EnemyManage EnemyManageScript;
         private ItemManage ItemManageScript;
         private NPCManage NPCManageScript;
+        private ActionManager ActionManager;
         //サウンドエフェクト
         [SerializeField] private AudioClip saveAudioClip;
         private AudioSource saveSound;
@@ -72,6 +73,7 @@ namespace PLATEAU.Samples
             EnemyManageScript = GameObject.Find("EnemyManager").GetComponent<EnemyManage>();
             ItemManageScript = GameObject.Find("ItemManager").GetComponent<ItemManage>();
             NPCManageScript= GameObject.Find("NPCManager").GetComponent<NPCManage>();
+            ActionManager = GameObject.Find("PlayerArmature").GetComponent<ActionManager>();
 
             //アイテム・NPCの初期化
             UIManageScript.InitializeUI();
@@ -285,13 +287,14 @@ namespace PLATEAU.Samples
         //ゲームの終了処理
         public void OnEndGame()
         {
+            ActionManager.state = ActionManager.State.Wait;
             ResetGoals();
             GoalAttributeDict.Clear();
             EnemyManageScript.DestroyEnemy();
             ItemManageScript.DestroyItem();         
             UIManageScript.HideGameUI();
             NPCManageScript.DestroyNPC();
-            playerInput.enabled = false;
+            // playerInput.enabled = false;
 
         }
         private void ResetGoals()
