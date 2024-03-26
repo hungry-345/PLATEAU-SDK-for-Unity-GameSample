@@ -1,5 +1,6 @@
 # PLATEAU-SDK-for-Unity-GameSample
-![3](https://github.com/Synesthesias/PLATEAU-SDK-for-Unity-GameSample/assets/96822472/cdf0a4d0-2572-44cd-a14e-d77a914e3f0d)
+
+![Readme](https://github.com/Synesthesias/PLATEAU-SDK-for-Unity-GameSample/assets/96822472/55fe9949-d13c-4c88-b3c8-ace77c969345)
 
 このリポジトリでは、[PLATEAU SDK for Unity](https://github.com/Project-PLATEAU/PLATEAU-SDK-for-Unity)を利用すると実際にどのようなアプリケーションが作れるかについて知るためのサンプルプロジェクトを公開しています。
 
