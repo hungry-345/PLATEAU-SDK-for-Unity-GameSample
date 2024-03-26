@@ -179,14 +179,14 @@ namespace StarterAssets
                 enemyController = hitAttack.collider.GetComponent<EnemyController>();
                 if(enemyController != null )
                 {
-                    enemyController.SetState(EnemyController.EnemyState.hit);
+                    enemyController.SetState(EnemyController.EnemyState.Hit);
                     enemyController.EnemyColorYellow(hitAttack);
                 }
                 else
                 {
                     Transform parent = hitAttack.transform.parent;
                     enemyController = parent.GetComponent<EnemyController>();
-                    enemyController.SetState(EnemyController.EnemyState.hit);
+                    enemyController.SetState(EnemyController.EnemyState.Hit);
                     enemyController.EnemyColorYellow(hitAttack);
                 }
                     //se再生

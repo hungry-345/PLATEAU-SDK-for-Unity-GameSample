@@ -9,65 +9,34 @@ public class ActionManager : MonoBehaviour
     {
         Wait,
         Normal,
-        //HookshotFlyingPlayer,
         Attack,
         Died
-
     }
     public State state;
-
-    //inputsystem
     private PlayerInput playerInput;
     
-
     //アニメーション管理
-    private Animator _animator;
-    private bool _hasAnimator;
-    private int _animIDDying;
-
+    private Animator animator;
+    private int animIDDying;
     private StarterAssets.ThirdPersonController thirdPersonController;
-
-    private StarterAssets.HookshotHandle hookshotHandle;
-
-    private bool hookshotAble;
-
     private bool attackAble;
-
-    private attackHandler attackHandler;
+    private AttackHandler attackHandler;
 
     private void Awake()
     {
+        animator = GetComponent<Animator>();
         thirdPersonController = GetComponent<StarterAssets.ThirdPersonController>();
-
-        //hookshotHandle = GetComponent<StarterAssets.HookshotHandle>();
-
-        attackHandler = GetComponent<attackHandler>();
-
+        attackHandler = GetComponent<AttackHandler>();
         state = State.Wait;
-
-        //hookshotAble = hookshotHandle.hookshotAble;
-
-        attackAble = attackHandler.checkAttack();
-
-        _hasAnimator = TryGetComponent(out _animator);
-
-        _animIDDying = Animator.StringToHash("Dying");
-
+        attackAble = attackHandler.CheckAttack();
+        animIDDying = Animator.StringToHash("Dying");
         playerInput = GetComponent<PlayerInput>();
         playerInput.enabled = false;
     }
 
     private void Update()
     {
-
-        _hasAnimator = TryGetComponent(out _animator);
-        _animIDDying = Animator.StringToHash("Dying");
-        //if (hookshotAble == true)
-        //{
-        //    thirdPersonController.enabled = false;
-        //    attackHandler.enabled = false;
-        //    state = State.HookshotFlyingPlayer;
-        //}
+        animIDDying = Animator.StringToHash("Dying");
         if(attackAble == true)
         {
             thirdPersonController.enabled = false;
@@ -88,7 +57,6 @@ public class ActionManager : MonoBehaviour
             attackHandler.enabled = true;
             state = State.Normal;
         }
-
         switch (state)
         {
             default:
@@ -97,25 +65,16 @@ public class ActionManager : MonoBehaviour
                 break;
             case State.Normal:
                 playerInput.enabled = true;
-                //thirdPersonController.enabled = true;
                 break;
-            //case State.HookshotFlyingPlayer:
-            //    thirdPersonController.enabled = false;
-            //    break;
-            //case State.Attack:
-            //    thirdPersonController.enabled = false;
-            //    break;
             case State.Died:
-                _animator.SetBool(_animIDDying, true);
+                animator.SetBool(animIDDying, true);
                 playerInput.enabled = false;
                 break;
-
         }
 
-        //Debug.Log(state);
     }
 
-    public void changeNormal ()
+    public void ChangeNormal ()
     {
         state = State.Normal ;
     }

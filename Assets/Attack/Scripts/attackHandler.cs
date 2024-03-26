@@ -4,30 +4,24 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class attackHandler : MonoBehaviour
+public class AttackHandler : MonoBehaviour
 {
-    //InputAction
     private InputAction attack;   
-
 
     [Header("attackParameter")]
     [SerializeField] private LayerMask attackable;
-    [SerializeField] private LayerMask CityMaterials;
+    [SerializeField] private LayerMask cityMaterials;
     [SerializeField] private Material lineColor;
     [SerializeField] private Transform tipPosition;
     [SerializeField] private float distance = 50f;
     private bool isAttack;
     private Vector3 attackPosition;
 
-    private GameObject player;
-
     //敵のコントローラー取得
     private EnemyController enemyController;
 
     //電撃
-    private LineRenderer lr;
-    [SerializeField] private Texture[] ElectricTexture;
-    private int ElectricAnimationStep;
+    private LineRenderer lineRenderer;
     [SerializeField] private float fps = 30f;
     private float fpsCounter;
     private float electroRelease = 0.1f;
@@ -35,7 +29,7 @@ public class attackHandler : MonoBehaviour
     //経過時間管理
     private float elapsedTime = 0f;
 
-    //se
+    //SE
     [SerializeField] private AudioClip spark;
     private AudioSource sparkSound;
 
@@ -43,14 +37,11 @@ public class attackHandler : MonoBehaviour
     {
         var playerInput = GetComponent<PlayerInput>();
         attack = playerInput.actions["attack"];
-        lr = this.GetComponent<LineRenderer>();
-        lr.enabled = false;
+        lineRenderer = this.GetComponent<LineRenderer>();
+        lineRenderer.enabled = false;
         sparkSound = this.AddComponent<AudioSource>();
         sparkSound.clip = spark;
         sparkSound.loop = false;
-
-        player = GameObject.Find("PlayerArmature");
-
     }
 
     private void Update()
@@ -59,10 +50,6 @@ public class attackHandler : MonoBehaviour
         {
             elapsedTime += Time.deltaTime;
             fpsCounter += Time.deltaTime;
-            if(fpsCounter >= 1/fps)
-            {
-                ElectricAnimationStep++;
-            }
             if(elapsedTime >electroRelease)
             {
                 RemoveElectro();
@@ -71,18 +58,7 @@ public class attackHandler : MonoBehaviour
         }
         attack.performed += OnAttackAction;
         DrawElectro();
-        //CheckClickLeftMouseButton();
     }
-
-    //public void CheckClickLeftMouseButton()
-    //{
-    //    if(Input.GetMouseButtonDown(0))
-    //    {
-    //        isAttack = true;
-    //    }
-    //    Attack();
-    //}
-
     private void OnAttackAction(InputAction.CallbackContext context)
     {
         isAttack = true;
@@ -93,8 +69,7 @@ public class attackHandler : MonoBehaviour
     {
         if (isAttack)
         {
-            lr.enabled = true;
-            // if (Physics.Raycast(player.transform.position, player.transform.forward, out RaycastHit hitAttack, 50f, attackable))
+            lineRenderer.enabled = true;
             if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hitAttack, distance, attackable))
             {
 
@@ -104,30 +79,20 @@ public class attackHandler : MonoBehaviour
                 Transform mesh = geometry.Find("Armature_Mesh");
                 attackPosition = new Vector3(mesh.position.x, mesh.position.y, mesh.position.z);
                 enemyController = hitAttack.collider.GetComponent<EnemyController>();
-                if (enemyController != null)
-                {
-                    //enemyController.SetState(EnemyController.EnemyState.hit);
-                    //enemyController.EnemyColorYellow(hitAttack);
-                }
-                else
+                if (enemyController == null)
                 {
                     Transform parent = hitAttack.transform.parent;
                     enemyController = parent.GetComponent<EnemyController>();
-                    //enemyController.SetState(EnemyController.EnemyState.hit);
-                    //enemyController.EnemyColorYellow(hitAttack);
                 }
 
-                if (!enemyController.getIsBiribiri())
+                if (!enemyController.GetIsBiribiri())
                 {
-                    enemyController.SetState(EnemyController.EnemyState.hit);
+                    enemyController.SetState(EnemyController.EnemyState.Hit);
                     enemyController.EnemyColorYellow(hitAttack);
-                    enemyController.ChangeBIribiri();
+                    enemyController.ChangeBiribiri();
                 }
-                //enemyController.ChangeBIribiri();
-
             }
-            // else if (Physics.Raycast(player.transform.position, player.transform.forward + new Vector3(0f,0.1f,0f), out RaycastHit hit, 50f, CityMaterials))
-            else if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit, 50f,CityMaterials))
+            else if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit, 50f,cityMaterials))
             {
 
                 attackPosition = hit.point;
@@ -135,40 +100,34 @@ public class attackHandler : MonoBehaviour
             }
             else
             {
-
-                // Vector3 forwardDirectiion = player.transform.forward + new Vector3(0f,0.1f,0f);
-                // Vector3 targetPosition = player.transform.position + forwardDirectiion * distance;
                 Vector3 forwardDirectiion = Camera.main.transform.forward;
                 Vector3 targetPosition = Camera.main.transform.position + forwardDirectiion * distance;
                 attackPosition = targetPosition;
-
             }
-
             //se再生
             sparkSound.Play();
         }
     }
 
-    public bool checkAttack()
+    public bool CheckAttack()
     {
         return isAttack;
     }
 
     public void DrawElectro()
     {
-        lr.SetPosition(0, tipPosition.position);
-        lr.SetPosition(1, attackPosition);
+        lineRenderer.SetPosition(0, tipPosition.position);
+        lineRenderer.SetPosition(1, attackPosition);
     }
 
     public void RemoveElectro()
     {
         isAttack = false;
-        if(lr != null)
+        if(lineRenderer != null)
         {
-            lr.enabled = false;
+            lineRenderer.enabled = false;
         }
     }
-
     private void OnDestroy()
     {
         attack.performed -= OnAttackAction;

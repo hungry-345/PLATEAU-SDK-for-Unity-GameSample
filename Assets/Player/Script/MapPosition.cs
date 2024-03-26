@@ -6,14 +6,13 @@ public class MapPosition : MonoBehaviour
 {
     Transform Player;
     Transform PlayerPositionMarker;
-    Transform PlayerPositionCamera;
+    Transform mapCamera;
     Transform OverLook;
-    int HintNum;
     void Start()
     {
         Player = GameObject.Find("PlayerArmature").transform;
         PlayerPositionMarker = GameObject.Find("PositionMarker").transform;
-        PlayerPositionCamera = GameObject.Find("PlayerPositionCamera").transform;
+        mapCamera = GameObject.Find("MapCamera").transform;
         OverLook = this.transform;
 
     }
@@ -24,6 +23,6 @@ public class MapPosition : MonoBehaviour
         // プレイヤーの座標に合わせてカメラの位置を変更する
         PlayerPositionMarker.localEulerAngles = new Vector3(0f,angle+180f,0f);
         PlayerPositionMarker.position = new Vector3(Player.position.x,-490,Player.position.z);
-        PlayerPositionCamera.position = new Vector3(Player.position.x,-80,Player.position.z);
+        mapCamera.position = new Vector3(Player.position.x,-80,Player.position.z);
     }
 }

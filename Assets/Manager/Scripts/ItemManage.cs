@@ -5,7 +5,6 @@ using UnityEngine;
 public class ItemManage : MonoBehaviour
 {
     //生成するアイテム
-    [SerializeField, Tooltip("高さアイテム")] private GameObject measuredheightItem;
     [SerializeField, Tooltip("用途アイテム")] private GameObject UsageItem;
     [SerializeField, Tooltip("アイテムマーカー")] private GameObject marker;
 

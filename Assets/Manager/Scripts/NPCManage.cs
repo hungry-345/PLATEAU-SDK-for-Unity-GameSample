@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NPCManager : MonoBehaviour
+public class NPCManage : MonoBehaviour
 {
     //NPCのPrefabの種類を管理する配列
     [SerializeField, Tooltip("NPCPrefab")] private GameObject[] NPCPrefabs;
@@ -10,7 +10,6 @@ public class NPCManager : MonoBehaviour
     [SerializeField, Tooltip("NPCSpawnPositions")] private Transform[] NPCSpawnPositions;
     //生成数
     [SerializeField, Tooltip("NPCNum")]private int NPCNum = 5;
-
     //連れているNPCを管理するリスト
     [SerializeField]List<GameObject> followNPCList = new List<GameObject>(); 
 
@@ -22,7 +21,6 @@ public class NPCManager : MonoBehaviour
     //NPC生成する
     void GenerateNPC()
     {
-        //
         for(int i=0;i<NPCNum;i++)
         {
             //ランダムな種類のNPCを生成
