@@ -15,24 +15,32 @@ namespace PLATEAU.Samples
 {
     public class UIManage : MonoBehaviour
     {
+        // ゴールの建物の属性情報を保持する構造体
         public struct BuildingInfo
         {
             public Label heightLabel;
             public Label capacityLabel;
         }
+        // ゴールの建物と属性情報を関連図ける辞書
+        public Dictionary<string,BuildingInfo> BuildingInfoDict = new Dictionary<string, BuildingInfo>();
+        // ゴールの建物の色
+        [SerializeField, Tooltip("ゴールの建物の色")] private Color selectedColor;
+        // UI
         [SerializeField, Tooltip("初期化中UI")] private UIDocument initializingUi;
         [SerializeField, Tooltip("ベースUI")] public UIDocument baseUi;
-        [SerializeField, Tooltip("選択中のオブジェクトの色")] private Color selectedColor;
+        // サウンドエフェクト
         [SerializeField] private AudioClip startAudioClip;
         private AudioSource startSound;
-        [SerializeField] public Camera PlayerPosCamera;
-        public Label timeLabel;
-        public Label rescuedNumLabel;
-        public Label rescuingNumLabel;
+        // マップカメラ
+        [SerializeField] public Camera MapCamera;
+        // 参照スクリプト
         private GameManage GameManageScript;
         private TimeManage TimeManageScript;
+        private ActionManager actionManager;
         // UI Document のラベル
-        public Dictionary<string,BuildingInfo> BuildingInfoDict = new Dictionary<string, BuildingInfo>();
+        public Label timeLabel;
+        public Label rescuingNumLabel;
+        public Label rescuedNumLabel;
         private Label Shelter1HeightLabel;
         private Label Shelter1CapacityLabel;
         private Label Shelter2HeightLabel;
@@ -41,41 +49,27 @@ namespace PLATEAU.Samples
         private Label Shelter3CapacityLabel;
         private Label MissionLabel;
         private Label StartText;
-        private string correctBuildingName;
-        private string filterStatus;
-        private ActionManager actionManager;
-        // -------------------------------------------------------------------------------------------------------------
-        private void Awake()
+        public void InitializeUI()
         {
             actionManager = GameObject.Find("PlayerArmature").GetComponent<ActionManager>();
-
+            GameManageScript = GameObject.Find("GameManager").GetComponent<GameManage>();
+            TimeManageScript = GameObject.Find("TimeManager").GetComponent<TimeManage>();
+            // スタート時のSEの初期化
             startSound = gameObject.AddComponent<AudioSource>();
             startSound.clip = startAudioClip;
             startSound.loop = false;
-        }
-
-        // -------------------------------------------------------------------------------------------------------------
-        public void InitializeUI()
-        {
-            GameManageScript = GameObject.Find("GameManager").GetComponent<GameManage>();
-            TimeManageScript = GameObject.Find("TimeManager").GetComponent<TimeManage>();
-
             // ゴールの位置を設定する
             GameManageScript.SelectGoal();
             StartCoroutine(WatiForInitialise());
-
-            //変数の初期化
-            filterStatus = "None";
-            correctBuildingName = "";
         }
         IEnumerator WatiForInitialise()
         {
+            // UIの切り替え
             initializingUi.gameObject.SetActive(true);
             yield return new WaitForSeconds(3.0f);
             initializingUi.gameObject.SetActive(false);
             baseUi.gameObject.SetActive(true);
-            startSound.Play();
-
+            // ラベルの初期化
             timeLabel = baseUi.rootVisualElement.Q<Label>("Time");
             rescuedNumLabel = baseUi.rootVisualElement.Q<Label>("Rescued_Count");
             rescuingNumLabel = baseUi.rootVisualElement.Q<Label>("Rescuing_Count");
@@ -87,10 +81,12 @@ namespace PLATEAU.Samples
             Shelter3CapacityLabel = baseUi.rootVisualElement.Q<Label>("Shelter3_Capacity");
             MissionLabel = baseUi.rootVisualElement.Q<Label>("Mission_Text");
 
-            EditMissionText();
             actionManager.ChangeNormal();
+            startSound.Play();
+
+            EditMissionText();
+            // スタートテキストを2秒後に消す
             yield return new WaitForSeconds(2.0f);
-            
             StartText = baseUi.rootVisualElement.Q<Label>("StartText");
             StartText.text = "";
         }
@@ -100,6 +96,7 @@ namespace PLATEAU.Samples
         /// </summary>
         public void DisplayAnswer(string hintBuildingName,string hintBuildingHeight,string hintBuildingCapacity,string hintBuildingEvacuee)
         {
+            // 建物の高さ、収容可能人数、収容人数の表示
             if(Shelter1HeightLabel.text == "")
             {
                 Shelter1HeightLabel.text = hintBuildingHeight;
@@ -141,12 +138,8 @@ namespace PLATEAU.Samples
         {
             GameObject building = GameObject.Find(deleteBuildingName);
             Renderer renderer = building.GetComponent<Renderer>();
-            for (int i = 0; i < renderer.materials.Length; ++i)
-            {
-                renderer.materials[i].color = Color.white;
-                renderer.materials[i].DisableKeyword("_EMISSION");
-            }
 
+            // 建物の高さ、収容可能人数、収容人数の表示を消す
             if(Shelter1HeightLabel.text == BuildingInfoDict[deleteBuildingName].heightLabel.text)
             {
                 Shelter1HeightLabel.text = "";
@@ -162,24 +155,32 @@ namespace PLATEAU.Samples
                 Shelter3HeightLabel.text = "";
                 Shelter3CapacityLabel.text = "";
             }
+            // 建物の色を元に戻す
+            for (int i = 0; i < renderer.materials.Length; ++i)
+            {
+                renderer.materials[i].color = Color.white;
+                renderer.materials[i].DisableKeyword("_EMISSION");
+            }
+            // ゴールの情報を辞書から消す
             if(BuildingInfoDict.ContainsKey(deleteBuildingName))
             {
                 BuildingInfoDict.Remove(deleteBuildingName);
             }
-
         }
-        public void SelectCityObject(Transform buildingTrans)
+        public void TouchedCityObject(Transform buildingTrans)
         {
             if (buildingTrans == null || buildingTrans.parent.parent == null)
             {
                 return;
             }
-            rescuedNumLabel.text = GameManageScript.rescuedNum.ToString();
-            rescuingNumLabel.text = GameManageScript.rescuingNum.ToString();
+            
             if (BuildingInfoDict.ContainsKey(buildingTrans.name))
             {
                 BuildingInfoDict[buildingTrans.name].capacityLabel.text = GameManageScript.GoalAttributeDict[buildingTrans.name].evacueeNum + "/" + GameManageScript.GoalAttributeDict[buildingTrans.name].capacity;
             }
+            rescuedNumLabel.text = GameManageScript.rescuedNum.ToString();
+            rescuingNumLabel.text = GameManageScript.rescuingNum.ToString();
+            EditMissionText();
         }
         public void DisplayRescuedNum()
         {
@@ -207,6 +208,7 @@ namespace PLATEAU.Samples
         }
         public void HideGameUI()
         {
+            MapCamera.enabled = false;
             baseUi.gameObject.SetActive(false);
         }
     }

@@ -83,16 +83,16 @@ public class NPCController : MonoBehaviour
             {
                 if(gameManage.rescuingNum < 11)
                 {
-                    SetNPCDestination(player.transform.position + player.transform.right*(1.1f + gameManage.rescuingNum*0.075f));
+                    SetNPCDestination(player.transform.position + player.transform.right*(-1)*(1.1f + gameManage.rescuingNum*0.075f));
                 }
                 else
                 {
-                    SetNPCDestination(player.transform.position + player.transform.right*(1.85f));
+                    SetNPCDestination(player.transform.position + player.transform.right*(-1)*(1.85f));
                 }
             }
             else
             {
-                SetNPCDestination(player.transform.position + player.transform.right* (-1.1f));
+                SetNPCDestination(player.transform.position + player.transform.right*(-1)* (-1.1f));
             }
             animator.SetFloat("MoveSpeed", runSpeed);
 

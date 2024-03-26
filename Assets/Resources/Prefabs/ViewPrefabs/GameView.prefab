@@ -5933,7 +5933,7 @@ GameObject:
   - component: {fileID: 7600826447983077792}
   - component: {fileID: 1026612508}
   m_Layer: 0
-  m_Name: PlayerPositionCamera
+  m_Name: MapCamera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6212,16 +6212,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37307cc0a78e689408c0371c43ac724d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selectedColor: {r: 0, g: 0.83239555, b: 1, a: 0}
   initializingUi: {fileID: 7600826448228269312}
   baseUi: {fileID: 8615188611050498614}
-  heightColorTable:
-  - {r: 1, g: 0.9190924, b: 0, a: 0}
-  usageColorTable:
-  - {r: 0.7582872, g: 1, b: 0, a: 0}
-  selectedColor: {r: 0, g: 0.83239555, b: 1, a: 0}
   startAudioClip: {fileID: 8300000, guid: e42eb6100c8e8ee4386abe71f6a44fe6, type: 3}
-  PlayerPosCamera: {fileID: 7600826447983077792}
-  isInitialiseFinish: 0
+  MapCamera: {fileID: 7600826447983077792}
 --- !u!1 &7600826448028043677
 GameObject:
   m_ObjectHideFlags: 0
