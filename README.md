@@ -40,7 +40,8 @@ Unityでプロジェクトを開きたい場合は下記の「プロジェクト
 git lfs install
 git clone https://github.com/Synesthesias/PLATEAU-SDK-for-Unity-GameSample.git
 ```
-- Unityでプロジェクトを開きます。
+- Unityでプロジェクトを開きます。  
+  この際、Unity起動時に「Enter Safe Mode?」というダイアログが出る場合は「Ignore」を押します。
 - 別途[Starter Assets - ThirdPerson](https://assetstore.unity.com/packages/essentials/starter-assets-thirdperson-updates-in-new-charactercontroller-pa-196526)を導入する必要があります。次の方法で導入します。
   - Unity Asset Storeから[Starter Assets - ThirdPerson](https://assetstore.unity.com/packages/essentials/starter-assets-thirdperson-updates-in-new-charactercontroller-pa-196526)を開き、`Add to My Assets`ボタンを押します。  
   この際、Unityアカウントへのログインが必要となります。
