@@ -47,7 +47,7 @@ git clone https://github.com/Synesthesias/PLATEAU-SDK-for-Unity-GameSample.git
   - Unityエディタのメニューバーから Window → Package Manager をクリックします。
   - Package Managerウィンドウ左上のドロップダウンメニューから`My Assets`を選択し、`Starter Assets - Third Person Character Controller`をクリックして`Install`または`Download`ボタンを押します。
   - ボタンが`Import`に変化するのでそれをクリックし、表示される`Import Unity Package`ウィンドウの`Import`ボタンを押します。
-- シーンファイル `Assets/GameSample/Scenes/GameSample.unity`を開いてPlayすることで実行できます。
+- シーンファイル `Assets/Scenes/GameSample.unity`を開いてPlayすることで実行できます。
 
 
 ## ライセンス
