@@ -25,7 +25,7 @@
 Unityでプロジェクトを開きたい場合は下記の「プロジェクトを導入したい場合」をご覧ください。
 
 ### ビルドアプリを入手したい場合
-- Windows向けのビルドアプリがReleaseページにあります。zipファイルをダウンロードして展開してアプリを起動します。
+- Windows向けのビルドアプリが[Releaseページ](https://github.com/Project-PLATEAU/PLATEAU-SDK-for-Unity-GameSample/releases)にあります。zipファイルをダウンロードして展開してアプリを起動します。
 
 ### プロジェクトを導入したい場合
 
