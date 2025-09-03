@@ -20,15 +20,12 @@ public class ActionManager : MonoBehaviour
     private int animIDDying;
     private StarterAssets.ThirdPersonController thirdPersonController;
     private bool attackAble;
-    private AttackHandler attackHandler;
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
         thirdPersonController = GetComponent<StarterAssets.ThirdPersonController>();
-        attackHandler = GetComponent<AttackHandler>();
         state = State.Wait;
-        attackAble = attackHandler.CheckAttack();
         animIDDying = Animator.StringToHash("Dying");
         playerInput = GetComponent<PlayerInput>();
         playerInput.enabled = false;
@@ -40,12 +37,10 @@ public class ActionManager : MonoBehaviour
         if(attackAble == true)
         {
             thirdPersonController.enabled = false;
-            attackHandler.enabled = false;  
         }
         else if(state == State.Died)
         {
             state = State.Died;
-            attackHandler.enabled = false;
         }
         else if(state == State.Wait)
         {
@@ -54,7 +49,6 @@ public class ActionManager : MonoBehaviour
         else
         {
             thirdPersonController.enabled = true;
-            attackHandler.enabled = true;
             state = State.Normal;
         }
         switch (state)
