@@ -8,71 +8,41 @@ public class ActionManager : MonoBehaviour
     public enum State
     {
         Wait,
-        Normal,
-        Attack,
-        Died
+        Normal
     }
+
     public State state;
     private PlayerInput playerInput;
-    
-    //アニメーション管理
-    private Animator animator;
-    private int animIDDying;
     private StarterAssets.ThirdPersonController thirdPersonController;
-    private bool attackAble;
 
     private void Awake()
     {
-        animator = GetComponent<Animator>();
         thirdPersonController = GetComponent<StarterAssets.ThirdPersonController>();
-        state = State.Wait;
-        animIDDying = Animator.StringToHash("Dying");
         playerInput = GetComponent<PlayerInput>();
+
+        state = State.Wait;
         playerInput.enabled = false;
+        thirdPersonController.enabled = false;
     }
 
     private void Update()
     {
-        animIDDying = Animator.StringToHash("Dying");
-        if(attackAble == true)
+        switch(state)
         {
-            thirdPersonController.enabled = false;
-        }
-        else if(state == State.Died)
-        {
-            state = State.Died;
-        }
-        else if(state == State.Wait)
-        {
-            state = State.Wait;
-        }
-        else
-        {
-            thirdPersonController.enabled = true;
-            state = State.Normal;
-        }
-        switch (state)
-        {
-            default:
             case State.Wait:
-                playerInput.enabled = false; 
+                playerInput.enabled = false;
+                thirdPersonController.enabled = false;
                 break;
+
             case State.Normal:
                 playerInput.enabled = true;
-                break;
-            case State.Died:
-                animator.SetBool(animIDDying, true);
-                playerInput.enabled = false;
+                thirdPersonController.enabled = true;
                 break;
         }
-
     }
 
-    public void ChangeNormal ()
+    public void ChangeNormal()
     {
-        state = State.Normal ;
+        state = State.Normal;
     }
-
-}     
-    
-
+}

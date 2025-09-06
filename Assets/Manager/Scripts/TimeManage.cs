@@ -14,7 +14,7 @@ namespace PLATEAU.Samples
         private bool isInitialiseFinish;
         private string itemName;
         private float generateSpan = 5f;
-        public int countdownMinutes = 3;
+        public int countdownMinutes = 1;
         private float countdownSeconds;
         private Coroutine coloringCoroutine;
         private bool isCoroutine;
@@ -28,7 +28,7 @@ namespace PLATEAU.Samples
             GameManageScript = GameObject.Find("GameManager").GetComponent<GameManage>();
             GameViewScript = GameObject.Find("GameView").GetComponent<GameView>();
 
-            countdownSeconds = countdownMinutes * 60f;
+            countdownSeconds = 1 * 60f;//1分（仮）
         }
 
         void Update()

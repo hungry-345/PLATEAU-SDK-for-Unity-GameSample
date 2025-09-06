@@ -15,7 +15,7 @@ public class NPCController : MonoBehaviour
 
     [SerializeField]private float walkSpeed=3f;
     [SerializeField]private float runSpeed=15f;
-    [SerializeField]private Renderer renderer;
+    [SerializeField]private Renderer npcRenderer;
     private CharacterController characterController;
     private GameManage gameManage;
     private NPCManage NPCManage;
@@ -112,12 +112,12 @@ public class NPCController : MonoBehaviour
             if (currentDistance > NPCWarpDistance || !characterController.isGrounded)
             {
                 //空中にいるときはNPCを表示しない
-                renderer.enabled = false;
+                npcRenderer.enabled = false;
                 this.transform.Translate(player.transform.position - this.transform.position);
             }
             else
             {
-                renderer.enabled = true;
+                npcRenderer.enabled = true;
             }
         }
         else if(state == NPCState.Escape|| state == NPCState.Stroll) //逃げる,巡回する

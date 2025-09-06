@@ -84,7 +84,7 @@ namespace PLATEAU.Samples
             actionManager.ChangeNormal();
             startSound.Play();
 
-            EditMissionText();
+            //EditMissionText();
             // スタートテキストを2秒後に消す
             yield return new WaitForSeconds(2.0f);
             StartText = baseUi.rootVisualElement.Q<Label>("StartText");
@@ -92,31 +92,32 @@ namespace PLATEAU.Samples
         }
 
         /// <summary>
-        /// アイテムを取得した時の処理(Contact.csに参照されている)
+        /// アイテムを取得した時の処理(Contact.csに参照されている)→ヒントに使う
         /// </summary>
         public void DisplayAnswer(string hintBuildingName,string hintBuildingHeight,string hintBuildingCapacity,string hintBuildingEvacuee)
         {
+            /*
             // 建物の高さ、収容可能人数、収容人数の表示
-            if(Shelter1HeightLabel.text == "")
+            if (Shelter1HeightLabel.text == "")
             {
                 Shelter1HeightLabel.text = hintBuildingHeight;
                 Shelter1CapacityLabel.text = hintBuildingEvacuee + "/" + hintBuildingCapacity;
-                BuildingInfo buildingInfo = new BuildingInfo {heightLabel=Shelter1HeightLabel,capacityLabel=Shelter1CapacityLabel};
-                BuildingInfoDict.Add(hintBuildingName,buildingInfo);
+                BuildingInfo buildingInfo = new BuildingInfo { heightLabel = Shelter1HeightLabel, capacityLabel = Shelter1CapacityLabel };
+                BuildingInfoDict.Add(hintBuildingName, buildingInfo);
             }
-            else if(Shelter2HeightLabel.text == "")
+            else if (Shelter2HeightLabel.text == "")
             {
                 Shelter2HeightLabel.text = hintBuildingHeight;
                 Shelter2CapacityLabel.text = hintBuildingEvacuee + "/" + hintBuildingCapacity;
-                BuildingInfo buildingInfo = new BuildingInfo {heightLabel=Shelter2HeightLabel,capacityLabel=Shelter2CapacityLabel};
-                BuildingInfoDict.Add(hintBuildingName,buildingInfo);
+                BuildingInfo buildingInfo = new BuildingInfo { heightLabel = Shelter2HeightLabel, capacityLabel = Shelter2CapacityLabel };
+                BuildingInfoDict.Add(hintBuildingName, buildingInfo);
             }
-            else if(Shelter3HeightLabel.text == "")
+            else if (Shelter3HeightLabel.text == "")
             {
                 Shelter3HeightLabel.text = hintBuildingHeight;
                 Shelter3CapacityLabel.text = hintBuildingEvacuee + "/" + hintBuildingCapacity;
-                BuildingInfo buildingInfo = new BuildingInfo {heightLabel=Shelter3HeightLabel,capacityLabel=Shelter3CapacityLabel};
-                BuildingInfoDict.Add(hintBuildingName,buildingInfo);
+                BuildingInfo buildingInfo = new BuildingInfo { heightLabel = Shelter3HeightLabel, capacityLabel = Shelter3CapacityLabel };
+                BuildingInfoDict.Add(hintBuildingName, buildingInfo);
             }
 
             // 建物の色を変更
@@ -166,6 +167,7 @@ namespace PLATEAU.Samples
             {
                 BuildingInfoDict.Remove(deleteBuildingName);
             }
+
         }
         public void TouchedCityObject(Transform buildingTrans)
         {
@@ -204,7 +206,9 @@ namespace PLATEAU.Samples
             {
                 MissionLabel.text = "避難場所に連れて行こう!";
             }
+            */
         }
+
         public void HideGameUI()
         {
             MapCamera.enabled = false;

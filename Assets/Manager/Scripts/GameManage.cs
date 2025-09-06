@@ -198,7 +198,7 @@ namespace PLATEAU.Samples
                 {
                     //ゴールの建物のタグを元に戻す
                     touchedBuilding.gameObject.tag = "Untagged";
-                    UIManageScript.DeleteAnswer(touchedBuilding.name);
+                    //UIManageScript.DeleteAnswer(touchedBuilding.name);
                     GoalAttributeDict.Remove(touchedBuilding.name);
                     
                     GameObject flag = GameObject.Find(touchedBuilding.name + "flag");
@@ -212,14 +212,14 @@ namespace PLATEAU.Samples
                 {
                     GoalAttributeDict[touchedBuilding.name] = tmpGoalAttribute;
                 }
-                UIManageScript.TouchedCityObject(touchedBuilding);
+                //UIManageScript.TouchedCityObject(touchedBuilding);
             }
         }
         //助けた人数を追加する処理
         public void AddRescueNum()
         {
             rescuedNum++;
-            UIManageScript.DisplayRescuedNum();
+            //UIManageScript.DisplayRescuedNum();
 
             // パーティクルエフェクト
             saveParticleInstance = Instantiate(saveParticle, player.gameObject.transform.position, Quaternion.Euler(-90, 0, 0), player.gameObject.transform);
@@ -231,7 +231,7 @@ namespace PLATEAU.Samples
         public void ContactHumanAction()
         {
             rescuingNum += 1;
-            UIManageScript.DisplayRescuingNum();
+            //UIManageScript.DisplayRescuingNum();
         }
         // -----------------------------------------------------------------------------------------------------------------------------------------------------
         /// <summary>

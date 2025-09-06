@@ -36,7 +36,7 @@ namespace PLATEAU.Samples
         }
         public void GameOverFunc()
         {
-            ActionManager.state = ActionManager.State.Died;
+            //ActionManager.state = ActionManager.State.Died;
             //一番上の親（GameView）にゲームオーバーを通知
             GameViewScript.isGameOver = true ; 
         }
