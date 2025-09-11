@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 //using UnityEngine.UI;
 using UnityEngine.UIElements;
 using Cursor = UnityEngine.Cursor;
@@ -50,10 +51,6 @@ public class GameView : ViewBase
         gameFinishSound = gameObject.AddComponent<AudioSource>();
         gameFinishSound.clip = gameFinishAudioClip;
         gameFinishSound.loop = false;
-        // 救出時
-        gameOverSound = gameObject.AddComponent<AudioSource>();
-        gameOverSound.clip = gameOverAudioClip;
-        gameOverSound.loop = false;
     }
 
     public override IEnumerator Wait()
@@ -68,30 +65,9 @@ public class GameView : ViewBase
                 gameManage.OnEndGame();
                 cursorManage.OnVisible();
 
-                //ゲームオーバーテキスト
-                //gameEndText.text = "Game Over";
                 if (isGameFinish)
                 {
-
-                    gameFinishUI.enabled = true;
-                    gameFinishSound.Play();
-                    Label ResultLabel = gameFinishUI.rootVisualElement.Q<Label>("Result");
-                    ResultLabel.text = "救出した人数 : " + gameManage.rescuedNum;
-                    toTitleButton = gameFinishUI.rootVisualElement.Query<Button>();
-                    //クリアテキスト
-                    //gameEndText.text = "Game Clear!";
-
-                    //スコア表示★スコア取得用の関数を作成する
-                    //scoreText.text = "SCORE　"+ViewManager.instance.score;
-                }
-                else
-                {
-                    //ゲームオーバーUIを表示
-                    gameOverUI.enabled = true;
-                    gameOverSound.Play();
-                    Label ResultLabel = gameOverUI.rootVisualElement.Q<Label>("Result");
-                    ResultLabel.text = "救出した人数 : " + gameManage.rescuedNum;
-                    toTitleButton = gameOverUI.rootVisualElement.Query<Button>();
+                    SceneManager.LoadScene("ResultScene");
                 }
                 toTitleButton.clicked += OnButtonClicked;
 

@@ -34,12 +34,7 @@ namespace PLATEAU.Samples
             getItemSound.clip = getItemAudioClip;
             getItemSound.loop = false;
         }
-        public void GameOverFunc()
-        {
-            //ActionManager.state = ActionManager.State.Died;
-            //一番上の親（GameView）にゲームオーバーを通知
-            GameViewScript.isGameOver = true ; 
-        }
+        
         private void OnControllerColliderHit(ControllerColliderHit hit)
         {
             if(hit.gameObject.CompareTag ("Hint"))

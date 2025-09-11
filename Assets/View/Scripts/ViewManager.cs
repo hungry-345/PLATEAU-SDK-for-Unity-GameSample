@@ -41,11 +41,11 @@ public class ViewManager : MonoBehaviour
         while(true)
         {
             var EnvironmentScript = GameObject.Find("Environment").GetComponent<EnvironmentController>();
-            var titleView = ViewBase.Instantiate<TitleView>("TitleView");
+            //var titleView = ViewBase.Instantiate<TitleView>("TitleView");
             EnvironmentScript.m_Rain = 0;
-            titleView.transform.position = Vector3.zero;
-            yield return titleView.Wait();
-            titleView.DestroyView();
+            //titleView.transform.position = Vector3.zero;
+            //yield return titleView.Wait();
+            //titleView.DestroyView();
             var gameView = ViewBase.Instantiate<GameView>("GameView");
             EnvironmentScript.m_Rain = 1;
             yield return gameView.Wait();
