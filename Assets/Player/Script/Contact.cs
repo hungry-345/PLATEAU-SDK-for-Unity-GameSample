@@ -34,26 +34,44 @@ namespace PLATEAU.Samples
             getItemSound.clip = getItemAudioClip;
             getItemSound.loop = false;
         }
-        
+
         private void OnControllerColliderHit(ControllerColliderHit hit)
         {
-            if(hit.gameObject.CompareTag ("Hint"))
+            if (hit.gameObject.CompareTag("Hint"))
             {
                 //UIManageスクリプトのヒント関数を発動
                 GameManageScript.GetHintItem();
                 // パーティクルエフェクト
-                getItemParticleInstance = Instantiate(getItemParticle,this.gameObject.transform.position,Quaternion.Euler(-90,0,0),this.gameObject.transform);
-                Destroy(getItemParticleInstance,particleDuration);
+                getItemParticleInstance = Instantiate(getItemParticle, this.gameObject.transform.position, Quaternion.Euler(-90, 0, 0), this.gameObject.transform);
+                Destroy(getItemParticleInstance, particleDuration);
                 // サウンドエフェクト
                 getItemSound.Play();
                 //アイテムを削除
                 ItemManageScript.GetItem(hit.gameObject);
             }
-            if(hit.gameObject.CompareTag("Goal"))
+            if (hit.gameObject.CompareTag("Goal"))
             {
                 //救助する
                 GameManageScript.SelectBuildingAction(hit.transform);
             }
+            if(hit.gameObject.CompareTag("TargetFlag"))
+            {
+                // 救助処理
+                GameManageScript.SelectBuildingAction(hit.transform);
+
+                // TimeManage から残り時間を取得
+                float remaining = FindObjectOfType<TimeManage>().RemainingTime;
+
+                // PlayerPrefs に保存（シーンを跨いでデータを保持できる）
+                PlayerPrefs.SetFloat("RemainingTime", remaining);
+
+                // デバッグログで確認
+                Debug.Log("ゴール！ 残り時間: " + remaining);
+
+                // リザルトシーンへ遷移
+                UnityEngine.SceneManagement.SceneManager.LoadScene("ResultScene");
+            }
+
         }
     }
 }

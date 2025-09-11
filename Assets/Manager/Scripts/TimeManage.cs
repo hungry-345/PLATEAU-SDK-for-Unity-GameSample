@@ -15,12 +15,17 @@ namespace PLATEAU.Samples
         private string itemName;
         private float generateSpan = 5f;
         public int countdownMinutes = 1;
-        private float countdownSeconds;
+        public float countdownSeconds;
         private Coroutine coloringCoroutine;
         private bool isCoroutine;
         
         public TimeSpan timeSpan;
 
+        // 👇 ここに追加
+        public float RemainingTime
+        {
+            get { return countdownSeconds; }
+        }
 
         void Start()
         {
@@ -28,7 +33,7 @@ namespace PLATEAU.Samples
             GameManageScript = GameObject.Find("GameManager").GetComponent<GameManage>();
             GameViewScript = GameObject.Find("GameView").GetComponent<GameView>();
 
-            countdownSeconds = 1 * 10f;//1分（仮）
+            countdownSeconds = 1 * 500f;//1分（仮）
         }
 
         void Update()

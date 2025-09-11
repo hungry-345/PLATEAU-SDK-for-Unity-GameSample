@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 using System.Linq;
 using StarterAssets;
+using PLATEAU.Samples;
 
 namespace PLATEAU.Samples
 {
@@ -51,6 +52,13 @@ namespace PLATEAU.Samples
         public int rescuedNum;
         // 同行者数
         public int rescuingNum;
+
+        private TimeManage timeManage;
+
+        void Start()
+        {
+            timeManage = GameObject.Find("TimeManager").GetComponent<TimeManage>();
+        }
         // -------------------------------------------------------------------------------------------------------------
         private void Awake()
         {
@@ -259,7 +267,7 @@ namespace PLATEAU.Samples
                     hintBuildingValue = goalAttribute.Value;
                     hintBuildingValue.buildingObj.tag = "Goal";
 
-                    UIManageScript.DisplayAnswer(hintBuildingName,hintBuildingValue.measuredheight,hintBuildingValue.capacity.ToString(),hintBuildingValue.evacueeNum.ToString());
+                    //UIManageScript.DisplayAnswer(hintBuildingName,hintBuildingValue.measuredheight,hintBuildingValue.capacity.ToString(),hintBuildingValue.evacueeNum.ToString());
                     break;
                 }
             }
@@ -287,7 +295,7 @@ namespace PLATEAU.Samples
             ActionManager.state = ActionManager.State.Wait;
             ResetGoals();
             GoalAttributeDict.Clear();
-            ItemManageScript.DestroyItem();         
+            ItemManageScript.DestroyItem();
             UIManageScript.HideGameUI();
             NPCManageScript.DestroyNPC();
             // playerInput.enabled = false;
