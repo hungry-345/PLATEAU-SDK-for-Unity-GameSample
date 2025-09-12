@@ -22,9 +22,9 @@ namespace PLATEAU.Samples
         public TimeSpan timeSpan;
 
         // 👇 ここに追加
-        public float RemainingTime
+        public float ElapsedTime
         {
-            get { return countdownSeconds; }
+            get { return elapsedTime; }
         }
 
         void Start()

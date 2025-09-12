@@ -21,11 +21,11 @@ public class NPCManage : MonoBehaviour
     //NPC生成する
     void GenerateNPC()
     {
-        for(int i=0;i<NPCNum;i++)
+        for (int i = 0; i < NPCNum; i++)
         {
             //ランダムな種類のNPCを生成
             int r = Random.Range(0, NPCPrefabs.Length);
-            Instantiate(NPCPrefabs[r], NPCSpawnPositions[i].position, Quaternion.identity,this.gameObject.transform);
+            Instantiate(NPCPrefabs[r], NPCSpawnPositions[i].position, Quaternion.identity, this.gameObject.transform);
         }
 
     }
