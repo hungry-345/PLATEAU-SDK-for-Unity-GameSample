@@ -31,7 +31,7 @@ public class GameView : ViewBase
     {
         //Cursor.lockState = CursorLockMode.Confined;
         cursor = GameObject.Find("Cursor");
-        cursorManage = cursor.GetComponent<CursorManager>();
+        //cursorManage = cursor.GetComponent<CursorManager>();
     }
 
     void Start()

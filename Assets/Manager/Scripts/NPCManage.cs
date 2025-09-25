@@ -37,8 +37,6 @@ public class NPCManage : MonoBehaviour
             //ランダムなNPCを選択
             int n = Random.Range(0, followNPCList.Count);
             NPCController npcController = followNPCList[n].GetComponent<NPCController>();
-            //NPCをゴールへ向かう状態に変更する
-            npcController.SetState(NPCController.NPCState.Goal);
         }
     }
     //NPCの削除
