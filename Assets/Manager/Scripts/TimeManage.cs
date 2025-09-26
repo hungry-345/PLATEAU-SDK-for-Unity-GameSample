@@ -1,31 +1,23 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace PLATEAU.Samples
 {
     public class TimeManage : MonoBehaviour
     {
-        private float elapsedTime;
+        private float elapsedTime;     // 全体の経過時間
+        private float spawnTimer;      // アイテム生成管理用
         private UIManage UIManageScript;
         private GameManage GameManageScript;
         private GameView GameViewScript;
-        private bool isInitialiseFinish;
-        private string itemName;
-        private float generateSpan = 5f;
+
+        private float generateSpan = 5f;  // アイテム生成間隔
         public int countdownMinutes = 1;
         public float countdownSeconds;
-        private Coroutine coloringCoroutine;
-        private bool isCoroutine;
-        
+
         public TimeSpan timeSpan;
 
-        // 👇 ここに追加
-        public float ElapsedTime
-        {
-            get { return elapsedTime; }
-        }
+        public float ElapsedTime => elapsedTime; // 経過時間を外部から参照可能
 
         void Start()
         {
@@ -33,30 +25,39 @@ namespace PLATEAU.Samples
             GameManageScript = GameObject.Find("GameManager").GetComponent<GameManage>();
             GameViewScript = GameObject.Find("GameView").GetComponent<GameView>();
 
-            countdownSeconds = 1 * 500f;//1分（仮）
+            countdownSeconds = 1 * 60f + 5; // 1分5秒（仮）
         }
 
         void Update()
         {
+            // 全体の経過時間
             elapsedTime += Time.deltaTime;
-            if(elapsedTime > generateSpan)
+
+            // 👇 経過時間をログに出す（mm:ss形式でも出せる）
+            TimeSpan elapsedSpan = TimeSpan.FromSeconds(elapsedTime);
+            //Debug.Log($"[TimeManage] 経過時間: {elapsedSpan:mm\\:ss} ({elapsedTime:F2} 秒)");
+
+            // アイテム生成のためのカウント
+            spawnTimer += Time.deltaTime;
+            if (spawnTimer > generateSpan)
             {
-                elapsedTime = 0f;
+                spawnTimer = 0f;
                 GameManageScript.SpawnHintItem();
             }
 
+            // 残り時間処理
             countdownSeconds -= Time.deltaTime;
             timeSpan = new TimeSpan(0, 0, (int)countdownSeconds);
-            if(timeSpan != null && UIManageScript.timeLabel != null)
+
+            if (UIManageScript.timeLabel != null)
             {
                 UIManageScript.timeLabel.text = timeSpan.ToString(@"mm\:ss");
             }
-            
-            if(countdownSeconds <= 0)
+
+            if (countdownSeconds <= 0)
             {
                 GameViewScript.isGameFinish = true;
             }
-
         }
     }
 }
