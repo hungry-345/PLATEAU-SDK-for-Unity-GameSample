@@ -65,9 +65,9 @@ public class ResultManager : MonoBehaviour
         List<float> times = LoadRanking();
 
         // UIにランキングを反映
-        rank1Text.text = times.Count > 0 ? $"1位: {TimeSpan.FromSeconds(times[0]):mm\\:ss}" : "1位: --:--";
-        rank2Text.text = times.Count > 1 ? $"2位: {TimeSpan.FromSeconds(times[1]):mm\\:ss}" : "2位: --:--";
-        rank3Text.text = times.Count > 2 ? $"3位: {TimeSpan.FromSeconds(times[2]):mm\\:ss}" : "3位: --:--";
+        rank1Text.text = times.Count > 0 ? $"{TimeSpan.FromSeconds(times[0]):mm\\:ss}" : "1位: --:--";
+        rank2Text.text = times.Count > 1 ? $"{TimeSpan.FromSeconds(times[1]):mm\\:ss}" : "2位: --:--";
+        rank3Text.text = times.Count > 2 ? $"{TimeSpan.FromSeconds(times[2]):mm\\:ss}" : "3位: --:--";
     }
 
     [Serializable]
