@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace PLATEAU.Samples
 {
@@ -56,8 +57,25 @@ namespace PLATEAU.Samples
 
             if (countdownSeconds <= 0)
             {
+                // まだ距離を保存していなければ保存
+                if (DistanceChecker.Instance != null)
+                {
+                    DistanceChecker.Instance.SaveDistanceAtTimeUp();
+                }
+
                 GameViewScript.isGameFinish = true;
+                countdownSeconds = 0f;
+                timeSpan = TimeSpan.Zero;
+
+                if (UIManageScript.timeLabel != null)
+                {
+                    UIManageScript.timeLabel.text = timeSpan.ToString(@"mm\:ss");
+                }
+
+                // シーン移動
+                SceneManager.LoadScene("NoResult");
             }
+
         }
     }
 }
