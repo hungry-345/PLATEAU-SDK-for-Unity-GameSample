@@ -4,25 +4,56 @@ using UnityEngine;
 
 public class CarSpawner : MonoBehaviour
 {
-    public GameObject[] carPrefabs;   // ★ 車プレファブ（複数）
-    public Transform spawnPoint;      // 生成位置
-    public float spawnInterval = 5f;  // 何秒ごとにスポーンするか
+    // ★ シーン上にある車オブジェクトを登録
+    public GameObject[] sceneCars;
 
-    private float timer = 0f;
+    // ★ スタート地点
+    public WaypointNode[] startNodes;
+
+    public float spawnInterval = 2f;
+    private float timer;
+    private int carIndex = 0;
+
+    void Start()
+    {
+        // 最初は全て非表示
+        foreach (GameObject car in sceneCars)
+        {
+            car.SetActive(false);
+        }
+    }
 
     void Update()
     {
-        timer += Time.deltaTime;
+        //timer += Time.deltaTime;
 
-        if (timer >= spawnInterval)
+        //if (timer >= spawnInterval)
+        //{
+            //timer = 0f;
+            SpawnCars();
+        //}
+    }
+
+    void SpawnCars()
+    {
+        foreach (WaypointNode start in startNodes)
         {
-            timer = 0f;
+            if (carIndex >= sceneCars.Length) return;
 
-            // ★ ランダムに1つ選ぶ
-            int r = Random.Range(0, carPrefabs.Length);
+            GameObject car = sceneCars[carIndex];
+            carIndex++;
 
-            // ★ 車を生成
-            Instantiate(carPrefabs[r], spawnPoint.position, spawnPoint.rotation);
+            // 位置・回転をセット
+            car.transform.position = start.transform.position;
+            car.transform.rotation = start.transform.rotation;
+
+            // Waypoint設定
+            WaypointMover mover = car.GetComponent<WaypointMover>();
+            mover.currentNode = start;
+
+            // 表示
+            car.SetActive(true);
         }
     }
 }
+
