@@ -4,14 +4,15 @@ using UnityEngine;
 
 public class CarSpawner : MonoBehaviour
 {
-    // ★ シーン上にある車オブジェクトを登録
+    // シーン上にある車オブジェクト
     public GameObject[] sceneCars;
 
-    // ★ スタート地点
+    // スタート地点
     public WaypointNode[] startNodes;
 
     public float spawnInterval = 2f;
-    private float timer;
+
+    private float timer = 0f;
     private int carIndex = 0;
 
     void Start()
@@ -25,13 +26,13 @@ public class CarSpawner : MonoBehaviour
 
     void Update()
     {
-        //timer += Time.deltaTime;
+        timer += Time.deltaTime;
 
-        //if (timer >= spawnInterval)
-        //{
-            //timer = 0f;
+        if (timer >= spawnInterval)
+        {
+            timer = 0f;
             SpawnCars();
-        //}
+        }
     }
 
     void SpawnCars()
@@ -49,6 +50,7 @@ public class CarSpawner : MonoBehaviour
 
             // Waypoint設定
             WaypointMover mover = car.GetComponent<WaypointMover>();
+            mover.startNode = start;     // ★ 追加
             mover.currentNode = start;
 
             // 表示
@@ -56,4 +58,3 @@ public class CarSpawner : MonoBehaviour
         }
     }
 }
-

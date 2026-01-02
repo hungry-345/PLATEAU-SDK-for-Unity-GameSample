@@ -7,6 +7,7 @@ public class WaypointMover : MonoBehaviour
     public float speed = 8f;
     public float rotateSpeed = 3f;
 
+    public WaypointNode startNode;   // ★ 追加
     public WaypointNode currentNode;
 
     void Update()
@@ -40,10 +41,12 @@ public class WaypointMover : MonoBehaviour
 
         if (Vector3.Distance(transform.position, currentNode.transform.position) < 0.1f)
         {
-            // ゴールなら消える
+            // ★ ゴールならスタート地点へ戻す
             if (currentNode.IsGoal)
             {
-                Destroy(gameObject);
+                currentNode = startNode;
+                transform.position = startNode.transform.position;
+                transform.rotation = startNode.transform.rotation;
                 return;
             }
 
@@ -54,4 +57,3 @@ public class WaypointMover : MonoBehaviour
         }
     }
 }
-
