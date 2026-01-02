@@ -26,7 +26,7 @@ namespace PLATEAU.Samples
             GameManageScript = GameObject.Find("GameManager").GetComponent<GameManage>();
             GameViewScript = GameObject.Find("GameView").GetComponent<GameView>();
 
-            countdownSeconds = 1 * 90f; // 1分5秒（仮）
+            countdownSeconds = 1 * 120f; // 1分5秒（仮）
         }
 
         void Update()
