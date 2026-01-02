@@ -13,7 +13,7 @@ public class WaypointMover : MonoBehaviour
     {
         if (currentNode == null)
         {
-            Destroy(gameObject);
+            gameObject.SetActive(false);
             return;
         }
 
