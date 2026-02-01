@@ -11,28 +11,33 @@ public class ResultManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI rank2Text;     // 2位
     [SerializeField] private TextMeshProUGUI rank3Text;     // 3位
 
-    private const string TimeKey = "ElapsedTime";    
-    private const string RankingKey = "RankingTimes";  
+    private const string TimeKey    = "ElapsedTime";
+    private const string RankingKey = "RankingTimes";
 
     void Start()
     {
         if (PlayerPrefs.HasKey(TimeKey))
         {
-            // 1. 秒数を取得
             float elapsed = PlayerPrefs.GetFloat(TimeKey);
             TimeSpan timeSpan = TimeSpan.FromSeconds(Mathf.FloorToInt(elapsed));
             clearTimeText.text = $"{timeSpan:mm\\:ss}";
 
-
-            // 3. ランキングに保存
             SaveTime(elapsed);
-
-            // 4. ランキングをUIに表示
             ShowRanking();
         }
         else
         {
-            clearTimeText.text = "タイムデータがありません。";
+            clearTimeText.text = "--:--";
+            ShowRanking();
+        }
+    }
+
+    void Update()
+    {
+        // Dキーでランキング初期化
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            ClearRanking();
         }
     }
 
@@ -40,6 +45,8 @@ public class ResultManager : MonoBehaviour
     {
         List<float> times = LoadRanking();
         times.Add(elapsed);
+
+        // 速いほど上位
         times.Sort();
 
         if (times.Count > 5)
@@ -64,16 +71,35 @@ public class ResultManager : MonoBehaviour
     {
         List<float> times = LoadRanking();
 
-        // UIにランキングを反映
-        rank1Text.text = times.Count > 0 ? $"{TimeSpan.FromSeconds(times[0]):mm\\:ss}" : "1位: --:--";
-        rank2Text.text = times.Count > 1 ? $"{TimeSpan.FromSeconds(times[1]):mm\\:ss}" : "2位: --:--";
-        rank3Text.text = times.Count > 2 ? $"{TimeSpan.FromSeconds(times[2]):mm\\:ss}" : "3位: --:--";
+        // ランキングが空の場合
+        if (times.Count == 0)
+        {
+            rank1Text.text = "--:--";
+            rank2Text.text = "--:--";
+            rank3Text.text = "--:--";
+            return;
+        }
+
+        rank1Text.text = times.Count > 0 ? $"{TimeSpan.FromSeconds(times[0]):mm\\:ss}" : "--:--";
+        rank2Text.text = times.Count > 1 ? $"{TimeSpan.FromSeconds(times[1]):mm\\:ss}" : "--:--";
+        rank3Text.text = times.Count > 2 ? $"{TimeSpan.FromSeconds(times[2]):mm\\:ss}" : "--:--";
+    }
+
+    private void ClearRanking()
+    {
+        PlayerPrefs.DeleteKey(RankingKey);
+        PlayerPrefs.Save();
+
+        ShowRanking();
     }
 
     [Serializable]
     private class RankingData
     {
         public List<float> times;
-        public RankingData(List<float> times) { this.times = times; }
+        public RankingData(List<float> times)
+        {
+            this.times = times;
+        }
     }
 }
