@@ -24,6 +24,9 @@ public class NPCController : MonoBehaviour
     private GameObject currentRoadObj;
     private GameObject nextRoadObj;
 
+    // 壁衝突関連
+    private bool canReverse = true;
+
     void Start()
     {
         characterController = GetComponent<CharacterController>();
@@ -43,7 +46,7 @@ public class NPCController : MonoBehaviour
         // アニメーション速度
         animator.SetFloat("MoveSpeed", speed);
 
-        // 移動処理
+        // 移動方向計算
         direction = (NPCDestination - transform.position).normalized;
         velocity = direction * speed;
 
@@ -65,6 +68,32 @@ public class NPCController : MonoBehaviour
         // 進行方向を向く
         Vector3 lookPos = new Vector3(NPCDestination.x, transform.position.y, NPCDestination.z);
         transform.LookAt(lookPos);
+    }
+
+    // CharacterController専用衝突検知
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (hit.gameObject.CompareTag("Wall") && canReverse)
+        {
+            ReverseDirection();
+            StartCoroutine(ReverseCooldown());
+        }
+    }
+
+    // 逆方向へ進路変更
+    private void ReverseDirection()
+    {
+        Vector3 reverseDir = -direction;
+        Vector3 newDestination = transform.position + reverseDir * 5f;
+        SetNPCDestination(newDestination);
+    }
+
+    // 連続反転防止
+    private IEnumerator ReverseCooldown()
+    {
+        canReverse = false;
+        yield return new WaitForSeconds(0.5f);
+        canReverse = true;
     }
 
     // 目的地をセット
