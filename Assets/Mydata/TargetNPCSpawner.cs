@@ -28,7 +28,6 @@ public class TargetNPCSpawner : MonoBehaviour
         }
 
         int randomIndex = Random.Range(0, spawnPositions.Length);
-        randomIndex = 0;
         Debug.Log(randomIndex);
         CurrentTargetSpawnIndex = randomIndex;
         CurrentTargetPosition = spawnPositions[randomIndex];
