@@ -50,8 +50,13 @@ public class NPCSpawner_near : MonoBehaviour
 
         GameObject npcPrefab = npcPattern1[index];
 
+        // ★Y座標だけ固定する
+        Vector3 spawnPos = spawnPoint.position;
+        spawnPos.y = 58.3f; // 固定
+
         // NPCを生成
-        Instantiate(npcPrefab, spawnPoint.position, spawnPoint.rotation);
+        Instantiate(npcPrefab, spawnPos, spawnPoint.rotation);
+
 
         spawnedCount++;
     }

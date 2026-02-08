@@ -85,7 +85,7 @@ namespace PLATEAU.Samples
             UIManageScript.InitializeUI();
             playerInput.enabled = false;
             ItemManageScript.InitializeItem();
-            //NPCManageScript.InitializeNPC();
+            NPCManageScript.InitializeNPC();
             playerInput.enabled = true;
 
         }
@@ -200,7 +200,7 @@ namespace PLATEAU.Samples
                 //NPCが向かうTransformの値をセット
                 Transform goalTransform = GameObject.Find(touchedBuilding.name + "flag").transform;
                 //NPCを救助する
-                //NPCManageScript.SendBuilding(sendNum);
+                NPCManageScript.SendBuilding(sendNum);
                 //収容人数の最後の1人が入る時
                 if(tmpGoalAttribute.capacity == tmpGoalAttribute.evacueeNum)
                 {
@@ -297,7 +297,7 @@ namespace PLATEAU.Samples
             GoalAttributeDict.Clear();
             ItemManageScript.DestroyItem();
             UIManageScript.HideGameUI();
-            //NPCManageScript.DestroyNPC();
+            NPCManageScript.DestroyNPC();
             // playerInput.enabled = false;
 
         }

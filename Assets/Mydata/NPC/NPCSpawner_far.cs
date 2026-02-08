@@ -16,6 +16,7 @@ public class NPCSpawner_far : MonoBehaviour
     [Header("生成間隔（秒）")]
     public float spawnInterval = 1f;
 
+
     private float timer = 0f;
     private int spawnedCount = 0;
 
@@ -50,8 +51,13 @@ public class NPCSpawner_far : MonoBehaviour
 
         GameObject npcPrefab = npcPattern1[index];
 
+        // ★Y座標だけ固定する
+        Vector3 spawnPos = spawnPoint.position;
+        spawnPos.y = 58.3f; // 固定
+
         // NPCを生成
-        Instantiate(npcPrefab, spawnPoint.position, spawnPoint.rotation);
+        Instantiate(npcPrefab, spawnPos, spawnPoint.rotation);
+
 
         spawnedCount++;
     }
