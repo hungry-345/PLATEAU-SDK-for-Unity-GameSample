@@ -11,18 +11,20 @@ public class ViewManager : MonoBehaviour
     public int score;
     private void Awake()
     {
-        Cursor.visible = false;
         if (instance == null)
         {
+            Cursor.visible = false;
             instance = this;
             DontDestroyOnLoad(this.gameObject);
+            if (mainCamera != null)
+            {
+                mainCamera.gameObject.SetActive(false);
+            }
         }
         else
         {
             Destroy(this.gameObject);
         }
-        mainCamera.gameObject.SetActive(false);
-        
     }
 
 
@@ -40,7 +42,20 @@ public class ViewManager : MonoBehaviour
 #else
         while(true)
         {
-            var EnvironmentScript = GameObject.Find("Environment").GetComponent<EnvironmentController>();
+            // Wait for Game Scene
+            while (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != "GameSample 1")
+            {
+                yield return null;
+            }
+
+            var EnvironmentObj = GameObject.Find("Environment");
+            if (EnvironmentObj == null) 
+            {
+                yield return null;
+                continue;
+            }
+
+            var EnvironmentScript = EnvironmentObj.GetComponent<EnvironmentController>();
             EnvironmentScript.m_Rain = 0;
             var gameView = ViewBase.Instantiate<GameView>("GameView");
             EnvironmentScript.m_Rain = 1;

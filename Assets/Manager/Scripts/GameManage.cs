@@ -67,6 +67,13 @@ namespace PLATEAU.Samples
         }
         public void StartGame()
         {
+            EventSystemSetup.SetupEventSystem();
+            Time.timeScale = 1f;
+            if (DistanceChecker.Instance != null || DistanceChecker.LastDistanceAtTimeUp != -1f)
+            {
+                DistanceChecker.LastDistanceAtTimeUp = -1f;
+            }
+
             rescuedNum = 0;
             rescuingNum = 0;
             rnd = new System.Random();

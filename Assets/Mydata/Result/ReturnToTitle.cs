@@ -1,13 +1,12 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class ReturnToTitle : MonoBehaviour
 {
-    void Update()
+    public void OnClick()
     {
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            SceneManager.LoadScene("TitleScene");
-        }
+        SceneManager.LoadScene("TitleScene");
     }
 }
