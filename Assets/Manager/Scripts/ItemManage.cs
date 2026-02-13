@@ -28,7 +28,7 @@ public class ItemManage : MonoBehaviour
     //初期化
     public void GenerateItem()
     {
-        if(itemCount < 16)
+        if (itemCount < 16)
         {
 
             //ランダムな子オブジェクトの位置を取得する
@@ -40,15 +40,16 @@ public class ItemManage : MonoBehaviour
             Vector3 circlePos = radius * Random.insideUnitCircle;
             //円内のランダム位置を計算
             Vector3 spawnPos = new Vector3(circlePos.x, 20f, circlePos.y) + center;
-            //アイテムを生成
+            /*アイテムを生成
             GameObject item = Instantiate(UsageItem, spawnPos, Quaternion.Euler(-90f, 0f, 0f), this.gameObject.transform);
             item.name = itemNumber + "Hint";
-            GameObject itemMarker = Instantiate(marker,transform.root.gameObject.transform) as GameObject;
+            GameObject itemMarker = Instantiate(marker, transform.root.gameObject.transform) as GameObject;
             itemMarker.name = item.name + "Marker";
             itemMarker.transform.localScale = new Vector3(10f, 1f, 10f);
-            itemMarker.transform.position = new Vector3(spawnPos.x,-500,spawnPos.z);
+            itemMarker.transform.position = new Vector3(spawnPos.x, -500, spawnPos.z);
             itemCount += 1;
-            itemNumber +=1;
+            itemNumber += 1;
+            */
         }
     }
     public void GetItem(GameObject hitItem)

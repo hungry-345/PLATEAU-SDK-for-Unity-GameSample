@@ -8,7 +8,7 @@ namespace PLATEAU.Samples
     public class Contact : MonoBehaviour
     {
         // パーティクルエフェクト  
-        [SerializeField] private GameObject getItemParticle;    
+        [SerializeField] private GameObject getItemParticle;
         private GameObject getItemParticleInstance;
         private float particleDuration = 2f;
 
@@ -17,7 +17,7 @@ namespace PLATEAU.Samples
         private AudioSource getItemSound;
 
         private GameManage GameManageScript;
-        private GameView GameViewScript; 
+        private GameView GameViewScript;
         private ItemManage ItemManageScript;
         private ActionManager ActionManager;
 
@@ -34,30 +34,38 @@ namespace PLATEAU.Samples
             getItemSound.clip = getItemAudioClip;
             getItemSound.loop = false;
         }
-        public void GameOverFunc()
-        {
-            ActionManager.state = ActionManager.State.Died;
-            //一番上の親（GameView）にゲームオーバーを通知
-            GameViewScript.isGameOver = true ; 
-        }
+
         private void OnControllerColliderHit(ControllerColliderHit hit)
         {
-            if(hit.gameObject.CompareTag ("Hint"))
+            if (hit.gameObject.CompareTag("Hint"))
             {
-                //UIManageスクリプトのヒント関数を発動
+                // ヒント取得処理
                 GameManageScript.GetHintItem();
+
                 // パーティクルエフェクト
-                getItemParticleInstance = Instantiate(getItemParticle,this.gameObject.transform.position,Quaternion.Euler(-90,0,0),this.gameObject.transform);
-                Destroy(getItemParticleInstance,particleDuration);
-                // サウンドエフェクト
+                getItemParticleInstance = Instantiate(getItemParticle, transform.position, Quaternion.Euler(-90, 0, 0), transform);
+                Destroy(getItemParticleInstance, particleDuration);
+
+                // サウンド再生
                 getItemSound.Play();
-                //アイテムを削除
+
+                // アイテム削除
                 ItemManageScript.GetItem(hit.gameObject);
             }
-            if(hit.gameObject.CompareTag("Goal"))
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.CompareTag("Target"))
             {
-                //救助する
-                GameManageScript.SelectBuildingAction(hit.transform);
+                // TimeManage の経過時間を取得
+                float elapsed = FindObjectOfType<TimeManage>().ElapsedTime;
+                PlayerPrefs.SetFloat("ElapsedTime", elapsed);
+
+                Debug.Log("ゴール！ 経過時間: " + elapsed);
+
+                // リザルトシーンへ遷移
+                UnityEngine.SceneManagement.SceneManager.LoadScene("ResultScene");
             }
         }
     }

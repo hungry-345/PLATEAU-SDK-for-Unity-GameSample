@@ -4,58 +4,101 @@ using UnityEngine;
 
 public class NPCManage : MonoBehaviour
 {
-    //NPCのPrefabの種類を管理する配列
     [SerializeField, Tooltip("NPCPrefab")] private GameObject[] NPCPrefabs;
-    //NPCのスポーン位置が入ったオブジェクト
     [SerializeField, Tooltip("NPCSpawnPositions")] private Transform[] NPCSpawnPositions;
-    //生成数
-    [SerializeField, Tooltip("NPCNum")]private int NPCNum = 5;
-    //連れているNPCを管理するリスト
-    [SerializeField]List<GameObject> followNPCList = new List<GameObject>(); 
+    [SerializeField, Tooltip("NPCNum")] private int NPCNum = 5;
+    [SerializeField] private List<GameObject> followNPCList = new List<GameObject>();
 
-    //初期化処理
+    // 🎵 ランダム音声関連
+    [Header("音声クリップ（おはよう／ちょっと待って／バイバーイ／初めまして／また明日）")]
+    [SerializeField] private AudioClip[] voiceClips;
+
+    // ランダム再生間隔設定
+    [SerializeField] private float minVoiceInterval = 5f;
+    [SerializeField] private float maxVoiceInterval = 15f;
+
     public void InitializeNPC()
     {
         GenerateNPC();
     }
-    //NPC生成する
+
     void GenerateNPC()
     {
-        for(int i=0;i<NPCNum;i++)
+        for (int i = 0; i < NPCNum; i++)
         {
-            //ランダムな種類のNPCを生成
             int r = Random.Range(0, NPCPrefabs.Length);
-            Instantiate(NPCPrefabs[r], NPCSpawnPositions[i].position, Quaternion.identity,this.gameObject.transform);
+            GameObject npc = Instantiate(NPCPrefabs[r], NPCSpawnPositions[i].position, Quaternion.identity, this.gameObject.transform);
+
+            AddFollowList(npc);
+
+            // 🎤 ランダム音源をNPCに設定して、再生コルーチン開始
+            AttachAndPlayRandomVoice(npc);
+        }
+    }
+
+    /// <summary>
+    /// NPCにランダム音源を付与し、定期的に再生する
+    /// </summary>
+    private void AttachAndPlayRandomVoice(GameObject npc)
+    {
+        if (voiceClips == null || voiceClips.Length == 0) return;
+
+        // AudioSource がなければ追加
+        AudioSource audioSource = npc.GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = npc.AddComponent<AudioSource>();
+            audioSource.playOnAwake = false;
+            audioSource.spatialBlend = 1f; // 3Dサウンドに
+            audioSource.maxDistance = 20f;
         }
 
+        // NPC専用のコルーチンを開始（NPCごとに個別で鳴らす）
+        StartCoroutine(PlayVoiceRoutine(audioSource));
     }
-    //ランダムなNPCを建物に向かわせる
-    public void SendBuilding(int NPCNum)
+
+    /// <summary>
+    /// NPCごとにランダムなタイミングで音声を再生するコルーチン
+    /// </summary>
+    private IEnumerator PlayVoiceRoutine(AudioSource source)
     {
-        for(int i=0;i<NPCNum;i++)
+        // NPCが破棄されるまでループ
+        while (source != null)
         {
-            //ランダムなNPCを選択
-            int n = Random.Range(0, followNPCList.Count);
-            NPCController npcController = followNPCList[n].GetComponent<NPCController>();
-            //NPCをゴールへ向かう状態に変更する
-            npcController.SetState(NPCController.NPCState.Goal);
+            yield return new WaitForSeconds(Random.Range(minVoiceInterval, maxVoiceInterval));
+
+            if (voiceClips.Length > 0 && !source.isPlaying)
+            {
+                AudioClip clip = voiceClips[Random.Range(0, voiceClips.Length)];
+                source.PlayOneShot(clip);
+            }
         }
     }
-    //NPCの削除
+
+    public void SendBuilding(int NPCNum)
+    {
+        for (int i = 0; i < NPCNum; i++)
+        {
+            int n = Random.Range(0, followNPCList.Count);
+            NPCController npcController = followNPCList[n].GetComponent<NPCController>();
+            // NPCController に指示を送る処理が今後追加される想定
+        }
+    }
+
     public void DestroyNPC()
     {
         foreach (Transform n in gameObject.transform)
         {
             GameObject.Destroy(n.gameObject);
         }
+        followNPCList.Clear();
     }
 
-    //followNPCListの追加
     public void AddFollowList(GameObject NPC)
     {
         followNPCList.Add(NPC);
     }
-    //followNPCListの除外
+
     public void RemoveFollowList(GameObject NPC)
     {
         followNPCList.Remove(NPC);

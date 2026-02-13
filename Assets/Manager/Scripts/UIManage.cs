@@ -194,15 +194,7 @@ namespace PLATEAU.Samples
         {
             if(GameManageScript.rescuingNum == 0)
             {
-                MissionLabel.text = "要救助者を見つけよう!";
-            }
-            else if(BuildingInfoDict.Count == 0)
-            {
-                MissionLabel.text = "紙飛行機を拾って避難場所の位置を調べよう!";
-            }
-            else
-            {
-                MissionLabel.text = "避難場所に連れて行こう!";
+                MissionLabel.text = "話しかけているNPCを探せ！";
             }
         }
         public void HideGameUI()

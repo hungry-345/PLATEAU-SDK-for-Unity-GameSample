@@ -1,0 +1,59 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class WaypointMover : MonoBehaviour
+{
+    public float speed = 8f;
+    public float rotateSpeed = 3f;
+
+    public WaypointNode startNode;   // ★ 追加
+    public WaypointNode currentNode;
+
+    void Update()
+    {
+        if (currentNode == null)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
+
+        MoveToNode();
+    }
+
+    void MoveToNode()
+    {
+        transform.position = Vector3.MoveTowards(
+            transform.position,
+            currentNode.transform.position,
+            speed * Time.deltaTime
+        );
+
+        Vector3 dir = currentNode.transform.position - transform.position;
+        if (dir.sqrMagnitude > 0.01f)
+        {
+            transform.rotation = Quaternion.Slerp(
+                transform.rotation,
+                Quaternion.LookRotation(dir),
+                rotateSpeed * Time.deltaTime
+            );
+        }
+
+        if (Vector3.Distance(transform.position, currentNode.transform.position) < 0.1f)
+        {
+            // ★ ゴールならスタート地点へ戻す
+            if (currentNode.IsGoal)
+            {
+                currentNode = startNode;
+                transform.position = startNode.transform.position;
+                transform.rotation = startNode.transform.rotation;
+                return;
+            }
+
+            // 次をランダム選択
+            currentNode = currentNode.nextNodes[
+                Random.Range(0, currentNode.nextNodes.Length)
+            ];
+        }
+    }
+}

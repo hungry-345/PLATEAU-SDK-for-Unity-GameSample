@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 using System.Linq;
 using StarterAssets;
+using PLATEAU.Samples;
 
 namespace PLATEAU.Samples
 {
@@ -35,7 +36,6 @@ namespace PLATEAU.Samples
         private Transform BuildingGml;
         // 参照スクリプト
         private UIManage UIManageScript;
-        private EnemyManage EnemyManageScript;
         private ItemManage ItemManageScript;
         private NPCManage NPCManageScript;
         private ActionManager ActionManager;
@@ -52,6 +52,13 @@ namespace PLATEAU.Samples
         public int rescuedNum;
         // 同行者数
         public int rescuingNum;
+
+        private TimeManage timeManage;
+
+        void Start()
+        {
+            timeManage = GameObject.Find("TimeManager").GetComponent<TimeManage>();
+        }
         // -------------------------------------------------------------------------------------------------------------
         private void Awake()
         {
@@ -60,6 +67,13 @@ namespace PLATEAU.Samples
         }
         public void StartGame()
         {
+            EventSystemSetup.SetupEventSystem();
+            Time.timeScale = 1f;
+            if (DistanceChecker.Instance != null || DistanceChecker.LastDistanceAtTimeUp != -1f)
+            {
+                DistanceChecker.LastDistanceAtTimeUp = -1f;
+            }
+
             rescuedNum = 0;
             rescuingNum = 0;
             rnd = new System.Random();
@@ -70,7 +84,6 @@ namespace PLATEAU.Samples
             saveSound.loop = false;
 
             UIManageScript = GameObject.Find("UIManager").GetComponent<UIManage>();
-            EnemyManageScript = GameObject.Find("EnemyManager").GetComponent<EnemyManage>();
             ItemManageScript = GameObject.Find("ItemManager").GetComponent<ItemManage>();
             NPCManageScript= GameObject.Find("NPCManager").GetComponent<NPCManage>();
             ActionManager = GameObject.Find("PlayerArmature").GetComponent<ActionManager>();
@@ -78,7 +91,6 @@ namespace PLATEAU.Samples
             //アイテム・NPCの初期化
             UIManageScript.InitializeUI();
             playerInput.enabled = false;
-            EnemyManageScript.InitializeEnemy();
             ItemManageScript.InitializeItem();
             NPCManageScript.InitializeNPC();
             playerInput.enabled = true;
@@ -201,7 +213,7 @@ namespace PLATEAU.Samples
                 {
                     //ゴールの建物のタグを元に戻す
                     touchedBuilding.gameObject.tag = "Untagged";
-                    UIManageScript.DeleteAnswer(touchedBuilding.name);
+                    //UIManageScript.DeleteAnswer(touchedBuilding.name);
                     GoalAttributeDict.Remove(touchedBuilding.name);
                     
                     GameObject flag = GameObject.Find(touchedBuilding.name + "flag");
@@ -215,14 +227,14 @@ namespace PLATEAU.Samples
                 {
                     GoalAttributeDict[touchedBuilding.name] = tmpGoalAttribute;
                 }
-                UIManageScript.TouchedCityObject(touchedBuilding);
+                //UIManageScript.TouchedCityObject(touchedBuilding);
             }
         }
         //助けた人数を追加する処理
         public void AddRescueNum()
         {
             rescuedNum++;
-            UIManageScript.DisplayRescuedNum();
+            //UIManageScript.DisplayRescuedNum();
 
             // パーティクルエフェクト
             saveParticleInstance = Instantiate(saveParticle, player.gameObject.transform.position, Quaternion.Euler(-90, 0, 0), player.gameObject.transform);
@@ -234,7 +246,7 @@ namespace PLATEAU.Samples
         public void ContactHumanAction()
         {
             rescuingNum += 1;
-            UIManageScript.DisplayRescuingNum();
+            //UIManageScript.DisplayRescuingNum();
         }
         // -----------------------------------------------------------------------------------------------------------------------------------------------------
         /// <summary>
@@ -262,7 +274,7 @@ namespace PLATEAU.Samples
                     hintBuildingValue = goalAttribute.Value;
                     hintBuildingValue.buildingObj.tag = "Goal";
 
-                    UIManageScript.DisplayAnswer(hintBuildingName,hintBuildingValue.measuredheight,hintBuildingValue.capacity.ToString(),hintBuildingValue.evacueeNum.ToString());
+                    //UIManageScript.DisplayAnswer(hintBuildingName,hintBuildingValue.measuredheight,hintBuildingValue.capacity.ToString(),hintBuildingValue.evacueeNum.ToString());
                     break;
                 }
             }
@@ -290,8 +302,7 @@ namespace PLATEAU.Samples
             ActionManager.state = ActionManager.State.Wait;
             ResetGoals();
             GoalAttributeDict.Clear();
-            EnemyManageScript.DestroyEnemy();
-            ItemManageScript.DestroyItem();         
+            ItemManageScript.DestroyItem();
             UIManageScript.HideGameUI();
             NPCManageScript.DestroyNPC();
             // playerInput.enabled = false;
